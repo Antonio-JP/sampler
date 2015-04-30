@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<?Comandos añadidos?>
+	<extension point="org.eclipse.ui.commands">
+		<category
+			name="Model visualization"
+			description="Commands related with the visualization of models"
+			id="rioko.prueba.drawModels.commands.category"/>
+		<?Comandos de visualizacion?>
+		<command
+			name="Toggle Data View"
+			description="Toggle between show the data of nodes or not"
+			id="rioko.drawModels.commands.zestEditor.toggleData"/>
+		<command
+			name="Toggle Connection Labels View"
+			description="Toggle between show the labels on the edges or not"
+			id="rioko.drawModels.commands.zestEditor.toggleConLabels"/>
+		<?Comandos de navegacion?>
+		<command
+			name="Go Back"
+			description="Change the configuration of the view to the last before the actual"
+			id="rioko.drawModels.commands.zestEditor.navigateModel.goBack"/>
+		<command
+			name="Reset"
+			description="Redraw the model using the first configuration"
+			id="rioko.drawModels.commands.zestEditor.navigateModel.reset"/>
+		<command
+			name="Show All Model"
+			description="Redraw the model with all their nodes"
+			id="rioko.drawModels.commands.zestEditor.navigateModel.showAllModel"/>
+		<?Comandos de algoritmos?>
+		<command
+			name="Create new Nested Algorithm"
+			description="Allows to create a new algorithm to visualize models"
+			id="rioko.drawModels.commands.algorithms.createNewAlgorithm"/>
+		<command
+			name="Select Visualization Algorithm"
+			description="Allows to select or create a new algorithm to visualize models"
+			id="rioko.drawModels.commands.algorithms.selectAlgorithm"/>
+		<?Comandos de extensiones de menus?>
+		<command
+			name="Open Model Viewer"
+			description="Open a XMI file to visualize the model contained"
+			id="rioko.drawModels.commands.extensions.openFile"/>
+		<?Otros comandos?>
+		<command
+			name="Search Node"
+			description="Allows the search of a node in the model"
+			id="rioko.drawModels.commands.others.searchNode"/>
+	</extension>
+	
+	<?Menus?>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution 
+			locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+			<menu
+				id="rioko.prueba.drawModels.menus.DrawModelMenu"
+				label="Drawing Models"
+				mnemonic="D">
+				<command
+					commandId="rioko.drawModels.commands.zestEditor.toggleData"
+					id="rioko.prueba.drawModels.menus.toggleData"
+					icon="icons/toggle_data_icon_little.jpg"
+					mnemonic="D"/>
+				<command
+					commandId="rioko.drawModels.commands.zestEditor.toggleConLabels"
+					id="rioko.prueba.drawModels.menus.toggleConLabels"
+					icon="icons/toggle_connection_labels_icon_little.jpg"
+					mnemonic="C"/>
+				<separator name="DrawModelMenu.separator2" visible="true" />
+				<command
+					commandId="rioko.drawModels.commands.zestEditor.navigateModel.goBack"
+					id="rioko.prueba.drawModels.menus.navigateModel.goBack"
+					icon="icons/navigation_model_go_back_icon_little.jpg"
+					mnemonic="B"/>
+				<command
+					commandId="rioko.drawModels.commands.zestEditor.navigateModel.reset"
+					id="rioko.prueba.drawModels.menus.navigateModel.reset"
+					icon="icons/navigation_model_reset_icon_little.jpg"
+					mnemonic="R"/>
+				<command
+					commandId="rioko.drawModels.commands.zestEditor.navigateModel.showAllModel"
+					id="rioko.prueba.drawModels.menus.navigateModel.showAllModel"
+					icon="icons/navigation_model_show_all_icon_little.jpg"
+					mnemonic="E"/>
+			</menu>
+			
+			<menu
+				id="rioko.prueba.drawModels.menus.AlgorithmMenu"
+				label="View Algorithms"
+				mnemonic="A">
+				<command
+					commandId="rioko.drawModels.commands.algorithms.createNewAlgorithm"
+					id="rioko.prueba.drawModels.menus.algorithms.createNewAlgorithm"
+					icon="icons/create_algorithm_small.jpg"
+					mnemonic="C"/>
+				<command
+					commandId="rioko.drawModels.commands.algorithms.selectAlgorithm"
+					id="rioko.prueba.drawModels.menus.algorithms.selectAlgorithm"
+					icon="icons/select_algorithm_small.jpg"
+					mnemonic="S"/>
+				<command
+					commandId="rioko.drawModels.commands.others.searchNode"
+					id="rioko.prueba.drawModels.menus.algorithms.searchNode"
+					icon="icons/search_small.png"
+					mnemonic="F"/>
+			</menu>
+		</menuContribution>
+		<?Contribuciones a la barra de herramientas ?>
+		<menuContribution
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+			<toolbar id="rioko.drawModels.toolbars.zestEditor">
+				<command 
+					commandId="rioko.drawModels.commands.zestEditor.toggleData"
+					icon="icons/toggle_data_icon.jpg">
+				</command>
+				<command 
+					commandId="rioko.drawModels.commands.zestEditor.toggleConLabels"
+					icon="icons/toggle_connection_labels_icon.jpg">
+				</command>
+				<visibleWhen checkEnabled="false">
+					<with variable="activeEditorId">
+						<equals value="rioko.prueba.editors.zestEditor">
+						</equals>
+					</with>
+				</visibleWhen>
+			</toolbar>
+			<toolbar id="rioko.drawModels.toolbars.navigateModel">
+				<command 
+					commandId="rioko.drawModels.commands.zestEditor.navigateModel.goBack"
+					icon="icons/navigation_model_go_back_icon.jpg">
+				</command>
+				<command 
+					commandId="rioko.drawModels.commands.zestEditor.navigateModel.reset"
+					icon="icons/navigation_model_reset_icon.jpg">
+				</command>
+				<command 
+					commandId="rioko.drawModels.commands.zestEditor.navigateModel.showAllModel"
+					icon="icons/navigation_model_show_all_icon.jpg">
+				</command>
+				<visibleWhen checkEnabled="false">
+					<with variable="activeEditorId">
+						<equals value="rioko.prueba.editors.zestEditor">
+						</equals>
+					</with>
+				</visibleWhen>
+			</toolbar>
+			<toolbar id="rioko.drawModels.toolbars.algorithms">
+				<command 
+					commandId="rioko.drawModels.commands.algorithms.createNewAlgorithm"
+					icon="icons/create_algorithm.jpg">
+				</command>
+				<command 
+					commandId="rioko.drawModels.commands.algorithms.selectAlgorithm"
+					icon="icons/select_algorithm.jpg">
+				</command>
+				<visibleWhen checkEnabled="false">
+					<with variable="activeEditorId">
+						<equals value="rioko.prueba.editors.zestEditor">
+						</equals>
+					</with>
+				</visibleWhen>
+			</toolbar>
+			<toolbar id="rioko.drawModels.toolbars.others">
+				<command 
+					commandId="rioko.drawModels.commands.others.searchNode"
+					icon="icons/search.png">
+				</command>
+				<visibleWhen checkEnabled="false">
+					<with variable="activeEditorId">
+						<equals value="rioko.prueba.editors.zestEditor">
+						</equals>
+					</with>
+				</visibleWhen>
+			</toolbar>
+		</menuContribution>
+		
+		<?Extensión del menú contextual en Package Explorer?>
+		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+        	<command
+        		commandId="rioko.drawModels.commands.extensions.openFile"
+        		id="rioko.drawModels.menus.extensions.openFile"
+        		icon="icons/sample.gif"
+        		mnemonic="O">
+	        	<visibleWhen>
+					<with variable="activeMenuSelection">
+						<iterate ifEmpty="false">
+							<adapt type="org.eclipse.core.resources.IFile">
+								<test property="org.eclipse.core.resources.name" value="*.*" />
+							</adapt>
+						</iterate>
+					</with>
+	        	</visibleWhen>
+        	</command>
+ 		</menuContribution>
+	</extension>
+	
+	<?Handlers de los menus?>
+ 	<extension point="org.eclipse.ui.handlers">
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.toggleData"
+ 			commandId="rioko.drawModels.commands.zestEditor.toggleData"
+ 			class="rioko.drawmodels.handlers.zesteditor.ToggleDataViewHandler"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.toggleConLabels"
+ 			commandId="rioko.drawModels.commands.zestEditor.toggleConLabels"
+ 			class="rioko.drawmodels.handlers.zesteditor.ToggleConnectionLabelsViewHandler"/>
+ 		<?Handlers de navegacion?>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.reset"
+ 			commandId="rioko.drawModels.commands.zestEditor.navigateModel.reset"
+ 			class="rioko.drawmodels.handlers.zesteditor.ResetNavigationModel"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.goBack"
+ 			commandId="rioko.drawModels.commands.zestEditor.navigateModel.goBack"
+ 			class="rioko.drawmodels.handlers.zesteditor.GoBackNavigationModel"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.showAllModel"
+ 			commandId="rioko.drawModels.commands.zestEditor.navigateModel.showAllModel"
+ 			class="rioko.drawmodels.handlers.zesteditor.ShowAllModel"/>
+ 		<?Handlers de algoritmos?>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.algorithms.createNewAlgorithm"
+ 			commandId="rioko.drawModels.commands.algorithms.createNewAlgorithm"
+ 			class="rioko.drawmodels.handlers.algorithms.CreateNewAlgorithmWizardHandler"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.algorithms.selectAlgorithm"
+ 			commandId="rioko.drawModels.commands.algorithms.selectAlgorithm"
+ 			class="rioko.drawmodels.handlers.algorithms.SelectAlgorithmWizardHandler"/>
+ 		<?Handlers de los menus contextuales adicionales?>
+ 		<handler
+ 			id="rioko.drawModels.handlers.extensions.openFile"
+ 			commandId="rioko.drawModels.commands.extensions.openFile"
+ 			class="rioko.drawmodels.handlers.extensions.OpenFile"/>
+ 		<?Handlers de los menus contextuales adicionales?>
+ 		<handler
+ 			id="rioko.drawModels.handlers.others.searchNode"
+ 			commandId="rioko.drawModels.commands.others.searchNode"
+ 			class="rioko.drawmodels.handlers.zesteditor.SearchNodes"/>
+ 	</extension>
+ 	
+ 	<?Vistas?>
+ 	<extension point="org.eclipse.ui.views">
+		<category
+			name="Model Drawing"
+			description="Views related with the exploration of a model"
+			id="rioko.drawModels.views.category"/>
+		<view
+			category="rioko.drawModels.views.category"
+			class="rioko.drawmodels.views.zestProperties.ZestPropertiesView"
+			icon="icons/sample.gif"
+			id="rioko.drawmodels.views.zestProperties"
+			name="View Preferences"/>
+		<view
+			category="rioko.drawModels.views.category"
+			class="rioko.drawmodels.views.nodeInformation.NodeInformationView"
+			icon="icons/sample.gif"
+			id="rioko.drawmodels.views.nodeInformation"
+			name="Node information"/>
+		<view
+			category="rioko.drawModels.views.category"
+			class="rioko.drawmodels.views.filtersView.FiltersView"
+			icon="icons/sample.gif"
+			id="rioko.drawmodels.views.filtersView"
+			name="Filters Information"/>
+	</extension>
+ 	
+ 	<?Editores?>
+ 	<extension point="org.eclipse.ui.editors">
+ 		<?Añadir la siguiente linea: extensions="mvd,java" cuando se quira poner una extensión predeterminada?>
+ 		<editor
+ 			id="rioko.drawmodels.editors.zestEditor"
+ 			name="Zest Editor Viewer"
+ 			icon="icons/sample.gif"
+ 			class="rioko.drawmodels.editors.zesteditor.ZestEditor"/>
+ 	</extension>
+ 	
+ 	<?Pasos de algoritmos?>
+ 	<extension point="rioko.graphabstraction.steps">
+     <filter
+           class="rioko.drawmodels.display.filter.FilterEClass"
+           id="rioko.drawModels.filters.eClass"
+           name="EClass">
+     </filter>
+     <local
+           class="rioko.drawmodels.display.local.ModelTreeAlgorithm"
+           id="rioko.drawModels.locals.treeContainer"
+           name="TreeContainer">
+     </local>
+ 	</extension>
+ 	<?Algorithmos implementados?>
+	<extension point="rioko.graphabstraction.abstractionAlgorithms">
+		<algorithm
+ 			class="rioko.drawmodels.algorithms.display.test.EClassFilterAlgorithm"
+			id="rioko.drawModels.algorithms.eClassFilterAlgorithm"
+			name="EClass Filter">
+		</algorithm>
+		<algorithm
+			class="rioko.drawmodels.algorithms.display.test.FullStepsTestAlgorithm"
+			id="rioko.drawModels.algorithms.fullStepsAlgorithm"
+			name="Full Steps Algorithm">
+		</algorithm>
+  <algorithm
+        class="rioko.drawmodels.algorithms.display.test.SimpleGlobalAndLocalAlgorithm"
+        id="rioko.drawModels.algorithms.leavesLocal"
+        name="Leaves-Local">
+  </algorithm>
+  <algorithm
+        class="rioko.drawmodels.algorithms.display.test.SimpleLocalAlgorithm"
+        id="rioko.drawModels.algorithms.localCriteria"
+        name="Local criteria">
+  </algorithm>
+  	</extension>
+  	<?Criterios de búsqueda?>
+  	<extension point="rioko.graphabstraction.searches">
+  		<search
+  			id="rioko.drawmodels.searches.byEClass"
+  			name="EClass search"
+  			class="rioko.drawmodels.diagram.filters.ByEClass"/>
+  		<search
+  			id="rioko.drawmodels.searches.byHaveAttribute"
+  			name="Having Attribute Search"
+  			class="rioko.drawmodels.diagram.filters.ByHaveAttribute"/>
+  		<search
+  			id="rioko.drawmodels.searches.byAttributeValue"
+  			name="Attribute Value search"
+  			class="rioko.drawmodels.diagram.filters.ByAttributeValue"/>
+  	</extension>
+</plugin>

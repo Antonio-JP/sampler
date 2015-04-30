@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="rioko.drawmodels" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="rioko.drawmodels" id="steps" name="Steps"/>
+      </appinfo>
+      <documentation>
+         This Steps extension point allow third-party plug-ins to define new steps which could be used in the Model Viewer provided by this plug-in.
+
+There are many types of elemens to add in this extension point:
+ - Filters (&lt;samp&gt;filter&lt;/samp&gt; label)
+ - Global Criteria (&lt;samp&gt;global&lt;/samp&gt; label)
+ - Local Criteria (&lt;samp&gt;local&lt;/samp&gt; label)
+ - Simple Steps (&lt;samp&gt;step&lt;/samp&gt; label)
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <choice>
+               <element ref="filter" minOccurs="1" maxOccurs="unbounded"/>
+               <element ref="global" minOccurs="1" maxOccurs="unbounded"/>
+               <element ref="local" minOccurs="1" maxOccurs="unbounded"/>
+               <element ref="step" minOccurs="1" maxOccurs="unbounded"/>
+            </choice>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="filter">
+      <annotation>
+         <documentation>
+            Schema for a Filter extension
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Unique identifier of the Filter.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Human readable name of the Filter
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  This is the class implementing the &lt;samp&gt;FilterNestedBuilder&lt;/samp&gt; class that is being included in the system of filter steps.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.drawmodels.display.FilterNestedBuilder:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="global">
+      <annotation>
+         <documentation>
+            Schema for a Global Criteria extension
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Unique identifier of the Global Criteria.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Human readable name of the Global Criteria
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  This is the class implementing the &lt;samp&gt;GlobalNestedBuilder&lt;/samp&gt; class that is being included in the system of global steps.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.drawmodels.display.GlobalNestedBuilder:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="local">
+      <annotation>
+         <documentation>
+            Schema for a Local Criteria extension
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Unique identifier of the Local Criteria.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Human readable name of the Local Criteria
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  This is the class implementing the &lt;samp&gt;LocalNestedBuilder&lt;/samp&gt; class that is being included in the system of local steps.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.drawmodels.display.LocalNestedBuilder:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="step">
+      <annotation>
+         <documentation>
+            Schema for a Simple Step extension
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Unique identifier of the Simple Step.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Human readable name of the Simple Step
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  This is the class implementing the &lt;samp&gt;NestedGraphBuilder&lt;/samp&gt; class that is being included in the system of steps.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.drawmodels.display.NestedGraphBuilder:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         1.0.0.qualifier
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         The following is an example of how use this extension point:
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension point=&quot;rioko.graphabstraction.steps&quot;&gt;
+  &lt;filter
+   id=&quot;xxx.example.yyy.myNewFilter&quot;
+   name=&quot;My New Filter&quot;
+   class=&quot;xxx.example.yyy.MyNewFilter&quot; /&gt;
+  &lt;step
+   id=&quot;xxx.example.yyy.aSimpleStep&quot;
+   name=&quot;A Simple Step&quot;
+   class=&quot;xxx.example.yyy.ASimpleStep&quot; /&gt;
+ &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         Each type of element declared in this extension point should extend a particular class:
+
+ - Filters: should extend &lt;samp&gt;rioko.drawmodels.display.FilterNestedBuilder&lt;/samp&gt; class
+ - Global Criteria: should extend &lt;samp&gt;rioko.drawmodels.display.GlobalnestedBuilder&lt;/samp&gt; class
+ - Local Criteria: should extend &lt;samp&gt;rioko.drawmodels.display.LocalNestedBuilder&lt;/samp&gt; class
+ - Simple Steps: should extend &lt;samp&gt;rioko.drawmodels.display.NestedGraphBuilder&lt;/samp&gt; class
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

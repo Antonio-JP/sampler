@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="steps" name="Steps" schema="schema/steps.exsd"/>
+   <extension-point id="abstractionAlgorithms" name="Graph Abstraction Algorithms" schema="schema/abstractionAlgorithms.exsd"/>
+   <extension-point id="searches" name="Search Criteria" schema="schema/searches.exsd"/>
+   <extension-point id="layoutAlgorithms" name="Graph Layout Algorithms" schema="schema/layoutAlgorithms.exsd"/>
+   <extension
+         point="rioko.graphabstraction.steps">
+      <global
+            class="rioko.graphabstraction.display.global.GlobalLeavesCompactificationNestedBuilder"
+            id="rioko.graphAbstraction.globals.leavesCompactification"
+            name="LeavesCompactification">
+      </global>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.abstractionAlgorithms">
+      <algorithm
+            class="rioko.graphabstraction.algorithms.TrivialBuilderAlgorithm"
+            id="rioko.graphAbstraction.algorithms.showAll"
+            name="Show All">
+      </algorithm>
+      <algorithm
+            class="rioko.graphabstraction.algorithms.test.SimpleAlgorithm"
+            id="rioko.graphAbstraction.algorithms.totalCompactification"
+            name="Total Compactification">
+      </algorithm>
+      <algorithm
+            class="rioko.graphabstraction.algorithms.test.SimpleGlobalAlgorithm"
+            id="rioko.graphAbstraction.algorithms.leavesCompactification"
+            name="Leaves compactification">
+      </algorithm>
+   </extension>
+   <extension point="rioko.graphabstraction.layoutAlgorithms">
+   		<algorithm
+   			class="rioko.zest.layout.TreeLayout"
+   			id="rioko.zest.layouts.treeLayout"
+   			name="Tree Graph Layout" />
+   		<algorithm
+   			class="rioko.zest.layout.SpringLayout"
+   			id="rioko.zest.layouts.springLayout"
+   			name="Spring Graph Layout" />
+   </extension>
+</plugin>

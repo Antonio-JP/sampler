@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!-- Configuration of the Ant build system to generate a Jar file --> 
+<project name="Rioko-Utilities" default="CreateJar">
+	
+	<target name="Clean" description="Clean jar files">
+		<delete>
+			<fileset dir="./bin/">
+				<include name="rioko.utils.jar"/>
+			</fileset>
+		</delete>
+	</target>
+	<target name="CreateJar" description="Create Jar file">
+		<jar jarfile="./bin/rioko.utils.jar" basedir="./bin/">
+			<manifest>
+			        <attribute name="Built-By" value="${user.name}" />
+			        <attribute name="Class-Path" value="./lib/" />
+			    </manifest>
+		</jar>
+		<copy file="./bin/rioko.utils.jar" todir="./../rioko.plugin.utils/lib/"/>
+	</target>
+</project>
