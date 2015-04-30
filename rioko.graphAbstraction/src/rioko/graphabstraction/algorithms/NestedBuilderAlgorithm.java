@@ -7,7 +7,6 @@ import java.util.HashSet;
 
 import rioko.utilities.Copiable;
 import rioko.utilities.Log;
-import rioko.utilities.Timing;
 import rioko.graphabstraction.configurations.Configurable;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
@@ -276,11 +275,6 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	//Graph Builder methods
 	@Override
 	public DiagramGraph createNestedGraph(DiagramGraph data, Configurable properties) {
-		// -------- MEASURING TIME --------- //
-		Timing t = Timing.getInstance(this.getAlgorithmName() + "_test.txt");
-		t.begginTiming(data.vertexSet().size());
-		// --------------------------------- //
-		
 		DiagramGraph target = data;
 
 		Log.print("Ejecutando algoritmo " + this.getAlgorithmName() + "...");
@@ -304,10 +298,6 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 		}
 		Log.xClose("algorithm");
 		Log.print("Fin del algoritmo " + this.getAlgorithmName());
-		
-		// -------- MEASURING TIME --------- //
-		t.endTiming();
-		// --------------------------------- //
 		
 		return target;
 	}
