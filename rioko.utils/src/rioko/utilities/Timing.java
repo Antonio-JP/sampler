@@ -95,7 +95,7 @@ public class Timing {
 		
 		if(working) {	//We check if the Timing object was opened
 			long totalTime = tEnd - tBeggin;	//Calculate the total execution time
-			this.file.println(text + size + ", " + totalTime);	//Print in the test file
+			this.file.println(text + size + ";" + totalTime);	//Print in the test file
 			this.file.flush();
 			
 			//We clean all the variebales associated to this Timing object
@@ -104,24 +104,28 @@ public class Timing {
 	}
 	
 	public void compactFile() {
+//		Log.print("Buscando fichero");
 		String name = this.keyOf(this);
 		
 		if(name != null) {
 			try {
+//				Log.print("Abriendo fichero compactificado");
 				File compact = new File(pathToFiles + "__compact_"+name);
 				
 				if(!compact.exists()) {
 					compact.createNewFile();
 				}
 				
-				PrintWriter writer = new PrintWriter(file);
+				PrintWriter writer = new PrintWriter(compact);
 				//Read the real file
+//				Log.print("Leyendo fichero de datos");
 				FileReader reader = new FileReader(pathToFiles + name);
 				BufferedReader buff = new BufferedReader(reader);
 				String line = buff.readLine();
+//				Log.print(" -- " + line);
 				HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
 				while(line != null) {
-					String[] parts = line.split(", ");
+					String[] parts = line.split(";");
 					if(parts.length != 2) {
 						continue;
 					}
@@ -137,6 +141,7 @@ public class Timing {
 					line = buff.readLine();
 				}
 				
+//				Log.print("Fichero leido");
 				//We get the means of execution
 				HashMap<Integer, Double> realTime = new HashMap<>();
 				for(Integer size : map.keySet()) {
@@ -147,12 +152,12 @@ public class Timing {
 					
 					realTime.put(size, totalTime/map.get(size).size());
 				}
-				
+//				Log.print("Cuentas hechas");
 				//We print the new File Information
 				for(Integer size : realTime.keySet()) {
-					writer.println(size + ", " + realTime.get(size));
+					writer.println(size + ";" + realTime.get(size));
 				}
-				
+//				Log.print("Medias impresas");
 				//We close everything
 				buff.close();
 				reader.close();
