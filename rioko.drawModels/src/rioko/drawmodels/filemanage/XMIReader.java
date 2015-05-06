@@ -69,6 +69,15 @@ public class XMIReader {
 		
 		return Files.get(file);
 	}
+
+	
+	public static void closeFile(IFile file) {
+		if(Files.containsKey(file)) {
+			XMIReader reader = Files.get(file);
+		
+			reader.resource.unload();
+		}
+	}
 	
 	public DiagramGraph getDiagram()
 	{

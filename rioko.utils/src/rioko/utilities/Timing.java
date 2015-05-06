@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import rioko.utilities.collections.ArrayMap;
+
 public class Timing {
 	
 	private static final String pathToFiles = "./tests/";
@@ -123,15 +125,15 @@ public class Timing {
 				BufferedReader buff = new BufferedReader(reader);
 				String line = buff.readLine();
 //				Log.print(" -- " + line);
-				HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
+				ArrayMap<Integer, ArrayList<Integer>> map = new ArrayMap<>();
 				while(line != null) {
 					String[] parts = line.split(";");
 					if(parts.length != 2) {
 						continue;
 					}
 					
-					Integer size = Integer.parseInt(parts[0]);
-					Integer time = Integer.parseInt(parts[1]);
+					int size = Integer.parseInt(parts[0]);
+					int time = Integer.parseInt(parts[1]);
 					
 					if(!map.containsKey(size)) {
 						map.put(size, new ArrayList<Integer>());
@@ -143,7 +145,7 @@ public class Timing {
 				
 //				Log.print("Fichero leido");
 				//We get the means of execution
-				HashMap<Integer, Double> realTime = new HashMap<>();
+				ArrayMap<Integer, Double> realTime = new ArrayMap<>();
 				for(Integer size : map.keySet()) {
 					double totalTime = 0;
 					for(Integer time : map.get(size)) {
@@ -155,7 +157,7 @@ public class Timing {
 //				Log.print("Cuentas hechas");
 				//We print the new File Information
 				for(Integer size : realTime.keySet()) {
-					writer.println(size + ";" + realTime.get(size));
+					writer.println((size + ";" + realTime.get(size)).replaceAll("\\.", ","));
 				}
 //				Log.print("Medias impresas");
 				//We close everything

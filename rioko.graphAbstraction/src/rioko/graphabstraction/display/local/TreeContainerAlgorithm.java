@@ -64,12 +64,8 @@ public abstract class TreeContainerAlgorithm extends LocalNestedBuilder {
 				}
 				
 				for(DiagramNode node : data.vertexTo(current)) {
-					try{
 					if(!parentOf.containsKey(node) && data.getEdge(node, current).getType().equals(typeOfConnection.CONTAINMENT)) {
 						queue.add(new Pair<DiagramNode,DiagramNode>(node, current));
-					}
-					} catch(NullPointerException e) {
-						e.printStackTrace();
 					}
 				}
 			}

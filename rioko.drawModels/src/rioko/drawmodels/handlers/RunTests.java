@@ -24,9 +24,9 @@ import rioko.utilities.Timing;
 
 public class RunTests extends AbstractGenericHandler {
 		
-	private static final int nTests = 50;
+	private static final int nTests = 1000;
 	
-	private static final int minSize = 100, maxSize = 14000;
+	private static final int minSize = 1000, maxSize = 5000;
 	
 	//Result file names
 	private static final String open = "__opening_file";
@@ -118,6 +118,10 @@ public class RunTests extends AbstractGenericHandler {
 					
 				}
 				Log.print("+++ Finished the test " + (test+1) + "/" + nTests);
+				
+				XMIReader.closeFile(file);
+				
+				System.gc();
 				
 			}
 			Log.print("** Finished the size " + size);
