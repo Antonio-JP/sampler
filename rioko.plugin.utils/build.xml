@@ -16,6 +16,5 @@
 			        <attribute name="Class-Path" value="./lib/" />
 			    </manifest>
 		</jar>
-		<copy file="./bin/rioko.utils.jar" todir="./../rioko.plugin.utils/lib/"/>
 	</target>
 </project>

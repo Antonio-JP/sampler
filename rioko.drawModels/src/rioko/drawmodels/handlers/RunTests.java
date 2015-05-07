@@ -24,9 +24,9 @@ import rioko.utilities.Timing;
 
 public class RunTests extends AbstractGenericHandler {
 		
-	private static final int nTests = 1000;
+	private static final int nTests = 1;
 	
-	private static final int minSize = 1000, maxSize = 5000;
+	private static final int minSize = 100, maxSize = 100;
 	
 	//Result file names
 	private static final String open = "__opening_file";
@@ -58,23 +58,23 @@ public class RunTests extends AbstractGenericHandler {
 		
 		Log.print("- Initialization done");
 		while(size <= maxSize) { //Iterations over the size
-			Log.print("** Begin with size " + size);
+			Log.print("("+ size + "): ** Begin with size " + size);
 			for(int test = 0; test < nTests; test++) { //Iterations over the numbers of tests
-				Log.print("+++ Beggin with test "+ (test+1) + "/" + nTests);
+				Log.print("("+ size + "): +++ Beggin with test "+ (test+1) + "/" + nTests);
 				//Reading part
 				IFile file = folder.getFile("result" + test + "_" + size + ".xmi");
 				ModelDiagram model = null;
 				
 				// ---- Measuring time
-				Log.print("&&&& Measuring the reading...");
+				Log.print("("+ size + "): &&&& Measuring the reading...");
 				tOpen.begginTiming(size);
 					try {
 						model = new ModelDiagram(XMIReader.getReaderFromFile(file));
 					} catch (IOException e) {
-						Log.print("Error creating the model for the test " + test + " of size " + size + ".");
+						Log.print("("+ size + "): Error creating the model for the test " + test + " of size " + size + ".");
 					}
 				tOpen.endTiming();
-				Log.print("&&&& Reading measure finished");
+				Log.print("("+ size + "): &&&& Reading measure finished");
 				// ---- End measure
 				
 				//We create now the properties to iterate over its algorithms
@@ -82,7 +82,7 @@ public class RunTests extends AbstractGenericHandler {
 				Collection<NestedBuilderAlgorithm> algorithms = RegisterBuilderAlgorithm.getRegisteredAlgorithms();
 				
 				for(NestedBuilderAlgorithm algorithm : algorithms) {
-					Log.print("&&&& Testing algorithm " + algorithm.getAlgorithmName());
+					Log.print("("+ size + "): &&&& Testing algorithm " + algorithm.getAlgorithmName());
 					properties.changeNestedAlgorithm(algorithm);
 					//Configuring the algorithm
 					for(DisplayOptions option : algorithm.getConfigurationNeeded()) {
@@ -104,27 +104,27 @@ public class RunTests extends AbstractGenericHandler {
 					}
 					Timing currentTime = Timing.getInstance(run+algorithm.getAlgorithmName() + extension);
 					// ---- Measuring time
-					Log.print("Measuring the algorithm...");
+					Log.print("("+ size + "): Measuring the algorithm...");
 					currentTime.begginTiming(size);
 						algorithm.createNestedGraph(model.getModelDiagram(), properties.getAlgorithmConfigurable());
 					currentTime.endTiming();
-					Log.print("Run measure finished");
+					Log.print("("+ size + "): Run measure finished");
 					// ---- End measure
 					
 					// Drawing part
-					Log.print("Not implemented the measure of drawing...");
+					Log.print("("+ size + "): Not implemented the measure of drawing...");
 					//TODO hacer la parte de pintado
-					Log.print("&&&& Finished the algorithm " + algorithm.getAlgorithmName());
+					Log.print("("+ size + "): &&&& Finished the algorithm " + algorithm.getAlgorithmName());
 					
 				}
-				Log.print("+++ Finished the test " + (test+1) + "/" + nTests);
+				Log.print("("+ size + "): +++ Finished the test " + (test+1) + "/" + nTests);
 				
 				XMIReader.closeFile(file);
 				
 				System.gc();
 				
 			}
-			Log.print("** Finished the size " + size);
+			Log.print("("+ size + "): ** Finished the size " + size);
 			
 			size = nextSize(size);
 		}
