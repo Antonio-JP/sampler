@@ -23,18 +23,17 @@ import rioko.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.utilities.Log;
 import rioko.utilities.Timing;
 
-public class RunTests extends AbstractGenericHandler {
-		
-	private static final int nTests = 1;
-	
-	private static final int minSize = 5500, maxSize = 6500;
+public class RunJDTAST extends AbstractGenericHandler {
 	
 	//Result file names
-	private static final String open = "__opening_file";
-	private static final String run = "__run_";
-//	private static final String draw = "draw_model";
+	private static final String open = "__opening_jdast";
+	private static final String run = "__run_jdast_";
 	
 	private static final String extension = ".csv";
+	
+	private static final int nTests = 4;
+	private static final int iniSet = 0;
+	private static final int nSets = 0;
 	
 	@Override
 	public Object execute(ExecutionEvent arg0) throws ExecutionException {
@@ -45,37 +44,36 @@ public class RunTests extends AbstractGenericHandler {
 		
 		//It will be several methods to make easier the coding and reading of teh tests.
 		Log.print("- Running tests");
-		int size = minSize;
 		
 		Timing tOpen = Timing.getInstance(open+extension);
 //		Timing tDraw = Timing.getInstance(draw+extension);
 		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
-		IProject project  = root.getProject("Testing_Sampler");
-		IFolder folder = project.getFolder("tests");
+		IProject project  = root.getProject("JDTAST");
+		IFolder folder = project.getFolder("models");
 		
 		Random r = new Random();
 		
 		Log.print("- Initialization done");
-		while(size <= maxSize) { //Iterations over the size
-			Log.print("("+ size + "): ** Begin with size " + size);
+		for(int set = iniSet; set <= nSets; set++) { //Iterations over the size
+			Log.print("("+ set + "): ** Begin with set " + set);
 			for(int test = 0; test < nTests; test++) { //Iterations over the numbers of tests
-				Log.print("("+ size + "): +++ Beggin with test "+ (test+1) + "/" + nTests);
+				Log.print("("+ set + "): +++ Beggin with test "+ (test+1) + "/" + nTests);
 				//Reading part
-				IFile file = folder.getFile("result" + test + "_" + size + ".xmi");
+				IFile file = folder.getFile("set" + set + ".xmi");
 				ModelDiagram model = null;
 				
 				// ---- Measuring time
-				Log.print("("+ size + "): &&&& Measuring the reading...");
-				tOpen.begginTiming(size);
+				Log.print("("+ set + "): &&&& Measuring the reading...");
+				tOpen.begginTiming(set);
 					try {
 						model = new ModelDiagram(XMIReader.getReaderFromFile(file));
 					} catch (IOException e) {
-						Log.print("("+ size + "): Error creating the model for the test " + test + " of size " + size + ".");
+						Log.print("("+ set + "): Error creating the model for the test " + test + " of size " + set + ".");
 					}
 				tOpen.endTiming();
-				Log.print("("+ size + "): &&&& Reading measure finished");
+				Log.print("("+ set + "): &&&& Reading measure finished");
 				// ---- End measure
 				
 				//We create now the properties to iterate over its algorithms
@@ -84,7 +82,7 @@ public class RunTests extends AbstractGenericHandler {
 				
 				for(NestedBuilderAlgorithm algorithm : algorithms) {
 					if(!(algorithm instanceof SimpleGlobalAndLocalAlgorithm)) {
-						Log.print("("+ size + "): &&&& Testing algorithm " + algorithm.getAlgorithmName());
+						Log.print("("+ set + "): &&&& Testing algorithm " + algorithm.getAlgorithmName());
 						properties.changeNestedAlgorithm(algorithm);
 						//Configuring the algorithm
 						for(DisplayOptions option : algorithm.getConfigurationNeeded()) {
@@ -106,30 +104,28 @@ public class RunTests extends AbstractGenericHandler {
 						}
 						Timing currentTime = Timing.getInstance(run+algorithm.getAlgorithmName() + extension);
 						// ---- Measuring time
-						Log.print("("+ size + "): Measuring the algorithm...");
-						currentTime.begginTiming(size);
+						Log.print("("+ set + "): Measuring the algorithm...");
+						currentTime.begginTiming(set);
 							algorithm.createNestedGraph(model.getModelDiagram(), properties.getAlgorithmConfigurable());
 						currentTime.endTiming();
-						Log.print("("+ size + "): Run measure finished");
+						Log.print("("+ set + "): Run measure finished");
 						// ---- End measure
 						
 						// Drawing part
-						Log.print("("+ size + "): Not implemented the measure of drawing...");
+						Log.print("("+ set + "): Not implemented the measure of drawing...");
 						//TODO hacer la parte de pintado
-						Log.print("("+ size + "): &&&& Finished the algorithm " + algorithm.getAlgorithmName());
+						Log.print("("+ set + "): &&&& Finished the algorithm " + algorithm.getAlgorithmName());
 					}
 					
 				}
-				Log.print("("+ size + "): +++ Finished the test " + (test+1) + "/" + nTests);
+				Log.print("("+ set + "): +++ Finished the test " + (test+1) + "/" + nTests);
 				
 				XMIReader.closeFile(file);
 				
 				System.gc();
 				
 			}
-			Log.print("("+ size + "): ** Finished the size " + size);
-			
-			size = nextSize(size);
+			Log.print("("+ set + "): ** Finished the size " + set);
 		}
 		
 		Log.print("- Finished the tests");
@@ -138,18 +134,5 @@ public class RunTests extends AbstractGenericHandler {
 		Log.print("- End of compactification");
 		Log.print(" ------------------- End of Running Tests --------------------------");
 		return null;
-	}
-
-	
-	private static int nextSize(int size) {
-		if(size >= 10000) {
-			return size+1000;
-		} else if(size >= 1000) {
-			return size+500;
-		} else if(size >= 100) {
-			return size+100;
-		} else {
-			return 100;
-		}
 	}
 }

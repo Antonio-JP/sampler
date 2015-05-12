@@ -118,6 +118,7 @@ public class ModelDiagram implements IEditorInput{
 
 	//IEditorInput methods
 	//Todos están vacíos porque no quiero nada de ellos
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class arg0) { return null; }
 

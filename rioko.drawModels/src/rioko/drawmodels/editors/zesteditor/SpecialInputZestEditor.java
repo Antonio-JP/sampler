@@ -30,6 +30,7 @@ public class SpecialInputZestEditor implements IEditorInput {
 	}
 		
 	//IEditorInput methods
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class arg0) { return null; }
 
