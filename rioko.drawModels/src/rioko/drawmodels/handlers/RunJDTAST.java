@@ -32,8 +32,8 @@ public class RunJDTAST extends AbstractGenericHandler {
 	private static final String extension = ".csv";
 	
 	private static final int nTests = 4;
-	private static final int iniSet = 0;
-	private static final int nSets = 0;
+	private static final int iniSet = 2;
+	private static final int nSets = 2;
 	
 	@Override
 	public Object execute(ExecutionEvent arg0) throws ExecutionException {
