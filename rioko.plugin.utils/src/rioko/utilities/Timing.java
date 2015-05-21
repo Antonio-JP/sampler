@@ -13,7 +13,7 @@ import rioko.utilities.collections.ArrayMap;
 
 public class Timing {
 	
-	private static final String pathToFiles = "./tests/";
+	private static String pathToFiles = "./tests/";
 
 	private static HashMap<String, Timing> tFiles = new HashMap<>();
 
@@ -26,17 +26,13 @@ public class Timing {
 	private boolean working = false;
 	
 	//Builders
-	private Timing(String name) {
-		try {
-			FileWriter file = new FileWriter(pathToFiles + name, true);
+	private Timing(String name) throws IOException{
+		FileWriter file = new FileWriter(pathToFiles + name, true);
 	 		
-			this.file = new PrintWriter(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.file = new PrintWriter(file);
 	}
 	
-	public static Timing getInstance(String name) {
+	public static Timing getInstance(String name) throws IOException{
 		Timing t = tFiles.get(name);
 		
 		if(t == null) {
@@ -46,6 +42,10 @@ public class Timing {
 		}
 		
 		return t;
+	}
+	
+	public static void setPath(String pathToFiles) {
+		Timing.pathToFiles = pathToFiles;
 	}
 	
 	public void closeInstance() {
@@ -203,31 +203,31 @@ public class Timing {
 		}
 	}
 	
-	public static void tBeggin(String name, int size) {
+	public static void tBeggin(String name, int size) throws IOException {
 		Timing t = Timing.getInstance(name);
 		
 		t.begginTiming(size);
 	}
 	
-	public static void tBeggin(String name, int size, String text) {
+	public static void tBeggin(String name, int size, String text) throws IOException {
 		Timing t = Timing.getInstance(name);
 		
 		t.begginTiming(size, text);
 	}
 	
-	public static void tEnd(String name) {
+	public static void tEnd(String name) throws IOException {
 		Timing t = Timing.getInstance(name);
 		
 		t.endTiming();
 	}
 	
-	public static void tClose(String name) {
+	public static void tClose(String name) throws IOException {
 		Timing t = Timing.getInstance(name);
 		
 		t.closeInstance();
 	}
 	
-	public static void tCompact(String name) {
+	public static void tCompact(String name) throws IOException {
 		Timing t = Timing.getInstance(name);
 		
 		t.compactFile();

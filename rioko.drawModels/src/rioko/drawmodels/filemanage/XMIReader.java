@@ -55,7 +55,8 @@ public class XMIReader {
 		// TODO Mejorar el sistema de lectura de los modelos
 		AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(this.getAdapterFactory(),new BasicCommandStack());
 		
-		resource = domain.createResource(file.getFullPath().toString());
+		resource = domain.createResource(file.getFullPath().makeAbsolute().toString());
+//		resource = domain.createResource(URI.createFileURI(file.getFullPath().toOSString()).toFileString());
 			
 		resource.load(null);
 		

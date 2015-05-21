@@ -43,96 +43,100 @@ public class RunJDTAST extends AbstractGenericHandler {
 		//  different editors pages and executing its drawing algorithms.
 		
 		//It will be several methods to make easier the coding and reading of teh tests.
-		Log.print("- Running tests");
-		
-		Timing tOpen = Timing.getInstance(open+extension);
-//		Timing tDraw = Timing.getInstance(draw+extension);
-		
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IWorkspaceRoot root = workspace.getRoot();
-		IProject project  = root.getProject("JDTAST");
-		IFolder folder = project.getFolder("models");
-		
-		Random r = new Random();
-		
-		Log.print("- Initialization done");
-		for(int set = iniSet; set <= nSets; set++) { //Iterations over the size
-			Log.print("("+ set + "): ** Begin with set " + set);
-			for(int test = 0; test < nTests; test++) { //Iterations over the numbers of tests
-				Log.print("("+ set + "): +++ Beggin with test "+ (test+1) + "/" + nTests);
-				//Reading part
-				IFile file = folder.getFile("set" + set + ".xmi");
-				ModelDiagram model = null;
-				
-				// ---- Measuring time
-				Log.print("("+ set + "): &&&& Measuring the reading...");
-				tOpen.begginTiming(set);
-					try {
-						model = new ModelDiagram(XMIReader.getReaderFromFile(file));
-					} catch (IOException e) {
-						Log.print("("+ set + "): Error creating the model for the test " + test + " of size " + set + ".");
-					}
-				tOpen.endTiming();
-				Log.print("("+ set + "): &&&& Reading measure finished");
-				// ---- End measure
-				
-				//We create now the properties to iterate over its algorithms
-				ZestProperties properties = new ZestProperties();
-				Collection<NestedBuilderAlgorithm> algorithms = RegisterBuilderAlgorithm.getRegisteredAlgorithms();
-				
-				for(NestedBuilderAlgorithm algorithm : algorithms) {
-					if(!(algorithm instanceof SimpleGlobalAndLocalAlgorithm)) {
-						Log.print("("+ set + "): &&&& Testing algorithm " + algorithm.getAlgorithmName());
-						properties.changeNestedAlgorithm(algorithm);
-						//Configuring the algorithm
-						for(DisplayOptions option : algorithm.getConfigurationNeeded()) {
-							switch(option) {
-								case ECLASS_FILTER:
-									//TODO poner una clase aleatoria del grafo
-									break;
-								case LEVELS_TS:
-									break;
-								case MAX_NODES:
-									properties.setMaxNodes(r.nextInt(10)+1);
-									break;
-								case ROOT_NODE:
-									properties.setRootNode(model.getModelDiagram().vertexSet().iterator().next());
-									break;
-								default:
-									break;
-							}
+		try {
+			Log.print("- Running tests");
+			
+			Timing tOpen = Timing.getInstance(open+extension);
+	//		Timing tDraw = Timing.getInstance(draw+extension);
+			
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IWorkspaceRoot root = workspace.getRoot();
+			IProject project  = root.getProject("JDTAST");
+			IFolder folder = project.getFolder("models");
+			
+			Random r = new Random();
+			
+			Log.print("- Initialization done");
+			for(int set = iniSet; set <= nSets; set++) { //Iterations over the size
+				Log.print("("+ set + "): ** Begin with set " + set);
+				for(int test = 0; test < nTests; test++) { //Iterations over the numbers of tests
+					Log.print("("+ set + "): +++ Beggin with test "+ (test+1) + "/" + nTests);
+					//Reading part
+					IFile file = folder.getFile("set" + set + ".xmi");
+					ModelDiagram model = null;
+					
+					// ---- Measuring time
+					Log.print("("+ set + "): &&&& Measuring the reading...");
+					tOpen.begginTiming(set);
+						try {
+							model = new ModelDiagram(XMIReader.getReaderFromFile(file));
+						} catch (IOException e) {
+							Log.print("("+ set + "): Error creating the model for the test " + test + " of size " + set + ".");
 						}
-						Timing currentTime = Timing.getInstance(run+algorithm.getAlgorithmName() + extension);
-						// ---- Measuring time
-						Log.print("("+ set + "): Measuring the algorithm...");
-						currentTime.begginTiming(set);
-							algorithm.createNestedGraph(model.getModelDiagram(), properties.getAlgorithmConfigurable());
-						currentTime.endTiming();
-						Log.print("("+ set + "): Run measure finished");
-						// ---- End measure
+					tOpen.endTiming();
+					Log.print("("+ set + "): &&&& Reading measure finished");
+					// ---- End measure
+					
+					//We create now the properties to iterate over its algorithms
+					ZestProperties properties = new ZestProperties();
+					Collection<NestedBuilderAlgorithm> algorithms = RegisterBuilderAlgorithm.getRegisteredAlgorithms();
+					
+					for(NestedBuilderAlgorithm algorithm : algorithms) {
+						if(!(algorithm instanceof SimpleGlobalAndLocalAlgorithm)) {
+							Log.print("("+ set + "): &&&& Testing algorithm " + algorithm.getAlgorithmName());
+							properties.changeNestedAlgorithm(algorithm);
+							//Configuring the algorithm
+							for(DisplayOptions option : algorithm.getConfigurationNeeded()) {
+								switch(option) {
+									case ECLASS_FILTER:
+										//TODO poner una clase aleatoria del grafo
+										break;
+									case LEVELS_TS:
+										break;
+									case MAX_NODES:
+										properties.setMaxNodes(r.nextInt(10)+1);
+										break;
+									case ROOT_NODE:
+										properties.setRootNode(model.getModelDiagram().vertexSet().iterator().next());
+										break;
+									default:
+										break;
+								}
+							}
+							Timing currentTime = Timing.getInstance(run+algorithm.getAlgorithmName() + extension);
+							// ---- Measuring time
+							Log.print("("+ set + "): Measuring the algorithm...");
+							currentTime.begginTiming(set);
+								algorithm.createNestedGraph(model.getModelDiagram(), properties.getAlgorithmConfigurable());
+							currentTime.endTiming();
+							Log.print("("+ set + "): Run measure finished");
+							// ---- End measure
+							
+							// Drawing part
+							Log.print("("+ set + "): Not implemented the measure of drawing...");
+							//TODO hacer la parte de pintado
+							Log.print("("+ set + "): &&&& Finished the algorithm " + algorithm.getAlgorithmName());
+						}
 						
-						// Drawing part
-						Log.print("("+ set + "): Not implemented the measure of drawing...");
-						//TODO hacer la parte de pintado
-						Log.print("("+ set + "): &&&& Finished the algorithm " + algorithm.getAlgorithmName());
 					}
+					Log.print("("+ set + "): +++ Finished the test " + (test+1) + "/" + nTests);
+					
+					XMIReader.closeFile(file);
+					
+					System.gc();
 					
 				}
-				Log.print("("+ set + "): +++ Finished the test " + (test+1) + "/" + nTests);
-				
-				XMIReader.closeFile(file);
-				
-				System.gc();
-				
+				Log.print("("+ set + "): ** Finished the size " + set);
 			}
-			Log.print("("+ set + "): ** Finished the size " + set);
+			
+			Log.print("- Finished the tests");
+			Log.print("- Compctifying files...");
+			Timing.closeAll();
+			Log.print("- End of compactification");
+			Log.print(" ------------------- End of Running Tests --------------------------");
+		} catch (IOException e) {
+			Log.exception(e);
 		}
-		
-		Log.print("- Finished the tests");
-		Log.print("- Compctifying files...");
-		Timing.closeAll();
-		Log.print("- End of compactification");
-		Log.print(" ------------------- End of Running Tests --------------------------");
 		return null;
 	}
 }

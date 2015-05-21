@@ -72,7 +72,7 @@ public final class Log {
 	}
 	
 	public static void open() {
-		open("./xmlLog.log", "./exceptionLog.log");
+		open("C:\\Users\\All users\\rioko_logs\\xmlLog.log", "C:\\Users\\All users\\rioko_logs\\exceptionLog.log");
 	}
 	
 	public static void open(String XMLpath, String ExceptionPath) {
