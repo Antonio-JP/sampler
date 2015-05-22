@@ -48,14 +48,6 @@
 			name="Search Node"
 			description="Allows the search of a node in the model"
 			id="rioko.drawModels.commands.others.searchNode"/>
-		<command
-			name="Run Tests"
-			description="Run the tests for the SAMPLER tool"
-			id="rioko.drawModels.commands.others.runTests"/>
-		<command
-			name="Run JDTAST"
-			description="Run the JDTAST tests for the SAMPLER tool"
-			id="rioko.drawModels.commands.others.runJDTAST"/>
 	</extension>
 	
 	<?Menus?>
@@ -175,14 +167,6 @@
 					commandId="rioko.drawModels.commands.others.searchNode"
 					icon="icons/search.png">
 				</command>
-				<command 
-					commandId="rioko.drawModels.commands.others.runTests"
-					icon="icons/sample.gif">
-				</command>
-				<command 
-					commandId="rioko.drawModels.commands.others.runJDTAST"
-					icon="icons/sample.gif">
-				</command>
 				<visibleWhen checkEnabled="false">
 					<with variable="activeEditorId">
 						<equals value="rioko.prueba.editors.zestEditor">
@@ -254,14 +238,6 @@
  			id="rioko.drawModels.handlers.others.searchNode"
  			commandId="rioko.drawModels.commands.others.searchNode"
  			class="rioko.drawmodels.handlers.zesteditor.SearchNodes"/>
- 		<handler
- 			id="rioko.drawModels.handlers.others.runTests"
- 			commandId="rioko.drawModels.commands.others.runTests"
- 			class="rioko.drawmodels.handlers.RunTests"/>
- 		<handler
- 			id="rioko.drawModels.handlers.others.runJDTAST"
- 			commandId="rioko.drawModels.commands.others.runJDTAST"
- 			class="rioko.drawmodels.handlers.RunJDTAST"/>
  	</extension>
  	
  	<?Vistas?>

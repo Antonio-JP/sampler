@@ -12,6 +12,9 @@ class PerformanceTestConstants {
 	//Project Management
 	public static final String PROJECT_NAME = "Testing_Sampler";
 	public static final String FOLDER_NAME = "tests";
+	
+	public static final String J_PROJECT_NAME = "Testing_JDTAST";
+	public static final String J_FOLDER_NAME = "sets";
 
 	//Execution Management
 	public static final int MIN_SIZE = 100;
