@@ -19,7 +19,7 @@ public class AllInOneNestedBuilder extends GlobalNestedBuilder {
 		Set<DiagramNode> list = data.vertexSet();
 		int nNodes = 1;
 		for(DiagramNode node : list) {
-			Log.xPrint("Agrupando nodo " + nNodes +"/"+list.size());
+			Log.xPrint("Working on node " + nNodes +"/"+list.size());
 			nNodes++;
 			
 			compose.addDiagramNode(node);

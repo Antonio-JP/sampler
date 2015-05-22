@@ -59,64 +59,64 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 	@Override
 	public void buildEdges(DiagramGraph target, DiagramGraph data)
 	{
-		Log.xPrint(" -- Construyendo aristas:");
+		Log.xPrint(" -- Building edges:");
 		int nNodes = 1;
 		//Para cada nodo del grafo que vamos a pintar
 		for(DiagramNode trgSource : target.vertexSet())
 		{
-			Log.xPrint("Creando arista desde el nodo " + nNodes);
+			Log.xPrint("Building edges from node " + nNodes);
 			Log.xOpen("edges-node");
 			//Vemos de cuáles de los nodos del grafo original procede
 			int dataNodes = 1;
 			//for(DiagramNode dtSource : data.getNodes())
 			for(DiagramNode dtSource : this.getNodesForSource(trgSource, data))
 			{
-				Log.xPrint("Mirando nodo de data (" + dataNodes + ")");
+				Log.xPrint("Working on data node (" + dataNodes + ")");
 				Log.xOpen("edges-dataNodes");
 				dataNodes++;
 				Set<DiagramNode> listOfSons = data.vertexFrom(dtSource);
 				int sonNodes = 1;
 				for(DiagramNode dtTarget : listOfSons)
 				{
-					Log.xPrint(" -- Analizando hijo número " + sonNodes+"/"+listOfSons.size());
+					Log.xPrint(" -- Looking child number " + sonNodes+"/"+listOfSons.size());
 					sonNodes++;
 					Log.xOpen("edges-son");
 					//Miramos que dtTarget no esté relacionado con trgSource
 					if(!trgSource.areRelated(dtTarget))
 					{
-						Log.xPrint("--- Encontrada conexión a añadir...");
+						Log.xPrint("--- Connection found...");
 						//En ese caso, añadimos la nueva conexión
 						//Buscamos en target los nodos del grafo a pintar que es o contiene a dtTarget.
 						//	- Se tiene en cuenta si se han filtrado o no vértices
-						Log.xPrint("--- & Buscando los nodos en el grafo destino al que añadir esta conexión");
+						Log.xPrint("--- & Searching nodes on target graph to add this connection");
 						Log.xOpen("edges-findNodes");
 						Pair<DiagramNode[], DiagramNode> trgsTarget = this.getListOfTargetSons(target, dtTarget, trgSource, data);
 						Log.xClose("edges-findNodes");
-						Log.xPrint("--- & Encontradas las conexiones");
+						Log.xPrint("--- & Found all connections");
 						int trgsNodes = 1;
 						for(DiagramNode trgTarget: trgsTarget.getFirst())
 						{
-							Log.xPrint("--- * Añadiendo conexión " + trgsNodes+"/"+trgsTarget.getFirst().length);
+							Log.xPrint("--- * Adding edge " + trgsNodes+"/"+trgsTarget.getFirst().length);
 							Log.xOpen("edges-addConnection");
 							if(target.getEdge(trgSource, trgTarget) == null) {
 								DiagramEdge<DiagramNode> edge = target.addEdge(trgSource, trgTarget);
 									
 								//Ponemos el tipo de arista que corresponda
-								Log.xPrint("--- * Ajustando el tipo de arista");
+								Log.xPrint("--- * Changing edge type");
 								if(trgsTarget.getLast() != null) {
-									Log.xPrint("--- ** El nodo no existe: el tipo es simple");
+									Log.xPrint("--- ** Node does not exist: simple type");
 									edge.setType(data.getEdge(dtSource, trgsTarget.getLast()).getType());
 								} else {
-									Log.xPrint("--- ** Hay que calcular el tipo de conexión");
+									Log.xPrint("--- ** Have to get connection type");
 									Log.xOpen("edges-typeConnection");
 									edge.setType(this.getTypeOfEdge(trgSource, trgTarget, data));
 									Log.xClose("edges.typeConnection");
 								}
 							}
 							Log.xClose("edges.addConnection");
-							Log.xPrint("--- * Conexión bien introducida");
+							Log.xPrint("--- * Connection added");
 						}
-						Log.xPrint("--- Añadidas las conexiones");
+						Log.xPrint("--- Added all connections");
 						//FIN !trgSource.equals(dtTarget)
 					}
 					//FIN bucle de adyacentes a dtSource
@@ -127,7 +127,7 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 				Log.xClose("edges-dataNodes");
 			}
 			Log.xClose("edges-node");
-			Log.xPrint("Nodo " + nNodes + " terminado");
+			Log.xPrint("Node " + nNodes + " finished");
 			nNodes++;
 		}
 		Log.xPrint(" -- Done");
@@ -137,13 +137,13 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 	private Pair<DiagramNode[], DiagramNode> getListOfTargetSons(DiagramGraph target, DiagramNode dtTarget, DiagramNode trgSource, DiagramGraph data) {
 		//Miramos si hay un nodo relacionado que sea dtTarget
 		ArrayList<DiagramNode> list = new ArrayList<>();
-		Log.xPrint("--- && Mirando si existe un nodo en el grafo destino...");
+		Log.xPrint("--- && Looking for a related node on target graph...");
 		list.add(this.existsRelatedNode(target, dtTarget));
 		
 		DiagramNode first = null;
 		
 		if(list.get(0) == null) {
-			Log.xPrint("--- &&& No existe. Buscamos a sus hijos");
+			Log.xPrint("--- &&& It does not exist. Searching its children");
 			list.remove(0);
 			first = dtTarget;
 			
@@ -162,9 +162,9 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 					}
 				}
 			}
-			Log.xPrint("--- &&& Hijos encontrados");
+			Log.xPrint("--- &&& All children found");
 		}
-		Log.xPrint("--- && Busqueda de vértices terminada -> " + list.size());
+		Log.xPrint("--- && Nodes searching ended -> " + list.size());
 		
 		return new Pair<DiagramNode[],DiagramNode>(list.toArray(new DiagramNode[0]), first);
 	}
@@ -195,7 +195,7 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 		//Caso simple-simple (ambos están en el grafo de datos)
 		//if((!(source instanceof ComposeDiagramNode)) && (!(target instanceof ComposeDiagramNode))) {
 		if((data.containsVertex(source)) && (data.containsVertex(target))) {
-			Log.xPrint("--- *** Caso simple-simple");
+			Log.xPrint("--- *** Simple-Simple case");
 			
 			//Devolvemos el tipo de arista que ya tenían en el grafo data
 			//DiagramEdge<DiagramNode> edge = data.getEdge(src, trg);
@@ -208,7 +208,7 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 		}
 		
 		//Caso general
-		Log.xPrint("--- *** Caso general");
+		Log.xPrint("--- *** General case");
 		typeOfConnection actualType = null;	//Inicializamos al caso "sin conexion"
 		
 		//Recorremos los nodos que están contenidos en source

@@ -111,7 +111,6 @@ public class Timing {
 		
 		if(name != null) {
 			try {
-//				Log.print("Abriendo fichero compactificado");
 				File compact = new File(pathToFiles + "__compact_"+name);
 				
 				if(!compact.exists()) {
@@ -120,11 +119,9 @@ public class Timing {
 				
 				PrintWriter writer = new PrintWriter(compact);
 				//Read the real file
-//				Log.print("Leyendo fichero de datos");
 				FileReader reader = new FileReader(pathToFiles + name);
 				BufferedReader buff = new BufferedReader(reader);
 				String line = buff.readLine();
-//				Log.print(" -- " + line);
 				ArrayMap<Integer, ArrayList<Integer>> map = new ArrayMap<>();
 				while(line != null) {
 					String[] parts = line.split(";");
@@ -143,7 +140,6 @@ public class Timing {
 					line = buff.readLine();
 				}
 				
-//				Log.print("Fichero leido");
 				//We get the means of execution
 				ArrayMap<Integer, Double> realTime = new ArrayMap<>();
 				for(Integer size : map.keySet()) {
@@ -154,12 +150,11 @@ public class Timing {
 					
 					realTime.put(size, totalTime/map.get(size).size());
 				}
-//				Log.print("Cuentas hechas");
 				//We print the new File Information
 				for(Integer size : realTime.keySet()) {
 					writer.println((size + ";" + realTime.get(size)).replaceAll("\\.", ","));
 				}
-//				Log.print("Medias impresas");
+				
 				//We close everything
 				buff.close();
 				reader.close();

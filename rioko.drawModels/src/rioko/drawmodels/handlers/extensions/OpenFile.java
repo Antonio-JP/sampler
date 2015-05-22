@@ -38,16 +38,16 @@ public class OpenFile extends AbstractGenericHandler {
 				XMIReader xmiReader;
 				try {
 					Log.xOpen("wizard");
-					Log.xPrint("Leyendo el modelo...");
+					Log.xPrint("Reading the model...");
 					xmiReader = XMIReader.getReaderFromFile(file);
 				
 					DiagramGraph graph = xmiReader.getDiagram();
 					ZestEditor editor = new ZestEditor();
 					
-					Log.xPrint("Creando el wizard...");
+					Log.xPrint("Creating wizard...");
 					SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard(editor, graph);
 					
-					Log.xPrint("Iniciando el wizard...");
+					Log.xPrint("Running wizard...");
 					wizard.init(HandlerUtil.getActiveWorkbenchWindow(ee).getWorkbench(), null);
 					    
 					// Instantiates the wizard container with the wizard and opens it
@@ -56,10 +56,10 @@ public class OpenFile extends AbstractGenericHandler {
 					dialog.create();
 					dialog.open();
 					
-					Log.xPrint("Wizard abierto. Esperando respuesta...");
+					Log.xPrint("Wizard opened. Waiting result...");
 					int ret = dialog.getReturnCode();
 					
-					Log.xPrint("Retorno del Wizard -> " + ret);
+					Log.xPrint("Return of Wizard -> " + ret);
 					Log.xClose("wizard");
 					
 					ZestProperties properties = editor.getProperties().copy();

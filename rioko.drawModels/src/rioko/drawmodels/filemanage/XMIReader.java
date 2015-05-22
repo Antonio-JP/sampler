@@ -1,7 +1,6 @@
 package rioko.drawmodels.filemanage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,8 +8,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -23,10 +20,8 @@ import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
-import rioko.drawmodels.diagram.XMIDiagram.AbstractAttribute;
 import rioko.drawmodels.diagram.XMIDiagram.ComposeXMIDiagramNode;
 import rioko.drawmodels.diagram.XMIDiagram.EmptyConnection;
-import rioko.drawmodels.diagram.XMIDiagram.StringAttribute;
 import rioko.drawmodels.diagram.XMIDiagram.XMIDiagramNode;
 
 public class XMIReader {
@@ -96,7 +91,7 @@ public class XMIReader {
 			while(iterator.hasNext())
 			{
 				current = iterator.next();
-				Log.xPrint("Iterando sobre el nodo " + nNodes);
+				Log.xPrint("Working on node " + nNodes);
 				nNodes++;
 				//Creamos el nodo, comprobando que no se haya introducido ya
 				XMIDiagramNode node = map.get(current);
@@ -191,31 +186,10 @@ public class XMIReader {
 	 */
 	private XMIDiagramNode createXMIDiagramNode(EObject obj)
 	{
-		EList<EAttribute> eAllAttributes = obj.eClass().getEAllAttributes();
-		ArrayList<AbstractAttribute> attrs = new ArrayList<>();
-		for(EAttribute attr : eAllAttributes) {
-			attrs.add(new StringAttribute(attr.getName(), XMIReader.getStringFromData(obj.eGet(attr))));
-		}
-		
-		XMIDiagramNode xmiNode = new XMIDiagramNode(obj.eClass(),attrs);
+		XMIDiagramNode xmiNode = new XMIDiagramNode(obj);
 		xmiNode.setId(this.nNodes);
 		this.nNodes++;
 		
 		return xmiNode;
-	}
-	
-	/**
-	 * 
-	 * @param data
-	 * @return
-	 */
-	private static String getStringFromData(Object data)
-	{
-		if(data == null)
-		{
-			return "null";
-		}
-		
-		return data.toString();
 	}
 }

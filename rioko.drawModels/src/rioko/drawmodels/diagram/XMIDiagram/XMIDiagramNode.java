@@ -1,69 +1,77 @@
 package rioko.drawmodels.diagram.XMIDiagram;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
 import rioko.draw2d.figures.VerticalFigure;
 import rioko.graphabstraction.diagram.DiagramNode;
 
 public class XMIDiagramNode extends DiagramNode {
 	
-	private ArrayList<AbstractAttribute> attrs;
+	private EObject object;
 	
-	private EClass classNode;
+//	private ArrayList<AbstractAttribute> attrs;
+	
+//	private EClass classNode;
 	
 	//Builders	
 	public XMIDiagramNode()
 	{
 		super();
-		this.attrs = new ArrayList<>();
 	}
 	
 	public XMIDiagramNode(String label)
 	{
 		super(label);
-		
-		this.attrs = new ArrayList<>();
 	}
 	
-	public XMIDiagramNode(String label, Collection<AbstractAttribute> attrs)
+	public XMIDiagramNode(String label, EObject eObject)
 	{
 		this(label);
 		
-		for(AbstractAttribute attr : attrs) {
-			this.attrs.add(attr.copy());
-		}
+		this.object = eObject;
 	}
 	
-	public XMIDiagramNode(EClass type, Collection<AbstractAttribute> attrs)
+	public XMIDiagramNode(EObject eObject)
 	{
-		this(type.getName(), attrs);
+		if(eObject == null) {
+			this.error("Null Argument recieved.");
+		}
 		
-		this.classNode = type;
+		this.setLabel(eObject.eClass().getName());
+		this.object = eObject;
 	}
 	
 	//Getters & Setters
 	public AbstractAttribute[] getAttributes()
 	{
-		return this.attrs.toArray(new AbstractAttribute[0]);
-	}
-	
-	public void addAttribute(AbstractAttribute attr)
-	{
-		this.attrs.add(attr);
+		this.checkEObject();
+		
+		EList<EAttribute> eAllAttributes = this.getEClass().getEAllAttributes();
+		ArrayList<AbstractAttribute> attrs = new ArrayList<>();
+		for(EAttribute attr : eAllAttributes) {
+			attrs.add(new StringAttribute(attr.getName(), this.getStringFromData(this.object.eGet(attr))));
+		}
+		
+		return attrs.toArray(new AbstractAttribute[0]);
 	}
 	
 	public EClass getEClass()
 	{
-		return this.classNode;
+		this.checkEObject();
+		
+		return this.object.eClass();
 	}
 	
-	public void setEClass(EClass classNode)
-	{
-		this.classNode = classNode;
+	public void setEObject(EObject eObject) {
+		this.object = eObject;
+		
+		this.setLabel(this.getEClass().getName());
 	}
 	
 	//Overriden methods
@@ -72,7 +80,7 @@ public class XMIDiagramNode extends DiagramNode {
 	{
 		this.dataFigure = new VerticalFigure();
 			
-		for(AbstractAttribute attr : this.attrs)
+		for(AbstractAttribute attr : this.getAttributes())
 		{
 			this.dataFigure.add(attr.getFigure());
 		}
@@ -82,11 +90,9 @@ public class XMIDiagramNode extends DiagramNode {
 
 	@Override
 	public DiagramNode copy() {
-		XMIDiagramNode copy = new XMIDiagramNode(this.getLabel(), this.attrs);
+		XMIDiagramNode copy = new XMIDiagramNode(this.object);
 		
 		copy.setId(this.getId());
-		
-		copy.setEClass(this.getEClass());
 		
 		copy.dataFigure = null;
 		
@@ -98,4 +104,29 @@ public class XMIDiagramNode extends DiagramNode {
 		return new XMIDiagramNodeFactory();
 	}
 
+	//Private methods
+	private void error(String message) {
+		throw new RuntimeException(message);
+	}
+	
+	private void checkEObject() {
+		if(this.object == null) {
+			this.error("XMI Node not initialized");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 */
+	private String getStringFromData(Object data)
+	{
+		if(data == null)
+		{
+			return "null";
+		}
+		
+		return data.toString();
+	}
 }

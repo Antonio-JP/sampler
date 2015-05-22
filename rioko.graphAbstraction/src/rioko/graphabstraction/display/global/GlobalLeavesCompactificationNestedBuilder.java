@@ -28,11 +28,11 @@ public class GlobalLeavesCompactificationNestedBuilder extends GlobalNestedBuild
 		
 		TreeUndirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>> iterator = new TreeUndirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>>(data, root, true);
 		
-		Log.xPrint(" --- Iterando sobre el grafo - Calculando hojas");
+		Log.xPrint(" --- Working on the graph nodes - Getting leaves");
 		Log.xOpen("nodes-iteration");
 		int nNodes = 1;
 		while(iterator.hasNext()) {
-			Log.xPrint(" --- & Procesando nodo " + nNodes);
+			Log.xPrint(" --- & Working on node " + nNodes);
 			nNodes++;
 			
 			DiagramNode currentNode = iterator.next();
@@ -52,14 +52,14 @@ public class GlobalLeavesCompactificationNestedBuilder extends GlobalNestedBuild
 		}
 		Log.xClose("nodes-iteration");
 		
-		Log.xPrint(" --- Agrupamos las hojas por padres");
+		Log.xPrint(" --- Compactifying leaves by their parent");
 		Log.xOpen("nodes-agrupation");
 		//Ahora tenemos en leaves las hojas del árbol. Las agrupamos por padre
 		HashMap<DiagramNode, ArrayList<DiagramNode>> listOfParents = new HashMap<>();
 		
 		nNodes = 1;
 		for(DiagramNode node : leaves) {
-			Log.xPrint(" --- & Procesando hoja " + nNodes+"/"+leaves.size());
+			Log.xPrint(" --- & Working on leaf " + nNodes+"/"+leaves.size());
 			nNodes++;
 			DiagramNode parent = iterator.getParent(node);
 			
@@ -71,14 +71,14 @@ public class GlobalLeavesCompactificationNestedBuilder extends GlobalNestedBuild
 		}
 		Log.xClose("nodes-agrupation");
 		
-		Log.xPrint(" --- Añadimos los nodos compuestos");
+		Log.xPrint(" --- Adding composed nodes");
 		Log.xOpen("nodes-creation");
 		//Ahora creamos los nodos agrupando los nodos de las hojas según el padre (y tipo, si corresponde)
 		for(DiagramNode parent : listOfParents.keySet()) {
 			DiagramNode compose = data.getComposeVertexFactory().createVertex(listOfParents.get(parent));
 			compose.setLabel(compose.getRootNode().getLabel());
 			target.addVertex(compose);
-			Log.xPrint(" --- & Añadido nodo compuesto");
+			Log.xPrint(" --- & Compose node added");
 		}
 		Log.xClose("nodes-creation");
 		

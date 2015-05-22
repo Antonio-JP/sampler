@@ -277,11 +277,11 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	public DiagramGraph createNestedGraph(DiagramGraph data, Configurable properties) {
 		DiagramGraph target = data;
 
-		Log.print("Ejecutando algoritmo " + this.getAlgorithmName() + "...");
+		Log.print("Running algorithm " + this.getAlgorithmName() + "...");
 		Log.xOpen("algorithm");
 		if(this.checkProperties(properties)) {			
 			try {
-				Log.xPrint("Propiedades válidas. Comenzando la ejecución...");
+				Log.xPrint("Properties checked. Starting...");
 				Log.xOpen("nodes");
 				//Nodos
 				target = this.buildNodes(data, properties);
@@ -297,7 +297,7 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 			}
 		}
 		Log.xClose("algorithm");
-		Log.print("Fin del algoritmo " + this.getAlgorithmName());
+		Log.print("Algorithm " + this.getAlgorithmName() + " finished.");
 		
 		return target;
 	}
@@ -309,59 +309,59 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 		
 		HashSet<DiagramNode> rootNodes = new HashSet<>();
 		Log.xOpen("steps");
-		Log.xPrint("Aplicando preprocesamiento...");
+		Log.xPrint("Prepocessing...");
 		Log.xOpen("pre-proc");
 		nextStepGraph = applyArray(this.preProcessor, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("pre-proc");
 		Log.xPrint("Done");
 		
-		Log.xPrint("Aplicando filtros...");
+		Log.xPrint("Filtering...");
 		Log.xOpen("filters");		
 		nextStepGraph = applyArray(this.filters, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("filters");
 		Log.xPrint("Done");
 		
-		Log.xPrint("Aplicando pasos antes de los criterios globales...");
+		Log.xPrint("Before Global Steps...");
 		Log.xOpen("pre-global");
 		nextStepGraph = applyArray(this.midProcessorFilter, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("pre-global");
 		Log.xPrint("Done");
 
-		Log.xPrint("Aplicando criterios globales...");
+		Log.xPrint("Applying Global Steps...");
 		Log.xOpen("global");
 		nextStepGraph = applyArray(this.globalCriteria, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("global");
 		Log.xPrint("Done");
 
-		Log.xPrint("Aplicando pases antes de los criterios locales...");
+		Log.xPrint("Before Local Steps...");
 		Log.xOpen("pre-local");
 		nextStepGraph = applyArray(this.midProcessorGlobal, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("pre-local");
 		Log.xPrint("Done");
 
-		Log.xPrint("Aplicando criterios locales...");
+		Log.xPrint("Applying Local Steps...");
 		Log.xOpen("local");
 		nextStepGraph = applyArray(this.localCriteria, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("local");
 		Log.xPrint("Done");
 
-		Log.xPrint("Aplicando postprocesamiento...");
+		Log.xPrint("Postprocessing...");
 		Log.xOpen("pos-proc");
 		nextStepGraph = applyArray(this.postProcessor, properties, currentGraph, rootNodes);
 		currentGraph = nextStepGraph;
 		Log.xClose("pos-proc");
 		Log.xPrint("Done");
 
-		Log.xPrint("Pintando los nodos raiz...");
+		Log.xPrint("Getting root nodes...");
 		applyRootNodes(currentGraph, rootNodes);
 		Log.xPrint("Done");
-		Log.xPrint("Ejecucion del algoritmo completa");
+		Log.xPrint("Execution of algorithm completed");
 		Log.xClose("steps");
 		
 		return currentGraph;
@@ -378,7 +378,7 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 			} else if(properties.getConfiguration(DisplayOptions.ROOT_NODE.toString()) != null){
 				rootNodes.add((DiagramNode) properties.getConfiguration(DisplayOptions.ROOT_NODE.toString()));
 			}
-			Log.print("Ejecutando paso " + step.getClass().getSimpleName() + "...");
+			Log.print("Running step " + step.getClass().getSimpleName() + "...");
 			Log.xOpen("step");
 			nextStepGraph = step.createNestedGraph(currentGraph, properties);
 			Log.xClose("step");
@@ -437,22 +437,6 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	}
 	
 	//Private method
-//	private static DisplayProperties getCorrectConfiguration(NestedGraphBuilder step, DisplayProperties configuration, DisplayProperties generalConf) {
-//		DisplayProperties finalConf;
-//		if(configuration != null) {
-//			finalConf = configuration.copy();
-//		} else {
-//			finalConf = new DisplayProperties();
-//		}
-//		for(DisplayOptions option : step.getConfigurationNeeded()) {
-//			if(!finalConf.isSet(option)) {
-//				finalConf.setAttribute(option, generalConf.getAttribute(option));
-//			}
-//		}
-//		
-//		return finalConf;
-//	}
-
 	private DisplayOptions[] getNeededOptions(NestedGraphBuilder step) {
 		ArrayList<DisplayOptions> list = new ArrayList<>();
 		

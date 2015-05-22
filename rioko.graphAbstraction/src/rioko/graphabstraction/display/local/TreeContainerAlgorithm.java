@@ -51,7 +51,7 @@ public abstract class TreeContainerAlgorithm extends LocalNestedBuilder {
 			if(!parentOf.containsKey(current)) {
 				//Procesamiento del nodo
 				target.addVertex(current);
-				Log.xPrint("Construido nodo simple " + nNodes);
+				Log.xPrint("Built simple node " + nNodes);
 				nNodes++;
 				
 				parentOf.put(current,currentPair.getLast());
@@ -111,12 +111,12 @@ public abstract class TreeContainerAlgorithm extends LocalNestedBuilder {
 				//Ya hemos terminado con este vértice
 				if(!others.get(i).isCompose()) {
 					target.addVertex(others.get(i).getRootNode());
-					Log.xPrint("Construido nodo simple " + nNodes);
+					Log.xPrint("Built simple node" + nNodes);
 					nNodes++;
 				} else if(!others.get(i).isEmpty()) {
 					others.get(i).setLabel(others.get(i).getRootNode().getLabel());
 					target.addVertex(others.get(i));
-					Log.xPrint("Construido nodo compuesto " + nNodes);
+					Log.xPrint("Built compose node " + nNodes);
 					nNodes++;
 				}
 				
@@ -153,7 +153,7 @@ public abstract class TreeContainerAlgorithm extends LocalNestedBuilder {
 		//Comprobamos que están todos los nodos
 		if(parentOf.keySet().size() < data.vertexSet().size()) {
 			ComposeDiagramNode other = data.getComposeVertexFactory().createVertex();
-			other.setLabel("Otra componente del modelo");
+			other.setLabel("Other connected components");
 			
 			for(DiagramNode node : data.vertexSet())
 			{
@@ -167,10 +167,10 @@ public abstract class TreeContainerAlgorithm extends LocalNestedBuilder {
 			} else {
 				target.addVertex(other.getRootNode());
 			}
-			Log.xPrint("Añadida la otra componente del modelo (" + nNodes + ")");
+			Log.xPrint("Added the others connected components of the model (" + nNodes + ")");
 			nNodes++;
 		} else if(parentOf.keySet().size()> data.vertexSet().size()) {
-			throw new Exception("Rioko ERROR: se han añadido más vértices de los que existen!!!");
+			throw new Exception("Rioko ERROR: There are more nodes added than existing on original graph!!");
 		}
 				
 		return target;
