@@ -15,11 +15,7 @@ drawModels, graphAbstraction and plugin.utils.
 
 Enjoy SAMPLER.
 
------------------------------------------------
- ---
- --- In the future, it will be a branch in the repository with the plug-ins compiled ready to install on your
- ---   Eclipse platform.
------------------------------------------------
+
 
 
 
@@ -40,8 +36,24 @@ carpetas drawModels, graphAbstraction y plugin.utils.
 
 ¡Disfrutad de SAMPLER!
 
------------------------------------------------
- ---
- --- En el futuro, estará disponible una branch adicional con los plug-ins compilados listos para instalarse
- ---   en la plataforma de Eclipse.
------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+----- 
+----- RELEASES
+-----
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+
+Release 1.0.0.0:
+	* Runnable Plug-in ready to install and visualize models.
+	* Includes a extra JUnit project to test the performance of SAMPLER.
+
+Working on:
+	* Version 1.1.0.0:
+		- Has the same features but change the way to read the models.
+		- Not duplicate information in memory while working on models.
+		- Detects proxies in the model and not load them until user wants.
+		- Improves performance of some basic visualization algorithms.
+		- Improves the Junit Project with more tests.
