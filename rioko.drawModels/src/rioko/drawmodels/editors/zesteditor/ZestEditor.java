@@ -30,6 +30,7 @@ import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.drawmodels.diagram.ModelDiagram;
+import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.graphabstraction.display.ExpandComposeNodeNestedBuilder;
 import rioko.drawmodels.draw2d.listeners.ChangeRootMouseListener;
 import rioko.drawmodels.editors.AbstractEditorPart;
@@ -351,6 +352,13 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		{
 			ExpandComposeNodeNestedBuilder builder = new ExpandComposeNodeNestedBuilder(compose, this.model.getPrintDiagram());
 			this.model.setPrintDiagram(this.properties.applyFilters(builder.createNestedGraph(this.model.getModelDiagram(), this.properties.getAlgorithmConfigurable())));
+			this.updateView(ZestEditor.UPDATE_NODES | ZestEditor.UPDATE_LAYOUT);
+		}
+	}
+	
+	public void extendProxyNode(XMIProxyDiagramNode proxy)
+	{
+		if(this.model.resolveProxy(proxy)) {
 			this.updateView(ZestEditor.UPDATE_NODES | ZestEditor.UPDATE_LAYOUT);
 		}
 	}

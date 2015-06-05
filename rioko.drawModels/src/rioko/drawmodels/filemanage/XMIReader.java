@@ -4,16 +4,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.ecore.xmi.XMLParserPool;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import rioko.utilities.Log;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
@@ -23,6 +27,7 @@ import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.drawmodels.diagram.XMIDiagram.ComposeXMIDiagramNode;
 import rioko.drawmodels.diagram.XMIDiagram.EmptyConnection;
 import rioko.drawmodels.diagram.XMIDiagram.XMIDiagramNode;
+import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 
 public class XMIReader {
 	
@@ -37,24 +42,38 @@ public class XMIReader {
 	 */
 	private Resource resource = null;
 	
-	private AdapterFactory adapterFactory = null;
+	private ResourceSet resSet = null;
 	
 	private DiagramGraph graph = null;
 	
 	private int nNodes = 0;
 	
+	// Other fields
+	private XMLParserPool parserPool = new XMLParserPoolImpl();
+	private Map<Object, Object> nameToFeatureMap = new HashMap<>();
+	
+	//Builders
 	public XMIReader() {}
 	
 	private XMIReader(IFile file) throws IOException
 	{
-		// TODO Mejorar el sistema de lectura de los modelos
-		AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(this.getAdapterFactory(),new BasicCommandStack());
+		//Create the ResourceSet associated to this Reader
+		this.resSet = new ResourceSetImpl();
 		
-		resource = domain.createResource(file.getFullPath().makeAbsolute().toString());
-//		resource = domain.createResource(URI.createFileURI(file.getFullPath().toOSString()).toFileString());
-			
-		resource.load(null);
+		//We create a caching map to URIs with their Resource
+		((ResourceSetImpl)this.resSet).setURIResourceMap(new HashMap<>());
 		
+		this.resource = this.resSet.createResource(URI.createURI(file.getFullPath().makeAbsolute().toString()));
+		//AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(this.getAdapterFactory(),new BasicCommandStack());
+		
+//		if(res instanceof XMIResource) {
+//			String uri = file.getFullPath().makeAbsolute().toString();
+	
+	//		resource = resSet.createResource(uri);
+	//		resource = domain.createResource(uri);
+	//		resource = domain.createResource(URI.createFileURI(file.getFullPath().toOSString()).toFileString());
+			resource.load(this.getDefaultLoadConfiguration());
+//		}
 		Files.put(file, this);
 	}
 	
@@ -74,6 +93,12 @@ public class XMIReader {
 			reader.resource.unload();
 		}
 	}
+
+	public EObject resolve(XMIProxyDiagramNode proxy) {
+//		resSet.createResource(EcoreUtil.getURI(proxy.getProxyObject()));
+		
+		return EcoreUtil.resolve(proxy.getProxyObject(), this.resSet);
+	}
 	
 	public DiagramGraph getDiagram()
 	{
@@ -82,9 +107,9 @@ public class XMIReader {
 		{
 			this.graph = new DiagramGraph(TYPEOFEDGES, TYPEOFNODES, TYPEOFCOMPOSE);
 			
-			HashMap<EObject, XMIDiagramNode> map = new HashMap<>();
+			HashMap<EObject, DiagramNode> map = new HashMap<>();
 			
-			Iterator<EObject> iterator = resource.getAllContents();
+			Iterator<EObject> iterator = EcoreUtil.getAllContents(resource, false);
 			EObject current = null;
 			
 			int nNodes = 1;
@@ -94,7 +119,7 @@ public class XMIReader {
 				Log.xPrint("Working on node " + nNodes);
 				nNodes++;
 				//Creamos el nodo, comprobando que no se haya introducido ya
-				XMIDiagramNode node = map.get(current);
+				DiagramNode node = map.get(current);
 				if(node == null) {
 					node = this.createXMIDiagramNode(current);
 					map.put(current, node);
@@ -104,7 +129,7 @@ public class XMIReader {
 				
 				//Conexiones de contención
 				EObject parentEObject = current.eContainer();
-				XMIDiagramNode parent = map.get(parentEObject);
+				DiagramNode parent = map.get(parentEObject);
 				
 				if(parent != null) {
 					DiagramEdge<DiagramNode> edge = graph.addEdge(parent, node);
@@ -120,7 +145,7 @@ public class XMIReader {
 				//Conexiones de referencias
 				for(EObject  ref: current.eCrossReferences())
 				{
-					XMIDiagramNode rfNode = map.get(ref);
+					DiagramNode rfNode = map.get(ref);
 					
 					if(rfNode == null)
 					{
@@ -164,19 +189,6 @@ public class XMIReader {
 		
 		return result;
 	}
-
-	//Protected methods
-	/**
-	 * Return an ComposedAdapterFactory for all registered models
-	 * 
-	 * @return a ComposedAdapterFactory
-	 */
-	protected AdapterFactory getAdapterFactory() {
-		if (adapterFactory == null) {
-			adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		}
-		return adapterFactory;
-	}
 	
 	//Private methods
 	/**
@@ -184,12 +196,31 @@ public class XMIReader {
 	 * @param obj
 	 * @return
 	 */
-	private XMIDiagramNode createXMIDiagramNode(EObject obj)
+	private DiagramNode createXMIDiagramNode(EObject obj)
 	{
-		XMIDiagramNode xmiNode = new XMIDiagramNode(obj);
-		xmiNode.setId(this.nNodes);
+		
+		DiagramNode node = this.graph.getVertexFactory().createVertex(obj);
+		node.setId(this.nNodes);
 		this.nNodes++;
 		
-		return xmiNode;
+		return node;
+	}
+	
+	private Map<Object,Object> getDefaultLoadConfiguration() {
+		if(this.resource == null || !(this.resource instanceof XMIResource)) {
+			return null;
+		} else {
+			XMIResource resource = (XMIResource)this.resource;
+			
+			Map<Object,Object> options = resource.getDefaultLoadOptions();
+			
+			options.put(XMLResource.OPTION_DEFER_ATTACHMENT, Boolean.TRUE);
+			options.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
+			options.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.TRUE);
+			options.put(XMLResource.OPTION_USE_PARSER_POOL, this.parserPool);
+			options.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, this.nameToFeatureMap);
+			
+			return options;
+		}
 	}
 }

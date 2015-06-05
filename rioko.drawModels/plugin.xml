@@ -199,52 +199,86 @@
 	<?Handlers de los menus?>
  	<extension point="org.eclipse.ui.handlers">
  		<handler
- 			id="rioko.prueba.drawModels.handlers.zestEditor.toggleData"
  			commandId="rioko.drawModels.commands.zestEditor.toggleData"
  			class="rioko.drawmodels.handlers.zesteditor.ToggleDataViewHandler"/>
  		<handler
- 			id="rioko.prueba.drawModels.handlers.zestEditor.toggleConLabels"
  			commandId="rioko.drawModels.commands.zestEditor.toggleConLabels"
  			class="rioko.drawmodels.handlers.zesteditor.ToggleConnectionLabelsViewHandler"/>
  		<?Handlers de navegacion?>
  		<handler
- 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.reset"
  			commandId="rioko.drawModels.commands.zestEditor.navigateModel.reset"
  			class="rioko.drawmodels.handlers.zesteditor.ResetNavigationModel"/>
  		<handler
- 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.goBack"
  			commandId="rioko.drawModels.commands.zestEditor.navigateModel.goBack"
  			class="rioko.drawmodels.handlers.zesteditor.GoBackNavigationModel"/>
  		<handler
- 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.showAllModel"
  			commandId="rioko.drawModels.commands.zestEditor.navigateModel.showAllModel"
  			class="rioko.drawmodels.handlers.zesteditor.ShowAllModel"/>
  		<?Handlers de algoritmos?>
  		<handler
- 			id="rioko.prueba.drawModels.handlers.algorithms.createNewAlgorithm"
  			commandId="rioko.drawModels.commands.algorithms.createNewAlgorithm"
  			class="rioko.drawmodels.handlers.algorithms.CreateNewAlgorithmWizardHandler"/>
  		<handler
- 			id="rioko.prueba.drawModels.handlers.algorithms.selectAlgorithm"
  			commandId="rioko.drawModels.commands.algorithms.selectAlgorithm"
  			class="rioko.drawmodels.handlers.algorithms.SelectAlgorithmWizardHandler"/>
  		<?Handlers de los menus contextuales adicionales?>
  		<handler
- 			id="rioko.drawModels.handlers.extensions.openFile"
  			commandId="rioko.drawModels.commands.extensions.openFile"
  			class="rioko.drawmodels.handlers.extensions.OpenFile"/>
  		<?Handlers de los menus contextuales adicionales?>
  		<handler
- 			id="rioko.drawModels.handlers.others.searchNode"
  			commandId="rioko.drawModels.commands.others.searchNode"
  			class="rioko.drawmodels.handlers.zesteditor.SearchNodes"/>
+ 		<!--handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.toggleData"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.zestEditor.toggleData"
+ 			class="rioko.drawmodels.handlers.zesteditor.ToggleDataViewHandler"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.toggleConLabels"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.zestEditor.toggleConLabels"
+ 			class="rioko.drawmodels.handlers.zesteditor.ToggleConnectionLabelsViewHandler"/>
+ 		<?Handlers de navegacion?>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.reset"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.zestEditor.navigateModel.reset"
+ 			class="rioko.drawmodels.handlers.zesteditor.ResetNavigationModel"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.goBack"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.zestEditor.navigateModel.goBack"
+ 			class="rioko.drawmodels.handlers.zesteditor.GoBackNavigationModel"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.zestEditor.navigateModel.showAllModel"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.zestEditor.navigateModel.showAllModel"
+ 			class="rioko.drawmodels.handlers.zesteditor.ShowAllModel"/>
+ 		<?Handlers de algoritmos?>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.algorithms.createNewAlgorithm"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.algorithms.createNewAlgorithm"
+ 			class="rioko.drawmodels.handlers.algorithms.CreateNewAlgorithmWizardHandler"/>
+ 		<handler
+ 			id="rioko.prueba.drawModels.handlers.algorithms.selectAlgorithm"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.algorithms.selectAlgorithm"
+ 			class="rioko.drawmodels.handlers.algorithms.SelectAlgorithmWizardHandler"/>
+ 		<?Handlers de los menus contextuales adicionales?>
+ 		<handler
+ 			id="rioko.drawModels.handlers.extensions.openFile"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.extensions.openFile"
+ 			class="rioko.drawmodels.handlers.extensions.OpenFile"/>
+ 		<?Handlers de los menus contextuales adicionales?>
+ 		<handler
+ 			id="rioko.drawModels.handlers.others.searchNode"	&& Da warning en este atributo
+ 			commandId="rioko.drawModels.commands.others.searchNode"
+ 			class="rioko.drawmodels.handlers.zesteditor.SearchNodes"/-->
  	</extension>
  	
  	<?Vistas?>
  	<extension point="org.eclipse.ui.views">
+		<!--category
+			name="Model Drawing"
+			description="Views related with the exploration of a model" && Da warning este atributo
+			id="rioko.drawModels.views.category"/-->
 		<category
 			name="Model Drawing"
-			description="Views related with the exploration of a model"
 			id="rioko.drawModels.views.category"/>
 		<view
 			category="rioko.drawModels.views.category"

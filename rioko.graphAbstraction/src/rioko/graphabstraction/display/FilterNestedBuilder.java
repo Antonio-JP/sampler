@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
+import rioko.graphabstraction.configurations.BasicConfigurableImpl;
 import rioko.graphabstraction.configurations.Configurable;
 import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.diagram.DiagramGraph;
@@ -22,13 +23,21 @@ public abstract class FilterNestedBuilder extends NestedGraphBuilder {
 		DiagramGraph target = new DiagramGraph(data.getEdgeClass(), data.getVertexClass(), data.getComposeClass());
 		
 		FilterOfVertex filter = this.getFilter(data, properties);
-		if(!this.filter.getConfiguration().isEmpty()) {
+		if(this.filter != null) {
 			ArrayList<Configuration> newConf = new ArrayList<>();
+			
+			boolean notValid = false;
 			for(Pair<String, Configuration> pair : this.filter.getConfiguration()) {
-				newConf.add(pair.getLast());
+				if(pair.getLast().isValid()) {
+					newConf.add(pair.getLast());
+				} else {
+					notValid = true;
+				}
 			}
 			
-			filter.setConfiguration(newConf);
+			if(!notValid) {
+				filter.setConfiguration(newConf);
+			}
 		}
 		for(DiagramNode node : data.vertexSet()) {
 			if(!filter.filterVertex(properties, data).contains(node)) {
@@ -54,6 +63,8 @@ public abstract class FilterNestedBuilder extends NestedGraphBuilder {
 			BadArgumentException {
 		if(this.filter != null) {
 			this.filter.setConfiguration(newConf);
+		} else {
+			this.getFilter(null, new BasicConfigurableImpl(newConf));
 		}
 	}
 

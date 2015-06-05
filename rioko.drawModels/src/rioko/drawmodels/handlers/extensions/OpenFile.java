@@ -8,13 +8,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.IDE;
 
 import rioko.utilities.Log;
-import rioko.graphabstraction.diagram.DiagramGraph;
-import rioko.drawmodels.editors.zesteditor.SpecialInputZestEditor;
+import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.filemanage.XMIReader;
@@ -41,11 +41,11 @@ public class OpenFile extends AbstractGenericHandler {
 					Log.xPrint("Reading the model...");
 					xmiReader = XMIReader.getReaderFromFile(file);
 				
-					DiagramGraph graph = xmiReader.getDiagram();
+					ModelDiagram model = new ModelDiagram(xmiReader);
 					ZestEditor editor = new ZestEditor();
 					
 					Log.xPrint("Creating wizard...");
-					SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard(editor, graph);
+					SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard(editor, model.getModelDiagram());
 					
 					Log.xPrint("Running wizard...");
 					wizard.init(HandlerUtil.getActiveWorkbenchWindow(ee).getWorkbench(), null);
@@ -65,7 +65,13 @@ public class OpenFile extends AbstractGenericHandler {
 					ZestProperties properties = editor.getProperties().copy();
 					editor.dispose();
 					
-					IDE.openEditor(HandlerUtil.getActiveWorkbenchWindow(ee).getActivePage(), new SpecialInputZestEditor(graph, properties, file.getName()), "rioko.drawmodels.editors.zestEditor");
+					IEditorPart newEditor = IDE.openEditor(HandlerUtil.getActiveWorkbenchWindow(ee).getActivePage(), model/*new SpecialInputZestEditor(graph, properties, file.getName())*/, "rioko.drawmodels.editors.zestEditor");
+					if(!(newEditor instanceof ZestEditor)) {
+						throw new PartInitException("Bad editor created");
+					}
+					
+					((ZestEditor)newEditor).changeZestProperties(properties);
+					((ZestEditor)newEditor).updateView();
 				} catch (IOException e) {
 					Log.exception(e);
 				} catch (PartInitException e) {

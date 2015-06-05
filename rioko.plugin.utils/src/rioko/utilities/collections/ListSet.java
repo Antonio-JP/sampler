@@ -27,7 +27,9 @@ public class ListSet<E> implements Set<E> {
 	}
 	
 	public ListSet(Collection<? extends E> collection) {
-		this.orderedSet = new ArrayList<E>(collection);
+		for(E element : collection) {
+			this.add(element);
+		}
 	}
 	
 	//Set and Collection Methods
@@ -123,5 +125,10 @@ public class ListSet<E> implements Set<E> {
 	public <T> T[] toArray(T[] array) {
 		return this.orderedSet.toArray(array);
 	}
-
+	
+	//Other methods
+	@Override
+	public String toString() {
+		return this.orderedSet.toString();
+	}
 }

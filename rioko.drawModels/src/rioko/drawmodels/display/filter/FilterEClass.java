@@ -17,12 +17,15 @@ import rioko.graphabstraction.display.DisplayOptions;
 import rioko.graphabstraction.display.FilterNestedBuilder;
 
 public class FilterEClass extends FilterNestedBuilder {
-	
+		
 	//GraphBuilder methods
 	@Override
 	public Collection<DisplayOptions> getConfigurationNeeded() {
 		
 		Collection<DisplayOptions> res = new ArrayList<>(1);
+		if(this.filter == null) {
+			res.add(DisplayOptions.ECLASS_FILTER);
+		}
 		if(this.filter.getConfiguration().isEmpty() || this.filter.getConfiguration().iterator().next().getLast().getConfiguration() == null) {
 			res.add(DisplayOptions.ECLASS_FILTER); 
 		}
@@ -33,25 +36,27 @@ public class FilterEClass extends FilterNestedBuilder {
 	//FilterNestedBuilder methods
 	@Override
 	protected FilterOfVertex getFilter(DiagramGraph data, Configurable properties) {
+		if(data == null && properties == null) {
+			return null;
+		}
+		
 		ByEClass filterOfVertex = new ByEClass();
 		
-		if(data != null && properties != null) {
-			ModelDiagram model = new ModelDiagram(data);
-			EClass finalEClass = null;
-			for(EClass eClass : model.getEClassList()) {
-				if(eClass.equals(properties.getConfiguration(DisplayOptions.ECLASS_FILTER.toString()))) {
-					finalEClass = eClass;
-					break;
-				}
+		ModelDiagram model = new ModelDiagram(data);
+		EClass finalEClass = null;
+		for(EClass eClass : model.getEClassList()) {
+			if(eClass.equals(properties.getConfiguration(DisplayOptions.ECLASS_FILTER.toString()))) {
+				finalEClass = eClass;
+				break;
 			}
-			
-			if(finalEClass != null) {
-				try {
-					filterOfVertex.setConfiguration(new EClassConfiguration(model, finalEClass));
-				} catch (BadConfigurationException | BadArgumentException e) {
-					// Impossible Exception
-					e.printStackTrace();
-				}
+		}
+		
+		if(finalEClass != null) {
+			try {
+				filterOfVertex.setConfiguration(new EClassConfiguration(model, finalEClass));
+			} catch (BadConfigurationException | BadArgumentException e) {
+				// Impossible Exception
+				e.printStackTrace();
 			}
 		}
 		

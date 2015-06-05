@@ -74,6 +74,10 @@ public class XMIDiagramNode extends DiagramNode {
 		this.setLabel(this.getEClass().getName());
 	}
 	
+	protected EObject getEObject() {
+		return this.object;
+	}
+	
 	//Overriden methods
 	@Override
 	public IFigure buildDataFigure() 
@@ -109,7 +113,7 @@ public class XMIDiagramNode extends DiagramNode {
 		throw new RuntimeException(message);
 	}
 	
-	private void checkEObject() {
+	protected void checkEObject() {
 		if(this.object == null) {
 			this.error("XMI Node not initialized");
 		}

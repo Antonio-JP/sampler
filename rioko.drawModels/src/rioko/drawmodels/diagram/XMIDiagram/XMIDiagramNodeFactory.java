@@ -13,9 +13,17 @@ public class XMIDiagramNodeFactory implements VertexFactory<XMIDiagramNode> {
 		} else if(arg0.length == 1 && (arg0[0] instanceof String)){
 			return new XMIDiagramNode((String)arg0[0]);
 		} else if(arg0.length == 1 && (arg0[0] instanceof EObject)) {
-			return new XMIDiagramNode((EObject)arg0[0]);
+			if(((EObject)arg0[0]).eIsProxy()) {
+				return new XMIProxyDiagramNode((EObject)arg0[0]);
+			} else {
+				return new XMIDiagramNode((EObject)arg0[0]);
+			}
 		} else if(arg0.length == 2 && (arg0[0] instanceof String) && (arg0[1] instanceof EObject)) {
-			return new XMIDiagramNode((String)arg0[0], (EObject)arg0[1]);
+			if(((EObject)arg0[0]).eIsProxy()) {
+				return new XMIProxyDiagramNode((String)arg0[0], (EObject)arg0[1]);
+			} else {
+				return new XMIDiagramNode((String)arg0[0], (EObject)arg0[1]);
+			}
 		} 
 		
 		return null;

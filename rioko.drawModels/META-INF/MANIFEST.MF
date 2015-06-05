@@ -13,11 +13,16 @@ Require-Bundle: rioko.graphabstraction;bundle-version="1.0.0";visibility:=reexpo
  org.eclipse.core.runtime.compatibility;bundle-version="3.2.200",
  org.eclipse.jface,
  org.eclipse.swt,
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.xmi
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: rioko.drawmodels.algorithms.display.test,
+ rioko.drawmodels.configurations,
  rioko.drawmodels.diagram,
+ rioko.drawmodels.diagram.XMIDiagram,
+ rioko.drawmodels.diagram.filters,
+ rioko.drawmodels.display.filter,
  rioko.drawmodels.editors.zesteditor.zestproperties,
  rioko.drawmodels.filemanage

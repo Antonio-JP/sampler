@@ -18,11 +18,10 @@ class PerformanceTestConstants {
 
 	//Execution Management
 	public static final int MIN_SIZE = 100;
-	public static final int MAX_SIZE = 1000;
-	public static final int STEP_SIZE = 100;
+	public static final int MAX_SIZE = 200;
 	public static final int NUM_MODELS = 1;
 	
-	public static final int NUM_REPEATS = 5;
+	public static final int NUM_REPEATS = 1;
 	
 	public static int nextSize(int size) {
 		if(size < 1000) {

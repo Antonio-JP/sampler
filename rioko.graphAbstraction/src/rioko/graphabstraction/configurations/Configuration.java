@@ -30,6 +30,10 @@ public interface Configuration extends Copiable{
 	
 	public String getTextConfiguration();
 	
+	public default boolean isValid() {
+		return true;
+	}
+	
 	@Override
 	public Configuration copy();
 }

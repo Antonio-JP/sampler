@@ -5,11 +5,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import rioko.drawmodels.diagram.XMIDiagram.XMIDiagramNode;
+import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.drawmodels.filemanage.XMIReader;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
@@ -31,6 +33,8 @@ public class ModelDiagram implements IEditorInput{
 	
 	private String name = "ZestEditor";
 	
+	private XMIReader xmiReader = null;
+	
 	//Builders
 	public ModelDiagram()
 	{
@@ -48,6 +52,8 @@ public class ModelDiagram implements IEditorInput{
 	
 	public ModelDiagram(XMIReader xmiReader) throws IOException
 	{
+		this.xmiReader = xmiReader;
+		
 		this.graph = xmiReader.getDiagram();
 		
 		this.printable = this.graph;
@@ -90,9 +96,11 @@ public class ModelDiagram implements IEditorInput{
 		if(this.eClassList == null) {
 			this.eClassList = new HashSet<EClass>();
 			
-			for(DiagramNode node : this.graph.vertexSet()) {
-				if(node instanceof XMIDiagramNode) {
-					this.eClassList.add(((XMIDiagramNode) node).getEClass());
+			if(this.graph != null) {
+				for(DiagramNode node : this.graph.vertexSet()) {
+					if(node instanceof XMIDiagramNode) {
+						this.eClassList.add(((XMIDiagramNode) node).getEClass());
+					}
 				}
 			}
 		}
@@ -114,6 +122,42 @@ public class ModelDiagram implements IEditorInput{
 		}
 		
 		return this.eClassNames;
+	}
+	
+	//Proxy methods
+	public boolean resolveProxy(XMIProxyDiagramNode proxy) {
+		if(this.graph.containsVertex(proxy)) {
+			EObject resolved = this.xmiReader.resolve(proxy);
+			
+			if(resolved == null || resolved == proxy.getProxyObject()) {
+				return false;
+			}
+			
+			DiagramNode newNode = this.graph.getVertexFactory().createVertex(resolved);
+			
+			Set<DiagramNode> from = this.graph.vertexFrom(proxy);
+			Set<DiagramNode> to = this.graph.vertexTo(proxy);
+			
+			//Remove the previous vertex from the graph
+			this.graph.removeVertex(proxy);
+			
+			//Add the new resolved node to the graph
+			this.graph.addVertex(newNode);
+			
+			for(DiagramNode nodeFrom : from) {
+				this.graph.addEdge(newNode, nodeFrom);
+			}
+			
+			for(DiagramNode nodeTo : to) {
+				this.graph.addEdge(nodeTo, newNode);
+			}
+			
+			/* TODO Queda la parte de hacer algo con las referencias de newNode */
+			
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	//IEditorInput methods

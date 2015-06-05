@@ -121,6 +121,11 @@ public class EClassConfiguration implements ModelDepending, ComboConfiguration {
 		
 		return this.value.getName();
 	}
+	
+	@Override
+	public boolean isValid() {
+		return (this.model == null) && (this.value == null);
+	}
 
 	//ModelDependingConfiguration methods
 	@Override
