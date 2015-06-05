@@ -26,9 +26,9 @@ public class FilterEClass extends FilterNestedBuilder {
 		if(this.filter == null) {
 			res.add(DisplayOptions.ECLASS_FILTER);
 		}
-		if(this.filter.getConfiguration().isEmpty() || this.filter.getConfiguration().iterator().next().getLast().getConfiguration() == null) {
-			res.add(DisplayOptions.ECLASS_FILTER); 
-		}
+//		if(this.filter.getConfiguration().isEmpty() || this.filter.getConfiguration().iterator().next().getLast().getConfiguration() == null) {
+//			res.add(DisplayOptions.ECLASS_FILTER); 
+//		}
 		
 		return res;
 	}

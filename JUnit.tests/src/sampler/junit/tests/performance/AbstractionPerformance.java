@@ -95,7 +95,7 @@ public class AbstractionPerformance {
 		Log.print("("+ currentSize+") : &&&& Measuring the reading...");
 		tOpen.begginTiming(currentSize);
 			try {
-				this.model = new ModelDiagram(XMIReader.getReaderFromFile(file));
+				this.model = XMIReader.getReaderFromFile(file).getModel();
 			} catch (IOException e) {
 				Log.exception(e);
 				Log.print("("+ currentSize + "): Error creating the model for the test " + path + ".");

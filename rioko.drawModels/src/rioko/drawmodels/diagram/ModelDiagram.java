@@ -1,6 +1,6 @@
 package rioko.drawmodels.diagram;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +15,10 @@ import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.drawmodels.filemanage.XMIReader;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
+import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.utilities.Pair;
 
 
 
@@ -50,14 +52,14 @@ public class ModelDiagram implements IEditorInput{
 		this.printable = this.graph;
 	}
 	
-	public ModelDiagram(XMIReader xmiReader) throws IOException
-	{
-		this.xmiReader = xmiReader;
-		
-		this.graph = xmiReader.getDiagram();
-		
-		this.printable = this.graph;
-	}
+//	public ModelDiagram(XMIReader xmiReader) throws IOException
+//	{
+//		this.xmiReader = xmiReader;
+//		
+//		this.graph = xmiReader.getDiagram();
+//		
+//		this.printable = this.graph;
+//	}
 	
 	public ModelDiagram(DiagramGraph graph) 
 	{
@@ -87,6 +89,33 @@ public class ModelDiagram implements IEditorInput{
 	public void setPrintDiagram(DiagramGraph printable)
 	{
 		this.printable = printable;
+	}
+
+	public void setXMIReader(XMIReader xmiReader) {
+		this.xmiReader = xmiReader;
+	}
+	
+	//Diagram Gestion methods
+	private int nextId = 1;
+	public boolean addVertex(DiagramNode node) {
+		if(this.graph.addVertex(node)) {
+			if(node.getId() != -1) {
+				node.setId(nextId);
+				nextId++;
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public DiagramEdge<DiagramNode> addEdge(DiagramNode source, DiagramNode target) {
+		return this.graph.addEdge(source, target);
+	}
+	
+	public boolean containsVertex(DiagramNode node) {
+		return this.graph.containsVertex(node);
 	}
 	
 	//Meta-model analysis methods
@@ -134,22 +163,31 @@ public class ModelDiagram implements IEditorInput{
 			}
 			
 			DiagramNode newNode = this.graph.getVertexFactory().createVertex(resolved);
+
+			ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsTo = new ArrayList<>();
+			ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsFrom = new ArrayList<>();
 			
-			Set<DiagramNode> from = this.graph.vertexFrom(proxy);
-			Set<DiagramNode> to = this.graph.vertexTo(proxy);
+			for(DiagramEdge<DiagramNode> edge : this.graph.edgesOf(proxy)) {
+				if(edge.getSource().equals(proxy)) {
+					connectionsFrom.add(new Pair<>(edge.getType(), edge.getTarget()));
+				} else {
+					connectionsTo.add(new Pair<>(edge.getType(), edge.getSource()));
+				}
+			}
 			
 			//Remove the previous vertex from the graph
 			this.graph.removeVertex(proxy);
 			
 			//Add the new resolved node to the graph
-			this.graph.addVertex(newNode);
+			newNode.setId(proxy.getId());
+			this.addVertex(newNode);
 			
-			for(DiagramNode nodeFrom : from) {
-				this.graph.addEdge(newNode, nodeFrom);
+			for(Pair<typeOfConnection,DiagramNode> nodeFrom : connectionsFrom) {
+				this.graph.addEdge(newNode, nodeFrom.getLast()).setType(nodeFrom.getFirst());
 			}
 			
-			for(DiagramNode nodeTo : to) {
-				this.graph.addEdge(nodeTo, newNode);
+			for(Pair<typeOfConnection,DiagramNode> nodeTo : connectionsTo) {
+				this.graph.addEdge(nodeTo.getLast(), newNode).setType(nodeTo.getFirst());
 			}
 			
 			/* TODO Queda la parte de hacer algo con las referencias de newNode */

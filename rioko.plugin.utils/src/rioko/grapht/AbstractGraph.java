@@ -108,14 +108,15 @@ public class AbstractGraph<V extends Vertex,E extends VisibleEdge<V>> implements
 	@Override
 	public Set<E> getAllEdges(V arg0, V arg1) {
 		Set<E> edges = this.edgesOf(arg0);
+		Set<E> res = new ListSet<E>();
 		
 		for(E edge : edges) {
-			if(!this.getEdgeSource(edge).equals(arg1) && !this.getEdgeTarget(edge).equals(arg1)) {
-				edges.remove(edge);
+			if(this.getEdgeSource(edge).equals(arg1) || this.getEdgeTarget(edge).equals(arg1)) {
+				res.add(edge);
 			}
 		}
 		
-		return edges;
+		return res;
 	}
 
 	@Override
@@ -232,6 +233,10 @@ public class AbstractGraph<V extends Vertex,E extends VisibleEdge<V>> implements
 		if(!this.containsVertex(arg0))
 		{
 			return false;
+		}
+		
+		for(V from : this.vertexTo(arg0)) {
+			this.removeAllEdges(from, arg0);
 		}
 		
 		this.adyacencyList.remove(arg0);

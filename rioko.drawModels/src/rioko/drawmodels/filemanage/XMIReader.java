@@ -22,8 +22,8 @@ import rioko.utilities.Log;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
-import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.diagram.XMIDiagram.ComposeXMIDiagramNode;
 import rioko.drawmodels.diagram.XMIDiagram.EmptyConnection;
 import rioko.drawmodels.diagram.XMIDiagram.XMIDiagramNode;
@@ -44,7 +44,7 @@ public class XMIReader {
 	
 	private ResourceSet resSet = null;
 	
-	private DiagramGraph graph = null;
+	private ModelDiagram model = null;
 	
 	private int nNodes = 0;
 	
@@ -100,12 +100,13 @@ public class XMIReader {
 		return EcoreUtil.resolve(proxy.getProxyObject(), this.resSet);
 	}
 	
-	public DiagramGraph getDiagram()
+	public ModelDiagram getModel()
 	{
 		Log.xOpen("reading-file");
-		if(this.graph == null)
+		if(this.model == null)
 		{
-			this.graph = new DiagramGraph(TYPEOFEDGES, TYPEOFNODES, TYPEOFCOMPOSE);
+			this.model = new ModelDiagram(TYPEOFEDGES, TYPEOFNODES, TYPEOFCOMPOSE);
+			this.model.setXMIReader(this);
 			
 			HashMap<EObject, DiagramNode> map = new HashMap<>();
 			
@@ -124,7 +125,7 @@ public class XMIReader {
 					node = this.createXMIDiagramNode(current);
 					map.put(current, node);
 				
-					graph.addVertex(node);
+					model.addVertex(node);
 				}
 				
 				//Conexiones de contención
@@ -132,7 +133,7 @@ public class XMIReader {
 				DiagramNode parent = map.get(parentEObject);
 				
 				if(parent != null) {
-					DiagramEdge<DiagramNode> edge = graph.addEdge(parent, node);
+					DiagramEdge<DiagramNode> edge = model.addEdge(parent, node);
 					
 					//El casting es válido porque así hemos creado la arista
 					EmptyConnection con = EmptyConnection.class.cast(edge);
@@ -153,23 +154,17 @@ public class XMIReader {
 						map.put(ref, rfNode);
 					}
 					
-					if(!this.graph.containsVertex(rfNode)) {
-						this.graph.addVertex(rfNode);
+					if(!this.model.containsVertex(rfNode)) {
+						this.model.addVertex(rfNode);
 					}
 					
-					DiagramEdge<DiagramNode> edge = graph.addEdge(node, rfNode);
-					
-					//El casting es válido porque así hemos creado la arista
-					EmptyConnection con = EmptyConnection.class.cast(edge);
-					con.setType(typeOfConnection.REFERENCE);
-					
-					con.setEReference(this.getEReference(current, ref));
+					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
 				}
 			}
 		}
 		
 		Log.xClose("reading-file");
-		return this.graph;
+		return this.model;
 	}
 	
 	private EReference getEReference(EObject parentEObject, EObject current) {
@@ -199,7 +194,7 @@ public class XMIReader {
 	private DiagramNode createXMIDiagramNode(EObject obj)
 	{
 		
-		DiagramNode node = this.graph.getVertexFactory().createVertex(obj);
+		DiagramNode node = this.model.getModelDiagram().getVertexFactory().createVertex(obj);
 		node.setId(this.nNodes);
 		this.nNodes++;
 		

@@ -102,7 +102,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 			if(input instanceof FileEditorInput) {
 				try {
 					this.xmiReader = XMIReader.getReaderFromFile(this.getFile());
-					this.model = new ModelDiagram(this.xmiReader);
+					this.model = this.xmiReader.getModel();
 				} catch (IOException e) {
 					throw new PartInitException("Rioko ERROR: no such file loaded");
 				}
@@ -359,7 +359,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	public void extendProxyNode(XMIProxyDiagramNode proxy)
 	{
 		if(this.model.resolveProxy(proxy)) {
-			this.updateView(ZestEditor.UPDATE_NODES | ZestEditor.UPDATE_LAYOUT);
+			this.updateView();
 		}
 	}
 	

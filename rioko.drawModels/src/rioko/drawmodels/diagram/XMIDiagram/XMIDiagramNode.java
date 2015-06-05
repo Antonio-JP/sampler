@@ -102,6 +102,20 @@ public class XMIDiagramNode extends DiagramNode {
 		
 		return copy;
 	}
+	
+	@Override
+	public boolean equals(Object ob) {
+		if(ob instanceof XMIDiagramNode) {
+			return this.getEObject().equals(((XMIDiagramNode) ob).getEObject());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getEObject().hashCode();
+	}
 
 	@Override
 	public XMIDiagramNodeFactory getVertexFactory() {

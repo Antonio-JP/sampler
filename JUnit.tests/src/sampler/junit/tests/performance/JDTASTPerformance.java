@@ -90,7 +90,7 @@ public class JDTASTPerformance {
 		Log.print("("+ currentSet+") : &&&& Measuring the reading...");
 		tOpen.begginTiming(currentSet);
 			try {
-				this.model = new ModelDiagram(XMIReader.getReaderFromFile(file));
+				this.model = XMIReader.getReaderFromFile(file).getModel();
 			} catch (IOException e) {
 				Log.exception(e);
 				Log.print("("+ currentSet + "): Error creating the model for the test " + path + ".");

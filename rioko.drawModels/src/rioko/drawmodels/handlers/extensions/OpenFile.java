@@ -41,7 +41,7 @@ public class OpenFile extends AbstractGenericHandler {
 					Log.xPrint("Reading the model...");
 					xmiReader = XMIReader.getReaderFromFile(file);
 				
-					ModelDiagram model = new ModelDiagram(xmiReader);
+					ModelDiagram model = xmiReader.getModel();
 					ZestEditor editor = new ZestEditor();
 					
 					Log.xPrint("Creating wizard...");
