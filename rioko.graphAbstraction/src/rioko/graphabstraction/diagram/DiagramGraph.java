@@ -59,7 +59,7 @@ public class DiagramGraph extends AbstractGraph<DiagramNode, DiagramEdge<Diagram
 	}
 	
 	@Override
-	protected DiagramGraph getSimilarType() {
+	public DiagramGraph getSimilarType() {
 		return new DiagramGraph(this.getEdgeClass(), this.getVertexClass(), this.getComposeClass());
 	}
 }

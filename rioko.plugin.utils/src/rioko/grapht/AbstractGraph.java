@@ -346,7 +346,7 @@ public class AbstractGraph<V extends Vertex,E extends VisibleEdge<V>> implements
 		return (Class<? extends V>)this.vertexClass;
 	}
 	
-	protected AbstractGraph<V,E> getSimilarType() {
+	public AbstractGraph<V,E> getSimilarType() {
 		return new AbstractGraph<>(this.edgeClass, this.vertexClass);
 	}
 }

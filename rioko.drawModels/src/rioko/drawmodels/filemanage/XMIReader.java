@@ -95,8 +95,6 @@ public class XMIReader {
 	}
 
 	public EObject resolve(XMIProxyDiagramNode proxy) {
-//		resSet.createResource(EcoreUtil.getURI(proxy.getProxyObject()));
-		
 		return EcoreUtil.resolve(proxy.getProxyObject(), this.resSet);
 	}
 	
