@@ -170,7 +170,9 @@ public class XMIReader {
 						Object object = current.eGet(reference, false);
 						
 						if(object instanceof EObjectResolvingEList) {
-							for(Object obj: ((EObjectResolvingEList) object).basicList()) {
+							@SuppressWarnings("rawtypes")
+							List list = ((EObjectResolvingEList) object).basicList();
+							for(Object obj: list) {
 								EObject eObject = (EObject)obj;
 	
 								this.processNode(eObject);
@@ -186,34 +188,7 @@ public class XMIReader {
 							model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
 						}
 					}
-//					this.processNode(eObject);
-//					DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
-					
-//					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
 				}
-//				for (EContentsEList.FeatureIterator featureIterator = 
-//				        (EContentsEList.FeatureIterator)current.eCrossReferences().iterator();
-//				       featureIterator.hasNext(); ){
-//					
-//					EObject eObject = (EObject)featureIterator.next();
-//				    EReference eReference = (EReference)featureIterator.feature();
-//
-//				    this.processNode(eObject);
-//					DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
-//					
-//					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
-//				}
-
-				
-				
-				//Conexiones de referencias
-//				for(EObject  ref: current.eCrossReferences())
-//				{
-//					this.processNode(ref);
-//					DiagramNode rfNode = this.getDiagramNodeFromEObject(ref);
-//					
-//					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
-//				}
 			}
 		}
  	}
