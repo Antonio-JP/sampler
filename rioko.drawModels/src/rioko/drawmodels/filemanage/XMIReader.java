@@ -8,11 +8,13 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLParserPool;
@@ -46,7 +48,7 @@ public class XMIReader {
 	
 	private ModelDiagram model = null;
 	
-	private int nNodes = 0;
+//	private int nNodes = 0;
 	
 	// Other fields
 	private XMLParserPool parserPool = new XMLParserPoolImpl();
@@ -63,17 +65,10 @@ public class XMIReader {
 		//We create a caching map to URIs with their Resource
 		((ResourceSetImpl)this.resSet).setURIResourceMap(new HashMap<>());
 		
+		//We create the Root resource
 		this.resource = this.resSet.createResource(URI.createURI(file.getFullPath().makeAbsolute().toString()));
-		//AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(this.getAdapterFactory(),new BasicCommandStack());
-		
-//		if(res instanceof XMIResource) {
-//			String uri = file.getFullPath().makeAbsolute().toString();
-	
-	//		resource = resSet.createResource(uri);
-	//		resource = domain.createResource(uri);
-	//		resource = domain.createResource(URI.createFileURI(file.getFullPath().toOSString()).toFileString());
-			resource.load(this.getDefaultLoadConfiguration());
-//		}
+		resource.load(this.getDefaultLoadConfiguration());
+			
 		Files.put(file, this);
 	}
 	
@@ -95,7 +90,22 @@ public class XMIReader {
 	}
 
 	public EObject resolve(XMIProxyDiagramNode proxy) {
-		return EcoreUtil.resolve(proxy.getProxyObject(), this.resSet);
+		Resource resolved = this.resSet.createResource(EcoreUtil.getURI(proxy.getProxyObject()).trimFragment());
+		
+		try {
+			resolved.load(this.getDefaultLoadConfiguration());
+			
+			Iterator<EObject> iterator = EcoreUtil.getAllContents(resolved, false);
+			if(iterator.hasNext()) {
+				return iterator.next();
+			}
+		} catch(IOException e) {
+			Log.exception(e);
+			Log.print("Error in the model: bad reference");
+		}
+		
+		return null;
+//		return EcoreUtil.resolve(proxy.getProxyObject(), this.resSet);
 	}
 	
 	public ModelDiagram getModel()
@@ -106,29 +116,35 @@ public class XMIReader {
 			this.model = new ModelDiagram(TYPEOFEDGES, TYPEOFNODES, TYPEOFCOMPOSE);
 			this.model.setXMIReader(this);
 			
-			HashMap<EObject, DiagramNode> map = new HashMap<>();
-			
 			Iterator<EObject> iterator = EcoreUtil.getAllContents(resource, false);
-			EObject current = null;
 			
 			int nNodes = 1;
 			while(iterator.hasNext())
 			{
-				current = iterator.next();
 				Log.xPrint("Working on node " + nNodes);
 				nNodes++;
-				//Creamos el nodo, comprobando que no se haya introducido ya
-				DiagramNode node = map.get(current);
-				if(node == null) {
-					node = this.createXMIDiagramNode(current);
-					map.put(current, node);
+				this.processNode(iterator.next());
+			}
+		}
+		
+		Log.xClose("reading-file");
+		return this.model;
+	}
+	
+	public void processNode(DiagramNode node, EObject current) {
+		DiagramNode inNode = this.getDiagramNodeFromDiagramNode(node);
+		//First Case: the node already exist but was a proxy
+		if((inNode instanceof XMIProxyDiagramNode) && !(node instanceof XMIProxyDiagramNode)) {
+			this.model.changeNode((XMIProxyDiagramNode) inNode, node, current);
+		} 
+		//Second Case: the node does not exist in the model (it is a call from changeNode 
+		else if(inNode == null) {
+			model.addVertex(node);
 				
-					model.addVertex(node);
-				}
-				
+			if(current != null) {
 				//Conexiones de contención
 				EObject parentEObject = current.eContainer();
-				DiagramNode parent = map.get(parentEObject);
+				DiagramNode parent = this.getDiagramNodeFromEObject(parentEObject);
 				
 				if(parent != null) {
 					DiagramEdge<DiagramNode> edge = model.addEdge(parent, node);
@@ -138,32 +154,112 @@ public class XMIReader {
 					con.setType(typeOfConnection.CONTAINMENT);
 						
 					con.setEReference(this.getEReference(parentEObject, current));
-					
 				}
 				
+				//Recorremos los hijos de contención
+				Iterator<EObject> children = EcoreUtil.getAllContents(current, false);
+				while(children.hasNext()) {
+					this.processNode(children.next());
+				}
+				
+				
+				EClass eClass = current.eClass();
+				for(EReference reference : eClass.getEReferences()) {
+					if(!reference.isContainment()) {
+						reference.setResolveProxies(false);
+						Object object = current.eGet(reference, false);
+						
+						if(object instanceof EObjectResolvingEList) {
+							for(Object obj: ((EObjectResolvingEList) object).basicList()) {
+								EObject eObject = (EObject)obj;
+	
+								this.processNode(eObject);
+								DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
+								
+								model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+							}
+						} else {
+							EObject eObject = (EObject)object;
+							this.processNode(eObject);
+							DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
+							
+							model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+						}
+					}
+//					this.processNode(eObject);
+//					DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
+					
+//					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+				}
+//				for (EContentsEList.FeatureIterator featureIterator = 
+//				        (EContentsEList.FeatureIterator)current.eCrossReferences().iterator();
+//				       featureIterator.hasNext(); ){
+//					
+//					EObject eObject = (EObject)featureIterator.next();
+//				    EReference eReference = (EReference)featureIterator.feature();
+//
+//				    this.processNode(eObject);
+//					DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
+//					
+//					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+//				}
+
+				
+				
 				//Conexiones de referencias
-				for(EObject  ref: current.eCrossReferences())
-				{
-					DiagramNode rfNode = map.get(ref);
-					
-					if(rfNode == null)
-					{
-						rfNode = this.createXMIDiagramNode(ref);
-						map.put(ref, rfNode);
-					}
-					
-					if(!this.model.containsVertex(rfNode)) {
-						this.model.addVertex(rfNode);
-					}
-					
-					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+//				for(EObject  ref: current.eCrossReferences())
+//				{
+//					this.processNode(ref);
+//					DiagramNode rfNode = this.getDiagramNodeFromEObject(ref);
+//					
+//					model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+//				}
+			}
+		}
+ 	}
+	
+	private void processNode(EObject current) {
+		//Creamos el nodo, comprobando que no se haya introducido ya
+		DiagramNode node = this.model.getModelDiagram().getVertexFactory().createVertex(current);
+		
+		this.processNode(node, current);
+	}
+	
+	/**
+	 * Private method to get the DiagramNode attached to a EObject of the model.
+	 * 
+	 * @param eObject we want to search
+	 * @return DiagramNode with the EObject attached
+	 */
+	private DiagramNode getDiagramNodeFromEObject(EObject eObject) {
+		DiagramNode node = this.model.getModelDiagram().getVertexFactory().createVertex(eObject);
+		
+		return this.getDiagramNodeFromDiagramNode(node);
+	}
+	
+	private DiagramNode getDiagramNodeFromDiagramNode(DiagramNode node) {
+		if(this.model.containsVertex(node)) {
+			for(DiagramNode inNode : this.model.getModelDiagram().vertexSet()) {
+				if(node.equals(inNode)) {
+					return inNode;
 				}
 			}
 		}
 		
-		Log.xClose("reading-file");
-		return this.model;
+		return null;
 	}
+	
+//	/**
+//	 * Private method to get a Resource from an EObject of the model
+//	 * 
+//	 * @param eObject EObject we use as base object
+//	 * @return Resource that contains the EObject
+//	 */
+//	private Resource getResourceFromEObject(EObject eObject) {
+//		URI uriOfResource = EcoreUtil.getURI(eObject);
+//		
+//		return this.resSet.getResource(uriOfResource, false);
+//	}
 	
 	private EReference getEReference(EObject parentEObject, EObject current) {
 		EReference result = null;
@@ -183,22 +279,7 @@ public class XMIReader {
 		return result;
 	}
 	
-	//Private methods
-	/**
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	private DiagramNode createXMIDiagramNode(EObject obj)
-	{
-		
-		DiagramNode node = this.model.getModelDiagram().getVertexFactory().createVertex(obj);
-		node.setId(this.nNodes);
-		this.nNodes++;
-		
-		return node;
-	}
-	
+	//Private methods	
 	private Map<Object,Object> getDefaultLoadConfiguration() {
 		if(this.resource == null || !(this.resource instanceof XMIResource)) {
 			return null;
@@ -216,4 +297,6 @@ public class XMIReader {
 			return options;
 		}
 	}
+	
+	//Static methods
 }

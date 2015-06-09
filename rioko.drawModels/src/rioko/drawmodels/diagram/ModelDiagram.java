@@ -99,7 +99,7 @@ public class ModelDiagram implements IEditorInput{
 	private int nextId = 1;
 	public boolean addVertex(DiagramNode node) {
 		if(this.graph.addVertex(node)) {
-			if(node.getId() != -1) {
+			if(node.getId() == -1) {
 				node.setId(nextId);
 				nextId++;
 			}
@@ -164,37 +164,41 @@ public class ModelDiagram implements IEditorInput{
 			
 			DiagramNode newNode = this.graph.getVertexFactory().createVertex(resolved);
 
-			ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsTo = new ArrayList<>();
-			ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsFrom = new ArrayList<>();
-			
-			for(DiagramEdge<DiagramNode> edge : this.graph.edgesOf(proxy)) {
-				if(edge.getSource().equals(proxy)) {
-					connectionsFrom.add(new Pair<>(edge.getType(), edge.getTarget()));
-				} else {
-					connectionsTo.add(new Pair<>(edge.getType(), edge.getSource()));
-				}
-			}
-			
-			//Remove the previous vertex from the graph
-			this.graph.removeVertex(proxy);
-			
-			//Add the new resolved node to the graph
-			newNode.setId(proxy.getId());
-			this.addVertex(newNode);
-			
-			for(Pair<typeOfConnection,DiagramNode> nodeFrom : connectionsFrom) {
-				this.graph.addEdge(newNode, nodeFrom.getLast()).setType(nodeFrom.getFirst());
-			}
-			
-			for(Pair<typeOfConnection,DiagramNode> nodeTo : connectionsTo) {
-				this.graph.addEdge(nodeTo.getLast(), newNode).setType(nodeTo.getFirst());
-			}
-			
-			/* TODO Queda la parte de hacer algo con las referencias de newNode */
+			this.changeNode(proxy, newNode, resolved);
 			
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	public void changeNode(XMIProxyDiagramNode proxy, DiagramNode resolved, EObject eObject) {
+		ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsTo = new ArrayList<>();
+		ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsFrom = new ArrayList<>();
+		
+		for(DiagramEdge<DiagramNode> edge : this.graph.edgesOf(proxy)) {
+			if(edge.getTarget().equals(proxy)) {
+				connectionsTo.add(new Pair<>(edge.getType(), edge.getSource()));
+			} else {
+				connectionsFrom.add(new Pair<>(edge.getType(), edge.getTarget()));
+			}
+		}
+		
+		//Remove the previous vertex from the graph
+		this.graph.removeVertex(proxy);
+		
+		//Add the new resolved node to the graph
+		resolved.setId(proxy.getId());
+		this.xmiReader.processNode(resolved, eObject);
+
+		//Adding the in-edges
+		for(Pair<typeOfConnection,DiagramNode> nodeTo : connectionsTo) {
+			this.graph.addEdge(nodeTo.getLast(), resolved).setType(nodeTo.getFirst());
+		}
+		
+		//Adding the out-edges
+		for(Pair<typeOfConnection,DiagramNode> nodeTo : connectionsFrom) {
+			this.graph.addEdge(resolved, nodeTo.getLast()).setType(nodeTo.getFirst());
 		}
 	}
 

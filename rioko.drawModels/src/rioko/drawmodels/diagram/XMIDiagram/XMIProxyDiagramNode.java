@@ -29,7 +29,7 @@ public class XMIProxyDiagramNode extends XMIDiagramNode {
 	
 	@Override
 	public IFigure getFigure(boolean showData) {
-		return super.getFigure(showData, new Color(null, 100,10,10));
+		return super.getFigure(showData, new Color(null, 232,159,255));
 	}
 	
 	public final EObject getProxyObject() {

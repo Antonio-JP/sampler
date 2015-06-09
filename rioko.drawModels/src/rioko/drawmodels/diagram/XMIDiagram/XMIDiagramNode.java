@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import rioko.draw2d.figures.VerticalFigure;
 import rioko.graphabstraction.diagram.DiagramNode;
@@ -106,7 +108,10 @@ public class XMIDiagramNode extends DiagramNode {
 	@Override
 	public boolean equals(Object ob) {
 		if(ob instanceof XMIDiagramNode) {
-			return this.getEObject().equals(((XMIDiagramNode) ob).getEObject());
+			URI here = EcoreUtil.getURI(this.object).trimFragment();
+			URI obURI = EcoreUtil.getURI(((XMIDiagramNode) ob).getEObject()).trimFragment();
+			
+			return here.equals(obURI);
 		}
 		
 		return false;
@@ -114,7 +119,7 @@ public class XMIDiagramNode extends DiagramNode {
 	
 	@Override
 	public int hashCode() {
-		return this.getEObject().hashCode();
+		return EcoreUtil.getURI(this.object).trimFragment().hashCode();
 	}
 
 	@Override
