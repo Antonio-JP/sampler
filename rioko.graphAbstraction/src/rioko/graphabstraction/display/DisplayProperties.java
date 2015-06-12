@@ -99,6 +99,8 @@ public class DisplayProperties implements Copiable {
 				case ECLASS_FILTER:
 					this.setFilterByText((String)newAttr);
 					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -113,9 +115,9 @@ public class DisplayProperties implements Copiable {
 				return this.getLevelsToShow();
 			case ECLASS_FILTER:
 				return this.getFilterByText();
+			default:
+				return false;
 		}
-	
-	return false;
 	}
 	//Checking Methods
 	public boolean isSet(DisplayOptions attribute) {
@@ -128,6 +130,8 @@ public class DisplayProperties implements Copiable {
 				return this.isSetLevelsToShow();
 			case ECLASS_FILTER:
 				return this.isSetFilterByText();
+			default:
+				break;
 		}
 		
 		return false;
@@ -197,6 +201,8 @@ public class DisplayProperties implements Copiable {
 					return (newAttr instanceof Integer);
 				case ECLASS_FILTER:
 					return (newAttr instanceof String);
+				default:
+					break;
 			}
 			
 			return false;

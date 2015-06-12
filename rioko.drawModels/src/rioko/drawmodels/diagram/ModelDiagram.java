@@ -33,8 +33,6 @@ public class ModelDiagram implements IEditorInput{
 	
 	private DiagramGraph printable;
 	
-	private String name = "ZestEditor";
-	
 	private XMIReader xmiReader = null;
 	
 	//Builders
@@ -66,13 +64,6 @@ public class ModelDiagram implements IEditorInput{
 		this.graph = graph;
 		
 		this.printable = this.graph;
-	}
-	
-	public ModelDiagram(DiagramGraph graph, String name) 
-	{
-		this(graph);
-		
-		this.name = name;		
 	}
 		
 	//Getters & Setters
@@ -171,6 +162,14 @@ public class ModelDiagram implements IEditorInput{
 			return false;
 		}
 	}
+
+	public ModelDiagram getModelFromProxy(XMIProxyDiagramNode proxy) {
+		if(this.containsVertex(proxy)) {
+			return this.xmiReader.getModel(proxy);
+		}
+		
+		return null;
+	}
 	
 	public void changeNode(XMIProxyDiagramNode proxy, DiagramNode resolved, EObject eObject) {
 		ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsTo = new ArrayList<>();
@@ -209,19 +208,24 @@ public class ModelDiagram implements IEditorInput{
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class arg0) { return null; }
 
 	@Override
-	public boolean exists() { return this.graph!=null; }
+	public boolean exists() { return (this.graph!=null || this.xmiReader != null); }
 
 	@Override
 	public ImageDescriptor getImageDescriptor() { return null; }
 
 	@Override
-	public String getName() { return this.name;}
+	public String getName() { 
+		if(this.xmiReader == null) {
+			return "ZestEditor";
+		} else {
+			return this.xmiReader.getFileName();}
+		}
 
 	@Override
 	public IPersistableElement getPersistable() { return null; }
 
 	@Override
-	public String getToolTipText() { return "Rioko: model custom explorer"; }
+	public String getToolTipText() { return "SAMPLER: " + this.getName(); }
 
 	
 }

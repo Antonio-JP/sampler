@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -14,8 +18,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLParserPool;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -37,7 +41,9 @@ public class XMIReader {
 	public static final Class<? extends DiagramNode> TYPEOFNODES = XMIDiagramNode.class;
 	public static final Class<? extends ComposeDiagramNode> TYPEOFCOMPOSE = ComposeXMIDiagramNode.class;
 	
-	private static HashMap<IFile, XMIReader> Files = new HashMap<>();
+	private static HashMap<Object, XMIReader> Files = new HashMap<>();
+	
+	private IFile file = null;
 
 	/**
 	 * Campo que tendrá el recurso con el que trabajaremos, es decir, el modelo y el metamodelo
@@ -52,13 +58,16 @@ public class XMIReader {
 	
 	// Other fields
 	private XMLParserPool parserPool = new XMLParserPoolImpl();
-	private Map<Object, Object> nameToFeatureMap = new HashMap<>();
+	private Map<IFile, Object> nameToFeatureMap = new HashMap<>();
 	
 	//Builders
 	public XMIReader() {}
 	
 	private XMIReader(IFile file) throws IOException
 	{
+		//We set the file of this xmiReader as file
+		this.file = file;
+		
 		//Create the ResourceSet associated to this Reader
 		this.resSet = new ResourceSetImpl();
 		
@@ -87,6 +96,10 @@ public class XMIReader {
 		
 			reader.resource.unload();
 		}
+	}
+
+	public String getFileName() {
+		return this.file.getName();
 	}
 
 	public EObject resolve(XMIProxyDiagramNode proxy) {
@@ -131,6 +144,24 @@ public class XMIReader {
 		return this.model;
 	}
 	
+	public ModelDiagram getModel(XMIProxyDiagramNode proxy) {
+		URI proxyUri = EcoreUtil.getURI(proxy.getProxyObject()).trimFragment();
+		
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IFile file = root.getFile(new Path(this.resSet.getURIConverter().normalize(proxyUri).toString().replaceFirst("resource/", "")));
+		try {
+			if(!file.exists()) {
+				throw new IOException("Rioko ERROR: file not exist");
+			}
+
+			return XMIReader.getReaderFromFile(file).getModel();
+		} catch (IOException e) {
+			Log.exception(e);
+			
+			return null;
+		}
+	}
+	
 	public void processNode(DiagramNode node, EObject current) {
 		DiagramNode inNode = this.getDiagramNodeFromDiagramNode(node);
 		//First Case: the node already exist but was a proxy
@@ -165,27 +196,40 @@ public class XMIReader {
 				
 				EClass eClass = current.eClass();
 				for(EReference reference : eClass.getEReferences()) {
-					if(!reference.isContainment()) {
+					if(!reference.isContainment() && !reference.isContainer()) {
 						reference.setResolveProxies(false);
 						Object object = current.eGet(reference, false);
 						
-						if(object instanceof EObjectResolvingEList) {
-							@SuppressWarnings("rawtypes")
-							List list = ((EObjectResolvingEList) object).basicList();
-							for(Object obj: list) {
-								EObject eObject = (EObject)obj;
-	
+						if(object == null) {
+							Log.print("Null Object found");
+						} else {
+							if(object instanceof InternalEList) {
+								@SuppressWarnings("rawtypes")
+								List list = ((InternalEList) object).basicList();
+								for(Object obj: list) {
+									EObject eObject = (EObject)obj;
+												this.processNode(eObject);
+									DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
+									
+									model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+								}
+							} else if(object instanceof EList) {
+								@SuppressWarnings("rawtypes")
+								List list = (EList) object;
+								for(Object obj: list) {
+									EObject eObject = (EObject)obj;
+												this.processNode(eObject);
+									DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
+									
+									model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
+								}
+							} else{
+								EObject eObject = (EObject)object;
 								this.processNode(eObject);
 								DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
 								
 								model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
 							}
-						} else {
-							EObject eObject = (EObject)object;
-							this.processNode(eObject);
-							DiagramNode rfNode = this.getDiagramNodeFromEObject(eObject);
-							
-							model.addEdge(node, rfNode).setType(typeOfConnection.REFERENCE);
 						}
 					}
 				}

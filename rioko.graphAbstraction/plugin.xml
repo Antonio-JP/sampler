@@ -12,6 +12,11 @@
             id="rioko.graphAbstraction.globals.leavesCompactification"
             name="LeavesCompactification">
       </global>
+      <global
+            class="rioko.graphabstraction.display.global.ConnectedComponentsBuilder"
+            id="rioko.graphAbstraction.globals.connectedComponents"
+            name="ConnectedComponents">
+      </global>
    </extension>
    <extension
          point="rioko.graphabstraction.abstractionAlgorithms">
@@ -29,6 +34,11 @@
             class="rioko.graphabstraction.algorithms.test.SimpleGlobalAlgorithm"
             id="rioko.graphAbstraction.algorithms.leavesCompactification"
             name="Leaves compactification">
+      </algorithm>
+      <algorithm
+            class="rioko.graphabstraction.algorithms.ConnectedComponentsAlgorithm"
+            id="rioko.graphAbstraction.algorithms.connectedComponents"
+            name="Connected Components Algorithm">
       </algorithm>
    </extension>
    <extension point="rioko.graphabstraction.layoutAlgorithms">

@@ -1,9 +1,12 @@
 package rioko.grapht;
 
 import java.util.Collection;
+import java.util.EmptyStackException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.ArrayList;
 
 import org.jgrapht.EdgeFactory;
@@ -333,6 +336,111 @@ public class AbstractGraph<V extends Vertex,E extends VisibleEdge<V>> implements
 		return subTreeNodes;
 	}
 	
+	public Set<Set<V>> getConnectedComponents(Boolean strongConnected) {
+		if(strongConnected) {
+			Integer lowestIndex = 0;
+			Map<V, Integer> indexMap = new HashMap<>();
+			Map<V, Integer> lowLinkMap = new HashMap<>();
+			Stack<V> stack = new Stack<>();
+			Set<Set<V>> res = new ListSet<>();
+			
+			for(V vertex : this.vertexSet()) {
+				if(!indexMap.containsKey(vertex)) {
+					res.addAll(this.getConnectedComponents(vertex, indexMap, lowLinkMap, stack, lowestIndex));
+				}
+			}
+			
+			return res;
+		} else {
+			AbstractGraph<V,E> aux = this.getSimilarType();
+			
+			for(V vertex : this.vertexSet()) {
+				@SuppressWarnings("unchecked")
+				V copy = (V) vertex.copy();
+				aux.addVertex(copy);
+			}
+			
+			for(E edge : this.edgeSet()) {
+				aux.addEdge(edge.getSource(), edge.getTarget());
+				
+				if(!this.containsEdge(edge.getTarget(), edge.getSource())) {
+					aux.addEdge(edge.getTarget(), edge.getSource());
+				}
+			}
+			
+			
+			// Is it possible return directly this set?
+			Set<Set<V>> partialRes = aux.getConnectedComponents(true);
+			
+			Set<Set<V>> res = new ListSet<>();
+			for(Set<V> component : partialRes) {
+				Set<V> finalComp = new ListSet<>();
+				
+				for(V vertex : component) {
+					for(V real : this.vertexSet()) {
+						if(real.equals(vertex)) {
+							finalComp.add(real);
+							break;
+						}
+					}
+				}
+				
+				res.add(finalComp);
+			}
+			
+			return res;
+		}
+	}
+	
+	private Set<Set<V>> getConnectedComponents(V vertex, Map<V, Integer> indexMap, Map<V, Integer> lowLinkMap, Stack<V> stack, Integer lowestIndex) {
+		// Set the depth index for v to the smallest unused index
+		indexMap.put(vertex, lowestIndex);
+		lowLinkMap.put(vertex, lowestIndex);
+		lowestIndex++;
+		
+		stack.push(vertex);
+		
+		Set<Set<V>> res = new ListSet<>();
+		
+		// Consider succesors of vertex
+		for(V target : this.vertexFrom(vertex)) {
+			if(!indexMap.containsKey(target)) {
+				res.addAll(this.getConnectedComponents(target, indexMap, lowLinkMap, stack, lowestIndex));
+		        // Successor w has not yet been visited; recurse on it
+				lowLinkMap.put(vertex, Integer.min(lowLinkMap.get(vertex), lowLinkMap.get(target)));
+			} else if(stack.contains(target)) {
+		        // Successor w is in stack S and hence in the current SCC
+				lowLinkMap.put(vertex, Integer.min(lowLinkMap.get(vertex), indexMap.get(target)));
+			}
+		}
+		
+	    // If v is a root node, pop the stack and generate an SCC
+		if(lowLinkMap.get(vertex).equals(indexMap.get(vertex))) {
+			Set<V> newComponent = new ListSet<V>();
+			
+			try{
+				V current = stack.pop();
+				
+				while(!vertex.equals(current) && !stack.isEmpty()) {
+					newComponent.add(current);
+					
+					current = stack.pop();
+				}
+				
+			} catch (EmptyStackException e) {
+				//Impossible Exception
+				Log.exception(e);
+				Log.print("Theorically impossible exception");
+			}
+			
+			newComponent.add(vertex);
+			
+			res.add(newComponent);
+		}
+		
+		return res;
+	}
+
 	//Auxiliar methods
 	@SuppressWarnings("unchecked")
 	public Class<? extends E> getEdgeClass()

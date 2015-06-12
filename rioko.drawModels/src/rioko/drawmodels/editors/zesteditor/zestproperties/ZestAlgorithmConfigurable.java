@@ -9,6 +9,7 @@ import rioko.drawmodels.configurations.ModelRootNodeConfiguration;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
+import rioko.graphabstraction.configurations.BooleanConfiguration;
 import rioko.graphabstraction.configurations.Configurable;
 import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.configurations.UnsignedIntConfiguration;
@@ -24,6 +25,7 @@ public class ZestAlgorithmConfigurable implements Configurable {
 	private ModelRootNodeConfiguration rootConf = new ModelRootNodeConfiguration();
 	private UnsignedIntConfiguration toExpand = new UnsignedIntConfiguration(); 
 	private EClassConfiguration toFilter = new EClassConfiguration();
+	private BooleanConfiguration strongCon = new BooleanConfiguration();
 	
 	
 	public void setAlgorithm(NestedBuilderAlgorithm algorithm) {
@@ -74,6 +76,8 @@ public class ZestAlgorithmConfigurable implements Configurable {
 			case ROOT_NODE:
 				this.rootConf.setConfiguration(value);
 				break;
+			case STRONG_BOOLEAN:
+				this.strongCon.setConfiguration(value);
 			default:
 				break;
 		}
@@ -107,9 +111,11 @@ public class ZestAlgorithmConfigurable implements Configurable {
 				return this.toShow;
 			case ROOT_NODE:
 				return this.rootConf;
-			default:
-				return null;
+			case STRONG_BOOLEAN:
+				return this.strongCon;
 		}
+		
+		return null;
 	}
 	
 	private Collection<DisplayOptions> getConfigurationNeeded() {
@@ -154,6 +160,10 @@ public class ZestAlgorithmConfigurable implements Configurable {
 						throw new BadArgumentException(RootNodeConfiguration.class, current.getClass());
 					}
 					break;
+				case STRONG_BOOLEAN:
+					if(!(current instanceof BooleanConfiguration)) {
+						throw new BadArgumentException(BooleanConfiguration.class, current.getClass());
+					}
 				default:
 					break;
 			}
@@ -170,6 +180,7 @@ public class ZestAlgorithmConfigurable implements Configurable {
 		res.toExpand = this.toExpand.copy();
 		res.toFilter = this.toFilter.copy();
 		res.toShow = this.toShow.copy();
+		res.strongCon = this.strongCon.copy();
 		
 		res.setAlgorithm(this.algorithm);
 				

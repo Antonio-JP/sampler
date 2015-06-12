@@ -15,7 +15,7 @@ import rioko.graphabstraction.diagram.DiagramNode;
 
 public class XMIDiagramNode extends DiagramNode {
 	
-	private EObject object;
+	private EObject object = null;
 	
 //	private ArrayList<AbstractAttribute> attrs;
 	
@@ -108,8 +108,8 @@ public class XMIDiagramNode extends DiagramNode {
 	@Override
 	public boolean equals(Object ob) {
 		if(ob instanceof XMIDiagramNode) {
-			URI here = EcoreUtil.getURI(this.object).trimFragment();
-			URI obURI = EcoreUtil.getURI(((XMIDiagramNode) ob).getEObject()).trimFragment();
+			URI here = EcoreUtil.getURI(this.object);
+			URI obURI = EcoreUtil.getURI(((XMIDiagramNode) ob).getEObject());
 			
 			return here.equals(obURI);
 		}
@@ -119,7 +119,10 @@ public class XMIDiagramNode extends DiagramNode {
 	
 	@Override
 	public int hashCode() {
-		return EcoreUtil.getURI(this.object).trimFragment().hashCode();
+		if(this.object == null) {
+			return super.hashCode();
+		}
+		return EcoreUtil.getURI(this.object).hashCode();
 	}
 
 	@Override

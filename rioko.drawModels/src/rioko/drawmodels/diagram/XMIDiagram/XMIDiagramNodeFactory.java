@@ -10,6 +10,8 @@ public class XMIDiagramNodeFactory implements VertexFactory<XMIDiagramNode> {
 	public XMIDiagramNode createVertex(Object... arg0) {
 		if(arg0.length == 0) {
 			return new XMIDiagramNode();
+		} else if(arg0.length == 1 && arg0[0] == null) {
+			return new XMINullDiagramNode();
 		} else if(arg0.length == 1 && (arg0[0] instanceof String)){
 			return new XMIDiagramNode((String)arg0[0]);
 		} else if(arg0.length == 1 && (arg0[0] instanceof EObject)) {

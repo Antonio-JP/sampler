@@ -334,7 +334,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		try {
 	        IDE.openEditor(page, 
 	        		new ModelDiagram((DiagramGraph)this.model.getModelDiagram().inducedSubgraph(collection)), 
-	        		"rioko.drawmodels.editors.zestEditor");
+	        		this.getSite().getId());
 	    } catch ( PartInitException e ) {
 	        Log.exception(e);
 	    }
@@ -343,6 +343,21 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	public void createNavigationEditor(ComposeDiagramNode compose)
 	{
 		this.createNavigationEditor(compose.getNodes());
+	}
+	
+	public void createNavigationEditor(XMIProxyDiagramNode proxy)
+	{
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			ModelDiagram newModel = this.model.getModelFromProxy(proxy);
+			if(newModel == null) {
+				throw new Exception("The proxy is not contained in the model");
+			}
+			
+	        IDE.openEditor(page, this.model.getModelFromProxy(proxy), this.getSite().getId());
+	    } catch ( Exception e ) {
+	        Log.exception(e);
+	    } 
 	}
 	
 	//Métodos  de ampliación de un nodo
