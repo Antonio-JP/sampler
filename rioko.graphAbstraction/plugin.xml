@@ -10,12 +10,12 @@
       <global
             class="rioko.graphabstraction.display.global.GlobalLeavesCompactificationNestedBuilder"
             id="rioko.graphAbstraction.globals.leavesCompactification"
-            name="LeavesCompactification">
+            name="Leaves Compactification">
       </global>
       <global
             class="rioko.graphabstraction.display.global.ConnectedComponentsBuilder"
             id="rioko.graphAbstraction.globals.connectedComponents"
-            name="ConnectedComponents">
+            name="Connected Components">
       </global>
    </extension>
    <extension

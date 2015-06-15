@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Spectral
+Bundle-SymbolicName: rioko.spectral;singleton:=true
+Bundle-Version: 1.0.0.0
+Bundle-Activator: rioko.spectral.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ rioko.plugin.utils,
+ rioko.graphabstraction
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

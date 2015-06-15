@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="rioko.graphabstraction.steps">
+      <global
+            class="rioko.graphabstraction.display.global.BiClusterNestedBuilder"
+            id="rioko.spectral.globals.biCluster"
+            name="Bi-Clustering Step">
+      </global>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.abstractionAlgorithms">
+      <algorithm
+            class="rioko.graphabstraction.algorithms.BiClusterAlgorithm"
+            id="rioko.spectral.algorithms.biClusteringAlgorithm"
+            name="Bi-Clustering Algorithm">
+      </algorithm>
+   </extension>
+
+</plugin>
