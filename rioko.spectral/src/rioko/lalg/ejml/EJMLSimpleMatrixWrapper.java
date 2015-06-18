@@ -106,8 +106,7 @@ public class EJMLSimpleMatrixWrapper implements Matrix<EJMLSimpleMatrixWrapper, 
 
 	@Override
 	public EigDecomposition<EJMLSimpleMatrixWrapper, VectorImpl> getEigenvalueDecomposition() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EJMLEDWrapper(this);
 	}
 
 	@Override

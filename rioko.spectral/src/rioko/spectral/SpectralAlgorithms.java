@@ -11,7 +11,7 @@ import rioko.utilities.collections.ListSet;
 
 public class SpectralAlgorithms {
 	public static <V extends Vertex, T extends Matrix<T,R>, R extends Vector<R>> Set<Set<V>> getBiCluster(AbstractGraph<V, ?> graph, Class<T> matrixClass) {
-		T laplacian = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass);
+		T laplacian = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false);
 		
 		EigDecomposition<T, R> decomposition = laplacian.getEigenvalueDecomposition();
 		Set<Set<V>> res = new ListSet<>();

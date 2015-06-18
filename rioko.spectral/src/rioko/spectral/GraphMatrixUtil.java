@@ -11,12 +11,16 @@ import rioko.lalg.Vector;
 
 public class GraphMatrixUtil {
 	/* Value constants */
-	private static final double SIMPLE_VALUE = 0;
-	private static final double REFERENCE_VALUE = 0;
-	private static final double CONTAINMENT_VALUE = 0;
+	private static final double SIMPLE_VALUE = 1;
+	private static final double REFERENCE_VALUE = 2;
+	private static final double CONTAINMENT_VALUE = 4;
 
 	/* Wrapping methods */
 	public static <T extends Matrix<T, R>, R extends Vector<R>> T getAdjacencyMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
+		return getAdjacencyMatrix(graph, matrixClass, true);
+	}
+	
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getAdjacencyMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
 		try {
 			T matrix = (matrixClass.newInstance()).getNewMatrix(graph.vertexSet().size(), graph.vertexSet().size());
 			
@@ -35,6 +39,15 @@ public class GraphMatrixUtil {
 				double value = GraphMatrixUtil.getValue(edge.getType());
 				
 				matrix.setElement(row, col, matrix.getElement(row, col) + value);
+				if(!directed) {
+					matrix.setElement(col, row, matrix.getElement(col, row) + value);
+				}
+			}
+			
+			if(!directed) {
+				return matrix.scalar(0.5);
+			} else {
+				return matrix;
 			}
 		} catch (InstantiationException | IllegalAccessException e) {
 			// impossible Exception
@@ -45,7 +58,11 @@ public class GraphMatrixUtil {
 	}
 	
 	public static <T extends Matrix<T, R>, R extends Vector<R>> T getDegreeMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
-		T ad = getAdjacencyMatrix(graph, matrixClass);
+		return getDegreeMatrix(graph, matrixClass, true);
+	}
+	
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getDegreeMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+		T ad = getAdjacencyMatrix(graph, matrixClass, directed);
 		if(ad != null) {
 			T res = ad.getNewMatrix(ad.rows(), ad.cols());
 				
@@ -65,11 +82,19 @@ public class GraphMatrixUtil {
 	}
 	
 	public static <T extends Matrix<T, R>, R extends Vector<R>> T getLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
-		return getDegreeMatrix(graph,matrixClass).sub(getAdjacencyMatrix(graph, matrixClass));
+		return getLaplacianMatrix(graph, matrixClass, true);
+	}
+	
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+		return getDegreeMatrix(graph,matrixClass,directed).sub(getAdjacencyMatrix(graph, matrixClass,directed));
 	}
 	
 	public static <T extends Matrix<T, R>, R extends Vector<R>> T getSignlessLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
-		return getDegreeMatrix(graph,matrixClass).add(getAdjacencyMatrix(graph, matrixClass));
+		return getSignlessLaplacianMatrix(graph, matrixClass, true);
+	}
+	
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getSignlessLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+		return getDegreeMatrix(graph,matrixClass,directed).add(getAdjacencyMatrix(graph, matrixClass,directed));
 	}
 
 	/* Other methods */

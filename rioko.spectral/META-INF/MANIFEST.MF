@@ -9,3 +9,15 @@ Require-Bundle: org.eclipse.core.runtime,
  rioko.graphabstraction
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/EJML-core-0.27-sources.jar,
+ lib/EJML-core-0.27.jar,
+ lib/EJML-dense64-0.27-sources.jar,
+ lib/EJML-dense64-0.27.jar,
+ lib/EJML-denseC64-0.27-sources.jar,
+ lib/EJML-denseC64-0.27.jar,
+ lib/EJML-equation-0.27-sources.jar,
+ lib/EJML-equation-0.27.jar,
+ lib/EJML-simple-0.27-sources.jar,
+ lib/EJML-simple-0.27.jar,
+ lib/Jama-1.0.3.jar,
+ .

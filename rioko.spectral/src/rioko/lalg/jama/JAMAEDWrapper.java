@@ -36,7 +36,7 @@ public class JAMAEDWrapper extends BasicEigDecompositionImpl<JAMAMatrixWrapper, 
 					//The eigenvalues are sorted in the list from the minor to the mayor
 					int j;
 					for(j = 0; j < this.eigenvalues.size(); j++) {
-					if(this.eigenvalues.get(j) > ein) {
+						if(this.eigenvalues.get(j) > ein) {
 							break;
 						}
 					}
