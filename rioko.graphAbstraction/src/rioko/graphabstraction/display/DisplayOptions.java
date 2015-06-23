@@ -1,11 +1,13 @@
 package rioko.graphabstraction.display;
 
 public enum DisplayOptions {
-	MAX_NODES, ROOT_NODE, LEVELS_TS, ECLASS_FILTER, STRONG_BOOLEAN;
+	MAX_NODES, ROOT_NODE, LEVELS_TS, ECLASS_FILTER, STRONG_BOOLEAN, NUM_CLUSTERS;
 	
 	private static final String STR_ROOT_NODE = "Root Node";
 	
 	private static final String STR_MAX_NODES = "Nodes to Show";
+
+	private static final String STR_NUM_CLUSTERS = "Clusters required";
 	
 	private static final String STR_ECLASS_FILTER = "EClass to Filter";
 
@@ -30,6 +32,10 @@ public enum DisplayOptions {
 				return STR_ECLASS_FILTER;
 			case STRONG_BOOLEAN:
 				return STR_STRONG_BOOLEAN;
+			case NUM_CLUSTERS:
+				return STR_NUM_CLUSTERS;
+		default:
+			break;
 		}
 		
 		return STR_ERR;

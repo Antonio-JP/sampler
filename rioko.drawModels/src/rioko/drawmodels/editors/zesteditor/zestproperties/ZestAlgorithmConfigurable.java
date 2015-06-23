@@ -26,6 +26,7 @@ public class ZestAlgorithmConfigurable implements Configurable {
 	private UnsignedIntConfiguration toExpand = new UnsignedIntConfiguration(); 
 	private EClassConfiguration toFilter = new EClassConfiguration();
 	private BooleanConfiguration strongCon = new BooleanConfiguration();
+	private UnsignedIntConfiguration clusterNum = new UnsignedIntConfiguration();
 	
 	
 	public void setAlgorithm(NestedBuilderAlgorithm algorithm) {
@@ -113,6 +114,10 @@ public class ZestAlgorithmConfigurable implements Configurable {
 				return this.rootConf;
 			case STRONG_BOOLEAN:
 				return this.strongCon;
+			case NUM_CLUSTERS:
+				return this.clusterNum;
+		default:
+			break;
 		}
 		
 		return null;

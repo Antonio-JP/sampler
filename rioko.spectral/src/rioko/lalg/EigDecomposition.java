@@ -37,4 +37,44 @@ public interface EigDecomposition<T extends Matrix<T,R>, R extends Vector<R>> {
 		
 		return res;
 	}
+	
+	public default double getEigenvalue(int position, boolean withMultiplicity) {
+		if(!withMultiplicity) {
+			return this.getEigenvalue(position);
+		} else {
+			int i = 0;
+			int j = 0;
+			while(i < this.size()) {
+				if(position < j + this.getMultiplicity(i)) {
+					break;
+				}
+				j+= this.getMultiplicity(i);
+				i++;
+			}
+			
+			if(i == this.size()) {
+				return Double.MAX_VALUE;
+			} else {
+				return this.getEigenvalue(i);
+			}
+		}
+	}
+	
+	public default R getEigenvector(int position) {
+		int i = 0;
+		int j = 0;
+		while(i < this.size()) {
+			if(position < j + this.getMultiplicity(i)) {
+				break;
+			}
+			j+= this.getMultiplicity(i);
+			i++;
+		}
+		
+		if(i == this.size()) {
+			return null;
+		} else {
+			return this.getEigenvector(i, position-j);
+		}
+	}
 }

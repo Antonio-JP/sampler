@@ -1,5 +1,7 @@
 package rioko.spectral;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 import rioko.grapht.AbstractGraph;
@@ -7,18 +9,143 @@ import rioko.grapht.Vertex;
 import rioko.lalg.EigDecomposition;
 import rioko.lalg.Matrix;
 import rioko.lalg.Vector;
+import rioko.utilities.Pair;
 import rioko.utilities.collections.ListSet;
 
 public class SpectralAlgorithms {
+	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getHierarchicalCluster(AbstractGraph<V, ?> graph, int k, Class<T> matrixClass) {
+		ArrayList<Pair<Set<V>, EigDecomposition<T,R>>> clusters = new ArrayList<>();
+		
+		
+		//We initiate the variables
+		clusters.add(new Pair<Set<V>, EigDecomposition<T,R>>(graph.vertexSet(), 
+				GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false).getEigenvalueDecomposition()));
+		
+		while(clusters.size() < k &&(!clusters.get(clusters.size()-1).getLast().equals(Double.MAX_VALUE))) {
+			/* Get the lowest energetic cluster (last index) */
+			Pair<Set<V>, EigDecomposition<T,R>> current = clusters.get(clusters.size() - 1);
+			
+			Set<Set<V>> biClust = getBiCluster(current.getFirst(), current.getLast());
+			Iterator<Set<V>> iterator = biClust.iterator();
+			Set<V> first= iterator.next(), second = iterator.next();
+			
+			
+			/* Remove the previous cluster */
+			clusters.remove(clusters.size()-1);
+			
+			/* Add the new clusters */
+			if(clusters.size() == k-1) {
+				/* If this is the last iteration, we skip the eigenvalue calculus */
+				addWithOrder(clusters, new Pair<>(first, null));
+				addWithOrder(clusters, new Pair<>(second, null));
+			} else {
+				addWithOrder(clusters, 
+						new Pair<>(first,GraphMatrixUtil.getLaplacianMatrix(graph.inducedSubgraph(first), matrixClass, false).getEigenvalueDecomposition()));
+				addWithOrder(clusters, 
+						new Pair<>(second,GraphMatrixUtil.getLaplacianMatrix(graph.inducedSubgraph(second), matrixClass, false).getEigenvalueDecomposition()));
+			}
+		}
+		
+		//Create the final clusters from currentClusters
+		Set<Set<V>> res = new ListSet<>();
+		for(Pair<Set<V>, EigDecomposition<T,R>> pair : clusters) {
+			res.add(pair.getFirst());
+		}
+		
+		return res;
+	}
+	
+	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getIterativeCluster(AbstractGraph<V, ?> graph, int k, Class<T> matrixClass) {
+		if(k == 2) {	/* Easy case */
+			return getBiCluster(graph, matrixClass);
+		}
+		
+		/* Other cases */
+		Set<Set<V>> res = new ListSet<>();
+		
+		if(k > graph.vertexSet().size()) {	
+			/* There is no enough vertices to make the required clusters */
+			for(V vertex : graph.vertexSet()) {
+				Set<V> aux = new ListSet<>();
+				aux.add(vertex);
+				res.add(aux);
+			}
+		} else {
+			EigDecomposition<T,R> decomposition = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false).getEigenvalueDecomposition();
+			if(decomposition != null) {
+				if(decomposition.getMultiplicity(0) >= k) {
+					//TODO Manage the disconnected case
+					res.add(graph.vertexSet());
+				} else {
+					R vector = decomposition.getEigenvector(k);
+					
+					int pos = 0;
+					Set<V> positive = new ListSet<V>(), negative = new ListSet<V>();
+					
+					for(V vertex : graph.vertexSet()) {
+						if(vector.getElement(pos) >= 0) {
+							positive.add(vertex);
+						} else {
+							negative.add(vertex);
+						}
+						
+						pos++;
+					}
+					
+					int posClust = k/2, negClust = k/2;
+					if(posClust + negClust < k) {
+						negClust +=1;
+					} else if(posClust + negClust > k) {
+						posClust -= 1;
+					}
+					
+					res.addAll(getIterativeCluster(graph.inducedSubgraph(positive), posClust, matrixClass));
+					res.addAll(getIterativeCluster(graph.inducedSubgraph(negative), negClust, matrixClass));
+				}
+			} else {
+				/* Error getting the eigenvalue decomposition -> Return the whole graph */
+				res.add(graph.vertexSet());
+			}
+		}
+		
+		return res;
+	}
+	
 	public static <V extends Vertex, T extends Matrix<T,R>, R extends Vector<R>> Set<Set<V>> getBiCluster(AbstractGraph<V, ?> graph, Class<T> matrixClass) {
 		T laplacian = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false);
 		
 		EigDecomposition<T, R> decomposition = laplacian.getEigenvalueDecomposition();
+
+		return getBiCluster(graph.vertexSet(), decomposition);
+	}
+	
+	// Auxiliary methods
+	/**
+	 * Method to get a BiCluster from a matrix decomposition
+	 * 
+	 * @param vertices Sorted vertices to clustering
+	 * @param decomposition Matrix eigenvalue decomposition used to do clustering
+	 * 
+	 * @return Set of sets with the two clusters
+	 */
+	private static <V extends Vertex, T extends Matrix<T,R>, R extends Vector<R>> Set<Set<V>> getBiCluster(Set<V> vertices, EigDecomposition<T,R> decomposition) {
 		Set<Set<V>> res = new ListSet<>();
 		
 		if(decomposition != null) {					
-			if(decomposition.size() <= 2) {
-				return null;	/* Empty Graph */
+			if(decomposition.size() < 2) {
+				/* Empty graph -> Create clusters without any criteria */
+				Iterator<V> iterator = vertices.iterator();
+				Set<V> first = new ListSet<>(), second = new ListSet<>();
+				while(iterator.hasNext()) {
+					first.add(iterator.next());
+					
+					if(iterator.hasNext()) {
+						second.add(iterator.next());
+					}
+				}
+				
+				res.add(first);
+				res.add(second);
 			} else if(decomposition.getMultiplicity(0) > 1) {
 				/* Disconnected Graph */
 				R vector = decomposition.getEigenvector(0, 0);
@@ -36,7 +163,7 @@ public class SpectralAlgorithms {
 				/* We made the clustering */
 				int pos = 0;
 				Set<V> c1 = new ListSet<V>(), c2 = new ListSet<V>();
-				for(V vertex : graph.vertexSet()) {
+				for(V vertex : vertices) {
 					if(vector.getElement(pos) == vector.getElement(0)) {
 						c1.add(vertex);
 					} else {
@@ -54,7 +181,7 @@ public class SpectralAlgorithms {
 				int pos = 0;
 				Set<V> positive = new ListSet<V>(), negative = new ListSet<V>();
 				
-				for(V vertex : graph.vertexSet()) {
+				for(V vertex : vertices) {
 					if(vector.getElement(pos) >= 0) {
 						positive.add(vertex);
 					} else {
@@ -68,9 +195,54 @@ public class SpectralAlgorithms {
 				res.add(negative);
 			}
 		} else {
-			res.add(graph.vertexSet());
+			res.add(vertices);
 		}
 
 		return res;
+	}
+	
+	//Methods to Hierachical Clustering
+	/**
+	 * Method to get the energy required to cut a graph using its eigenvalue decomposition.
+	 * 
+	 * @param decomposition Decomposition of the Laplacian matrix of the graph
+	 * 
+	 * @return Double with the value of the second eigenvalue. Double.MAX_VALUE if there is no decomposition
+	 */
+	private static <T extends Matrix<T,R>, R extends Vector<R>> Double getEnergyFromDecomposition(EigDecomposition<T, R> decomposition) {
+		if(decomposition == null) {
+			/* Error getting the decomposition */
+			return Double.MAX_VALUE;
+		} else if(decomposition.size()< 2) {
+			/* All eigenvalues are the same */
+			return decomposition.getEigenvalue(0);
+		} else {
+			/* There is a non-trivial eigenvalue */
+			return decomposition.getEigenvalue(1);
+		}
+	}
+	
+	/**
+	 * Method to add a new Cluster to a List keeping the list ordered. The first element has the greatest energy
+	 * 
+	 * @param list List to modify
+	 * @param pairToAdd Pair with the Cluster and its decomposition.
+	 */
+	private static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> void addWithOrder(ArrayList<Pair<Set<V>, EigDecomposition<T,R>>> list, 
+			Pair<Set<V>, EigDecomposition<T,R>> pairToAdd) {
+		Double energy = getEnergyFromDecomposition(pairToAdd.getLast());
+		
+		boolean added = false;
+		for(int i = 0; i < list.size(); i++) {
+			if(energy > getEnergyFromDecomposition(list.get(i).getLast())) {
+				added = true;
+				list.add(i, pairToAdd);
+				break;
+			}
+		}
+		
+		if(!added) {
+			list.add(pairToAdd);
+		}
 	}
 }

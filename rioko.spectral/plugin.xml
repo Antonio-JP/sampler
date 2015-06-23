@@ -8,6 +8,16 @@
             id="rioko.spectral.globals.biCluster"
             name="Bi-Clustering Step">
       </global>
+      <global
+            class="rioko.graphabstraction.display.global.HierarchicalClusterBuilder"
+            id="rioko.spectral.globals.hierarchicalCluster"
+            name="Hierarchical-Clustering Step">
+      </global>
+      <global
+            class="rioko.graphabstraction.display.global.IterativeClusterBuilder"
+            id="rioko.spectral.globals.iterativeCluster"
+            name="Iterative-Clustering Step">
+      </global>
    </extension>
    <extension
          point="rioko.graphabstraction.abstractionAlgorithms">
