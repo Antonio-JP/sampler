@@ -1,5 +1,7 @@
 package rioko.spectral;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -56,61 +58,69 @@ public class SpectralAlgorithms {
 	}
 	
 	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getIterativeCluster(AbstractGraph<V, ?> graph, int k, Class<T> matrixClass) {
-		if(k == 2) {	/* Easy case */
-			return getBiCluster(graph, matrixClass);
-		}
-		
-		/* Other cases */
 		Set<Set<V>> res = new ListSet<>();
 		
-		if(k > graph.vertexSet().size()) {	
+		/* Easy cases */
+		if(k == 1) {
+			res.add(graph.vertexSet());
+			
+			return res;
+		} else if(k >= graph.vertexSet().size()) {
 			/* There is no enough vertices to make the required clusters */
 			for(V vertex : graph.vertexSet()) {
 				Set<V> aux = new ListSet<>();
 				aux.add(vertex);
 				res.add(aux);
 			}
-		} else {
-			EigDecomposition<T,R> decomposition = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false).getEigenvalueDecomposition();
-			if(decomposition != null) {
-				if(decomposition.getMultiplicity(0) >= k) {
-					//TODO Manage the disconnected case
-					res.add(graph.vertexSet());
-				} else {
-					R vector = decomposition.getEigenvector(k);
-					
-					int pos = 0;
-					Set<V> positive = new ListSet<V>(), negative = new ListSet<V>();
-					
-					for(V vertex : graph.vertexSet()) {
-						if(vector.getElement(pos) >= 0) {
-							positive.add(vertex);
-						} else {
-							negative.add(vertex);
-						}
-						
-						pos++;
-					}
-					
-					int posClust = k/2, negClust = k/2;
-					if(posClust + negClust < k) {
-						negClust +=1;
-					} else if(posClust + negClust > k) {
-						posClust -= 1;
-					}
-					
-					res.addAll(getIterativeCluster(graph.inducedSubgraph(positive), posClust, matrixClass));
-					res.addAll(getIterativeCluster(graph.inducedSubgraph(negative), negClust, matrixClass));
+			
+			return res;
+		} else if(k == 2) {
+			return getBiCluster(graph, matrixClass);
+		}
+		
+		/* Other cases */
+		EigDecomposition<T,R> decomposition = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false).getEigenvalueDecomposition();
+		if(decomposition != null) {
+			if(decomposition.getMultiplicity(0) >= k) {
+				/* We have more than k connected components, so the clusters seoarate them */ 
+				Set<Set<V>> connectedComponents = graph.getConnectedComponents(false);
+				ArrayList<Set<V>> listOfClusters = new ArrayList<>(k);
+				for(int i = 0; i < k; i++) {
+					listOfClusters.add(new ListSet<>());
 				}
+				
+				int i = 0;
+				for(Set<V> component : connectedComponents) {
+					listOfClusters.get(i).addAll(component);
+					i = (i+1)%k;
+				}
+				
+				res.addAll(listOfClusters);
 			} else {
-				/* Error getting the eigenvalue decomposition -> Return the whole graph */
-				res.add(graph.vertexSet());
+				R vector = decomposition.getEigenvector(k-1);
+				
+				Set<V> positive = new ListSet<V>(), negative = new ListSet<V>();
+				
+				separateBetweenPosAndNeg(graph.vertexSet(), vector, positive, negative);
+				
+				int posClust = k/2, negClust = k/2;
+				if(posClust + negClust < k) {
+					posClust += 1;
+				} else if(posClust + negClust > k) {
+					negClust -= 1;
+				}
+				
+				res.addAll(getIterativeCluster(graph.inducedSubgraph(positive), posClust, matrixClass));
+				res.addAll(getIterativeCluster(graph.inducedSubgraph(negative), negClust, matrixClass));
 			}
+		} else {
+			/* Error getting the eigenvalue decomposition -> Return the whole graph */
+			res.add(graph.vertexSet());
 		}
 		
 		return res;
 	}
-	
+
 	public static <V extends Vertex, T extends Matrix<T,R>, R extends Vector<R>> Set<Set<V>> getBiCluster(AbstractGraph<V, ?> graph, Class<T> matrixClass) {
 		T laplacian = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false);
 		
@@ -133,7 +143,7 @@ public class SpectralAlgorithms {
 		
 		if(decomposition != null) {					
 			if(decomposition.size() < 2) {
-				/* Empty graph -> Create clusters without any criteria */
+				/* Empty graph -> Create clusters with no criteria */
 				Iterator<V> iterator = vertices.iterator();
 				Set<V> first = new ListSet<>(), second = new ListSet<>();
 				while(iterator.hasNext()) {
@@ -145,7 +155,10 @@ public class SpectralAlgorithms {
 				}
 				
 				res.add(first);
-				res.add(second);
+				/* We check there were more than one element */
+				if(!second.isEmpty()) {
+					res.add(second);
+				}
 			} else if(decomposition.getMultiplicity(0) > 1) {
 				/* Disconnected Graph */
 				R vector = decomposition.getEigenvector(0, 0);
@@ -178,18 +191,9 @@ public class SpectralAlgorithms {
 			} else {
 				/* Standard case */
 				R vector = decomposition.getEigenvector(1, 0);
-				int pos = 0;
 				Set<V> positive = new ListSet<V>(), negative = new ListSet<V>();
 				
-				for(V vertex : vertices) {
-					if(vector.getElement(pos) >= 0) {
-						positive.add(vertex);
-					} else {
-						negative.add(vertex);
-					}
-					
-					pos++;
-				}
+				separateBetweenPosAndNeg(vertices, vector, positive, negative);
 				
 				res.add(positive);
 				res.add(negative);
@@ -199,6 +203,58 @@ public class SpectralAlgorithms {
 		}
 
 		return res;
+	}
+	
+	/**
+	 * Method that separates in positive and negatives of the vertices set using a vector. It modifies the Sets arguments positive and negative, but just read the vertices and vector arguments.
+	 * 
+	 * @param vertices Set of vertices to split (Just read)
+	 * @param vector Vector used to split the vertices set (Just read)
+	 * @param positive Empty set to save the positive vertices of the vector (Modified)
+	 * @param negative Empty set to save the negative vertices of the vector (Modified)
+	 */
+	private static <V extends Vertex, R extends Vector<R>> void separateBetweenPosAndNeg(Set<V> vertices, R vector, Set<V> positive,
+			Set<V> negative) {
+		/* Create a new vector checking the "nearly zero" values */
+		/* The next loop assures that the near zero values are set to zero */
+		R aux = vector.copy();
+		for(int i = 0; i < aux.size(); i++) {
+			double currentValue = aux.getElement(i);
+			double newValue = Math.signum(currentValue) * BigDecimal.valueOf(Math.abs(currentValue)).setScale(8, RoundingMode.DOWN).doubleValue();
+			aux.setElement(i, newValue);
+		}
+		
+		/* Check the special cases */
+		boolean allPositive = true, allConstant = true;
+		for(int i = 0; (i < aux.size()) && (allPositive || allConstant); i++) {
+			allPositive &= (aux.getElement(i) >= 0);
+			allConstant &= (aux.getElement(i) == aux.getElement(0));
+		}
+		
+		if(allConstant) {
+			/* Constant vector -> nothing to do */
+			positive.addAll(vertices);
+			return;
+		}
+		
+		if(allPositive) {
+			/* There should be zero values and positive ones. Scale the vector with -1 to distinguis those vertices */
+			aux = aux.scalar(-1);
+		} 
+		
+		/* We split now using the sign of the elements of aux vector */
+		int pos = 0;
+		for(V vertex : vertices) {
+			if(aux.getElement(pos) >= 0) {
+				positive.add(vertex);
+			} else {
+				negative.add(vertex);
+			}
+			
+			pos++;
+		}
+		
+		return;
 	}
 	
 	//Methods to Hierachical Clustering
