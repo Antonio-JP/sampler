@@ -13,7 +13,7 @@ public class ZestEditorLayout extends CenterLayoutAlgorithm {
 		this.layoutStopped = false;
 	}
 	
-	//AbstractLayoutAlgorithm Methods
+	//GeneralLayoutAlgorithm Methods
 
 	@Override
 	protected void applyLayoutInternal(InternalNode[] entitiesToLayout, InternalRelationship[] relationshipsToConsider, double boundsX,

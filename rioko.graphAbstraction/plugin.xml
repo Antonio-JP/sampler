@@ -43,11 +43,11 @@
    </extension>
    <extension point="rioko.graphabstraction.layoutAlgorithms">
    		<algorithm
-   			class="rioko.zest.layout.TreeLayout"
+   			class="rioko.zest.layout.system.TreeLayout"
    			id="rioko.zest.layouts.treeLayout"
    			name="Tree Graph Layout" />
    		<algorithm
-   			class="rioko.zest.layout.SpringLayout"
+   			class="rioko.zest.layout.system.SpringLayout"
    			id="rioko.zest.layouts.springLayout"
    			name="Spring Graph Layout" />
    </extension>

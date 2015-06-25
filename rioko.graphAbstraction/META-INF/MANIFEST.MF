@@ -7,7 +7,7 @@ Bundle-Activator: rioko.graphabstraction.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.zest.core;bundle-version="1.5.100";visibility:=reexport,
- org.eclipse.zest.layouts,
+ org.eclipse.zest.layouts;visibility:=reexport,
  rioko.plugin.utils;bundle-version="1.0.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
@@ -34,5 +34,6 @@ Export-Package: rioko.graphabstraction.algorithms;uses:="rioko.graphabstraction.
  rioko.graphabstraction.draw2d.listeners;uses:="rioko.draw2d.listeners,org.eclipse.swt.graphics,org.eclipse.draw2d",
  rioko.runtime.registers,
  rioko.runtime.registers.algorithm,
- rioko.zest.layout
+ rioko.zest.layout,
+ rioko.zest.layout.exceptions
 Bundle-ClassPath: .
