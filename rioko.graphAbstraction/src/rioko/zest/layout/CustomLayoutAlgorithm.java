@@ -213,7 +213,7 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 	}
 
 	/* Phase controling methods */
-	protected void getNextPhase() {
+	private void getNextPhase() {
 		switch(this.phase) {
 		case PREPARATION:
 			this.setNewPhase(this.getNextFromPreparation());
@@ -243,20 +243,18 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 	}
 
 	private void setNewPhase(AlgPhase next) {
-		if(!this.phase.equals(next)) {
-			this.phase = next;
-		}
-		
+		this.phase = next;
+				
 		/* We update the position of the vertices of the layout */
 		for(InternalNode node : this.nodes) {
-			this.moveTo(node, node.getDx(), node.getDy());
+			this.move(node);
 		}
 	}
 
-	private void moveTo(InternalNode node, double dx, double dy) {
-		node.setInternalLocation(node.getInternalX() + dx, node.getInternalY() + dy);
-		node.setLocation(node.getCurrentX() + dx, node.getCurrentY() + dy);
-		node.setLocationInLayout(node.getXInLayout() + dx, node.getYInLayout() + dy);
+	private void move(InternalNode node) {
+		node.setInternalLocation(node.getInternalX() + node.getDx(), node.getInternalY() + node.getDy());
+		node.setLocation(node.getCurrentX() + node.getDx(), node.getCurrentY() + node.getDy());
+		node.setLocationInLayout(node.getXInLayout() + node.getDx(), node.getYInLayout() + node.getDy());
 		
 		/* Set the move vector to zero */
 		this.setDVector(node, Point.ZERO);
