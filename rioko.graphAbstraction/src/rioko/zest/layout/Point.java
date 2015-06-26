@@ -34,4 +34,8 @@ public class Point {
 	public Point sub(Point p) {
 		return this.add(p.inverse());
 	}
+
+	public Point scale(double s) {
+		return new Point(this.x * s, this.y*s);
+	}
 }

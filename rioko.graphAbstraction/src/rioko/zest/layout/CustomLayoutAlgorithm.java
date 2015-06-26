@@ -13,8 +13,12 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 	
 	private AlgPhase phase = AlgPhase.OFF;
 	
+	private boolean initialMove = true, doneInitial = false;
+	
+	//Fields to know what are we drawing
+	protected InternalNode[] nodes;
+	protected InternalRelationship[] relations;
 	private Rectangle layoutArea;
-	private boolean initialMove = true;
 	
 	//Enums
 	protected enum AlgPhase {OFF, PREPARATION, RUNNING, ADJUST; 
@@ -54,48 +58,58 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 	//Methods from AbstractLayoutAlgorithm
 	@Override
 	protected void applyLayoutInternal(InternalNode[] nodes, InternalRelationship[] relations, double x, double y, double width, double height) {
-		AlgPhase currentPhase = AlgPhase.getPhase(this.getCurrentLayoutStep());
 		
-		switch(currentPhase) {
-			case OFF:
-				break;
-				
-			case PREPARATION:
-				/* Setting up phase */
-				/* Stablish the Layout Area */
-				this.setLayoutArea(x, y, width, height);
-				try {
-					this.layoutArea.setOrigin(this.layoutArea.getCenter());
-				} catch (OutOfBundlesException e) {
-					// Impossible Exception
-					e.printStackTrace();
-				}
-				
-				if(this.initialMove) {
-					for(InternalNode node : nodes) {
-						/* We set the position of the nodes at the center of the layout Area */
-						this.setDVector(node, Point.ZERO);
-						this.setInternalLocation(node, Point.ZERO);
-						this.setLocation(node, Point.ZERO);
-						this.setLocationInLayout(node, Point.ZERO);
+		while(!this.phase.equals(AlgPhase.OFF)) {
+			
+			switch(this.phase) {
+				case OFF:
+					break;
+					
+				case PREPARATION:
+					/* Setting up phase */
+					if(! this.doneInitial) {
+						this.nodes = nodes;
+						this.relations = relations;
+						
+						/* Stablish the Layout Area */
+						this.setLayoutArea(x, y, width, height);
+						try {
+							this.layoutArea.setOrigin(this.layoutArea.getCenter());
+						} catch (OutOfBundlesException e) {
+							// Impossible Exception
+							e.printStackTrace();
+						}
+						
+						if(this.initialMove) {
+							for(InternalNode node : nodes) {
+								/* We set the position of the nodes at the center of the layout Area */
+								this.setDVector(node, Point.ZERO);
+								this.setLocation(node, Point.ZERO);
+							}
+							
+							this.doneInitial = true;
+						}
 					}
-				}
-				
-				this.preparation(nodes, relations);
-				break;
-				
-			case RUNNING:
-				/* Main phase of the algorithm */
-				this.running(nodes, relations);
-				break;
-				
-			case ADJUST:
-				/* Last phase of the Layout Algorithm */
-				this.adjust(nodes, relations);
-				break;
-				
-			default:
-				break;
+					
+					this.preparation();
+					this.getNextPhase();
+					break;
+					
+				case RUNNING:
+					/* Main phase of the algorithm */
+					this.running();
+					this.getNextPhase();
+					break;
+					
+				case ADJUST:
+					/* Last phase of the Layout Algorithm */
+					this.adjust();
+					this.getNextPhase();
+					break;
+					
+				default:
+					break;
+			}
 		}
 	}
 
@@ -127,12 +141,13 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 
 	@Override
 	protected void postLayoutAlgorithm(InternalNode[] arg0, InternalRelationship[] arg1) {
-		this.phase = AlgPhase.PREPARATION;
+		this.phase = AlgPhase.OFF;
 	}
 
 	@Override
 	protected void preLayoutAlgorithm(InternalNode[] arg0, InternalRelationship[] arg1, double x, double y, double width, double height) {
-		this.phase = AlgPhase.OFF;
+		this.phase = AlgPhase.PREPARATION;
+		this.doneInitial = false;
 	}
 
 	@Override
@@ -182,31 +197,68 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 	private void setLocationAbsolute(InternalNode node, Point p) {
 		Point aux = p.sub(new Point(this.layoutArea.getLeft(), this.layoutArea.getTop()));
 		node.setLocation(aux.getX(), aux.getY());
-	}
-	
-	protected void setInternalLocation(InternalNode node, Point p) {
-		this.setInternalLocationAbsolute(node, this.layoutArea.getAbsolute(p));
-	}
-	
-	private void setInternalLocationAbsolute(InternalNode node, Point p) {
-		Point aux = p.sub(new Point(this.layoutArea.getLeft(), this.layoutArea.getTop()));
 		node.setInternalLocation(aux.getX(), aux.getY());
-	}
-	
-	protected void setLocationInLayout(InternalNode node, Point p) {
-		this.setLocationInLayoutAbsolute(node, this.layoutArea.getAbsolute(p));
-	}
-	
-	private void setLocationInLayoutAbsolute(InternalNode node, Point p) {
-		Point aux = p.sub(new Point(this.layoutArea.getLeft(), this.layoutArea.getTop()));
 		node.setLocationInLayout(aux.getX(), aux.getY());
 	}
 	
 	/* Specific methods for each phase */
-	protected abstract void preparation(InternalNode[] nodes, InternalRelationship[] relations);
+	protected void preparation() {}
 	
-	protected abstract void running(InternalNode[] nodes, InternalRelationship[] relations);
+	protected abstract void running();
 	
-	protected abstract void adjust(InternalNode[] nodes, InternalRelationship[] relations);
+	protected void adjust() {
+		for(InternalNode node : this.nodes) {
+			this.setDVector(node, new Point(-node.getWidthInLayout()/2, -node.getHeightInLayout()/2));
+		}
+	}
 
+	/* Phase controling methods */
+	protected void getNextPhase() {
+		switch(this.phase) {
+		case PREPARATION:
+			this.setNewPhase(this.getNextFromPreparation());
+			break;
+		case RUNNING:
+			this.setNewPhase(this.getNextFromRunning());
+			break;
+		case ADJUST:
+			this.setNewPhase(this.getNextFromAdjust());
+			break;
+		case OFF:
+			break;
+		default:
+			break;
+		
+		}
+	}
+
+	protected AlgPhase getNextFromPreparation() {
+		return AlgPhase.RUNNING;
+	}
+	protected AlgPhase getNextFromRunning() {
+		return AlgPhase.ADJUST;
+	}
+	protected AlgPhase getNextFromAdjust() {
+		return AlgPhase.OFF;
+	}
+
+	private void setNewPhase(AlgPhase next) {
+		if(!this.phase.equals(next)) {
+			this.phase = next;
+		}
+		
+		/* We update the position of the vertices of the layout */
+		for(InternalNode node : this.nodes) {
+			this.moveTo(node, node.getDx(), node.getDy());
+		}
+	}
+
+	private void moveTo(InternalNode node, double dx, double dy) {
+		node.setInternalLocation(node.getInternalX() + dx, node.getInternalY() + dy);
+		node.setLocation(node.getCurrentX() + dx, node.getCurrentY() + dy);
+		node.setLocationInLayout(node.getXInLayout() + dx, node.getYInLayout() + dy);
+		
+		/* Set the move vector to zero */
+		this.setDVector(node, Point.ZERO);
+	}
 }

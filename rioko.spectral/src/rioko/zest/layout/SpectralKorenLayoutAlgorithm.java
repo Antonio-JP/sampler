@@ -1,10 +1,13 @@
 package rioko.zest.layout;
 
-import org.eclipse.zest.layouts.dataStructures.InternalNode;
-import org.eclipse.zest.layouts.dataStructures.InternalRelationship;
+import org.eclipse.zest.layouts.LayoutStyles;
 
 public class SpectralKorenLayoutAlgorithm extends CustomLayoutAlgorithm {
 
+	public SpectralKorenLayoutAlgorithm() {
+		super(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+	}
+	
 	public SpectralKorenLayoutAlgorithm(int styles) {
 		super(styles);
 	}
@@ -12,25 +15,15 @@ public class SpectralKorenLayoutAlgorithm extends CustomLayoutAlgorithm {
 	//Copiable methods
 	@Override
 	public SpectralKorenLayoutAlgorithm copy() {
-		return new SpectralKorenLayoutAlgorithm(this.getStyle());
+		SpectralKorenLayoutAlgorithm res = new SpectralKorenLayoutAlgorithm(this.getStyle());
+		res.setName(this.getName());
+		
+		return res;
 	}
 
 	//CustomLayoutAlgorithmMethods
 	@Override
-	protected void preparation(InternalNode[] nodes, InternalRelationship[] relations) {
-		//Do nothing
-	}
-
-	@Override
-	protected void running(InternalNode[] nodes, InternalRelationship[] relations) {
-		// TODO Auto-generated method stub
+	protected void running() {
 		
 	}
-
-	@Override
-	protected void adjust(InternalNode[] nodes, InternalRelationship[] relations) {
-		//Do nothing
-	}
-
-
 }

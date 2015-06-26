@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.zest.layouts.InvalidLayoutConfiguration;
-import org.eclipse.zest.layouts.dataStructures.InternalNode;
-import org.eclipse.zest.layouts.dataStructures.InternalRelationship;
 
 public class ComposeCustomLayoutAlgorithm extends CustomLayoutAlgorithm {
 
@@ -33,30 +31,19 @@ public class ComposeCustomLayoutAlgorithm extends CustomLayoutAlgorithm {
 	}
 
 	@Override
-	protected void preparation(InternalNode[] nodes, InternalRelationship[] relations) {
-		// Do nothing
-
-	}
-
-	@Override
-	protected void running(InternalNode[] nodes, InternalRelationship[] relations) {
+	protected void running() {
 		Rectangle area = this.getLayoutArea();
 
 		double x = area.getLeft(), y = area.getTop(), width = area.getWidth(), height = area.getHeight();
 		
 		for(CustomLayoutAlgorithm algorithm : this.layouts) {
 			try {
-				algorithm.applyLayout(nodes, relations, x, y, width, height, false, false);
+				algorithm.applyLayout(this.nodes, this.relations, x, y, width, height, false, false);
 			} catch (InvalidLayoutConfiguration e) {
 				// Impossible Exception
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	protected void adjust(InternalNode[] nodes, InternalRelationship[] relations) {
-		//Do nothing
 	}
 
 }

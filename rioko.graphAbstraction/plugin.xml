@@ -50,5 +50,10 @@
    			class="rioko.zest.layout.system.SpringLayout"
    			id="rioko.zest.layouts.springLayout"
    			name="Spring Graph Layout" />
+     <algorithm
+           class="rioko.zest.layout.custom.DiamondLayoutAlgorithm"
+           id="rioko.zest.layouts.diamondLayout"
+           name="Diamond Graph Layout">
+     </algorithm>
    </extension>
 </plugin>

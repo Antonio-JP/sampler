@@ -28,8 +28,8 @@ public class TreeLayout extends GeneralLayoutAlgorithm {
 	}
 
 	@Override
-	public SpringLayout copy() {
-		SpringLayout res = new SpringLayout(this.getStyle());
+	public TreeLayout copy() {
+		TreeLayout res = new TreeLayout(this.getStyle());
 		res.setName(this.getName());
 		
 		return res;
