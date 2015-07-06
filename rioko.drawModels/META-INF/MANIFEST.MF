@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: DrawModels
+Bundle-Name: Drawing Models Plug-In
 Bundle-SymbolicName: rioko.drawmodels;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: rioko.drawmodels.Activator
@@ -27,3 +27,4 @@ Export-Package: rioko.drawmodels.algorithms.display.test,
  rioko.drawmodels.display.filter,
  rioko.drawmodels.editors.zesteditor.zestproperties,
  rioko.drawmodels.filemanage
+Bundle-Vendor: Miso - Rioukay
