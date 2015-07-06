@@ -5,20 +5,17 @@
       version="1.0.0.qualifier"
       provider-name="Miso - Rioukay">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description>
+      SAMPLER Tool is provided with all the neccesary plig-ins to run it on your Eclipse distribution.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="">
+      I swear for all the gods and the heavens, that I will remember who has provided to me this magical and excellent tool.
    </license>
 
    <url>
       <update url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
+      <discovery label="Epsilon Updates" url="http://download.eclipse.org/epsilon/updates/"/>
    </url>
 
    <requires>
