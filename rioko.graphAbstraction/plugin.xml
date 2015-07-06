@@ -55,5 +55,10 @@
            id="rioko.zest.layouts.diamondLayout"
            name="Diamond Graph Layout">
      </algorithm>
+     <algorithm
+           class="rioko.zest.layout.custom.RandomLayoutAlgorithm"
+           id="rioko.zest.layouts.randomLayout"
+           name="Random Graph Layout">
+     </algorithm>
    </extension>
 </plugin>

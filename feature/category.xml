@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <category-def name="sampler" label="Sampler">
-      <description>
-         Sampler category for every plug-in and feature of SAMPLER tool.
-      </description>
-   </category-def>
-</site>

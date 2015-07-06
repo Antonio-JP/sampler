@@ -38,4 +38,27 @@ public class Point {
 	public Point scale(double s) {
 		return new Point(this.x * s, this.y*s);
 	}
+
+	public double norm() {
+		return Math.sqrt(getX()*getX() + getY()*getY());
+	}
+	
+	@Override
+	public boolean equals(Object ob) {
+		if(ob instanceof Point) {
+			return (this.x == ((Point) ob).getX()) && (this.y == ((Point) ob).getY());
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return (new Double(this.x+this.y)).hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ")";
+	}
 }

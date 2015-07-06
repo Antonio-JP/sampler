@@ -259,4 +259,21 @@ public abstract class CustomLayoutAlgorithm extends AbstractLayoutAlgorithm impl
 		/* Set the move vector to zero */
 		this.setDVector(node, Point.ZERO);
 	}
+	
+	// Image control methods
+	final protected Rectangle getRectangle(InternalNode node) {
+		return new Rectangle(this.getPosition(node), this.getWidth(node), this.getHeight(node));
+	}
+
+	final protected double getHeight(InternalNode node) {
+		return node.getHeightInLayout();
+	}
+
+	final protected double getWidth(InternalNode node) {
+		return node.getWidthInLayout();
+	}
+
+	final protected Point getPosition(InternalNode node) {
+		return new Point(node.getXInLayout(), node.getYInLayout());
+	}
 }

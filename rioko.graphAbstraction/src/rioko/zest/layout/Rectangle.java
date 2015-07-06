@@ -3,6 +3,7 @@ package rioko.zest.layout;
 import rioko.zest.layout.exceptions.OutOfBundlesException;
 
 public class Rectangle {
+	
 	private Point firstPoint;
 	private Point origin;
 	private double width, height;
@@ -90,5 +91,33 @@ public class Rectangle {
 	
 	public Point getRelative(Point p) {
 		return p.sub(origin);
+	}
+
+	public boolean collide(Rectangle rectangle) {
+		if(this.containsInAbsolute(new Point(rectangle.getLeft(), rectangle.getTop()))) {
+			return true;
+		} else if(this.containsInAbsolute(new Point(rectangle.getLeft(), rectangle.getBottom()))) {
+			return true;
+		} else if(this.containsInAbsolute(new Point(rectangle.getRight(), rectangle.getTop()))) {
+			return true;
+		} else if(this.containsInAbsolute(new Point(rectangle.getRight(), rectangle.getBottom()))) {
+			return true;
+		} else if(rectangle.containsInAbsolute(new Point(this.getLeft(), this.getTop()))) {
+			return true;
+		} else if(rectangle.containsInAbsolute(new Point(this.getLeft(), this.getBottom()))) {
+			return true;
+		} else if(rectangle.containsInAbsolute(new Point(this.getRight(), this.getTop()))) {
+			return true;
+		} else if(rectangle.containsInAbsolute(new Point(this.getRight(), this.getBottom()))) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//Other simple methods
+	@Override
+	public String toString() {
+		return "[" + this.firstPoint.toString() +" -> " + this.width + ", " + this.height + "]";
 	}
 }
