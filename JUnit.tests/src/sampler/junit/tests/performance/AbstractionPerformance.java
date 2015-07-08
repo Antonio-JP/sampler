@@ -27,7 +27,7 @@ import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.filemanage.XMIReader;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.display.DisplayOptions;
-import rioko.runtime.registers.RegisterBuilderAlgorithm;
+import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.utilities.Log;
 import rioko.utilities.Timing;
 

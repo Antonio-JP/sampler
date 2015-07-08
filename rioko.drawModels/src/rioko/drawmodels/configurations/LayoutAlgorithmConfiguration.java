@@ -3,20 +3,19 @@ package rioko.drawmodels.configurations;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.zest.layouts.LayoutAlgorithm;
 
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.ComboConfiguration;
 import rioko.graphabstraction.configurations.TypeOfConfiguration;
-import rioko.runtime.registers.RegisterLayoutAlgorithm;
-import rioko.zest.layout.ZestLayoutAlgorithm;
+import rioko.layouts.algorithms.LayoutAlgorithm;
+import rioko.layouts.runtime.registers.RegisterLayoutAlgorithm;
 
 public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 
-	private ArrayList<ZestLayoutAlgorithm> algorithms = new ArrayList<>();
+	private ArrayList<LayoutAlgorithm> algorithms = new ArrayList<>();
 	
-	private ZestLayoutAlgorithm currentAlgorithm = null;
+	private LayoutAlgorithm currentAlgorithm = null;
 	
 	public LayoutAlgorithmConfiguration() {
 		algorithms.addAll(RegisterLayoutAlgorithm.getRegisteredAlgorithms());
@@ -37,14 +36,14 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	@Override
 	public void setValueConfiguration(Object value) throws BadArgumentException, BadConfigurationException {
 		if(value instanceof LayoutAlgorithm) {
-			if(this.contains((ZestLayoutAlgorithm) value)) {
-				this.currentAlgorithm = (ZestLayoutAlgorithm) value;
+			if(this.contains((LayoutAlgorithm) value)) {
+				this.currentAlgorithm = (LayoutAlgorithm) value;
 			}
 		} else if(value instanceof String) {
-			ZestLayoutAlgorithm alg = this.getAlgorithm((String)value);
+			LayoutAlgorithm alg = this.getAlgorithm((String)value);
 			
 			if(alg == null) {
-				throw new BadArgumentException(ZestLayoutAlgorithm.class, value.getClass(), "No aggregation algorithm given");
+				throw new BadArgumentException(LayoutAlgorithm.class, value.getClass(), "No aggregation algorithm given");
 			} else {
 				this.currentAlgorithm = alg;
 			}
@@ -54,7 +53,7 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	}
 
 	@Override
-	public ZestLayoutAlgorithm getConfiguration() {
+	public LayoutAlgorithm getConfiguration() {
 		return this.currentAlgorithm;
 	}
 
@@ -68,7 +67,7 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	}
 
 	@Override
-	public Collection<ZestLayoutAlgorithm> getPossibleOptions() {
+	public Collection<LayoutAlgorithm> getPossibleOptions() {
 		return this.algorithms;
 	}
 
@@ -76,7 +75,7 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	public Collection<String> getPossibleOptionNames() {
 		ArrayList<String> names = new ArrayList<>();
 		
-		for(ZestLayoutAlgorithm alg : this.algorithms) {
+		for(LayoutAlgorithm alg : this.algorithms) {
 			names.add(alg.getName());
 		}
 		
@@ -89,12 +88,17 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	}
 	
 	//Private methods
-	private boolean contains(ZestLayoutAlgorithm value) {
+	private boolean contains(LayoutAlgorithm value) {
 		return this.getAlgorithm(value.getName()) != null;
 	}
+
+	private int indexOf(LayoutAlgorithm value) {
+		return this.algorithms.indexOf(this.getAlgorithm(value.getName()));
+	}
+
 	
-	private ZestLayoutAlgorithm getAlgorithm(String value) {
-		for(ZestLayoutAlgorithm alg : this.algorithms) {
+	private LayoutAlgorithm getAlgorithm(String value) {
+		for(LayoutAlgorithm alg : this.algorithms) {
 			if(alg.getName().equals(value)) {
 				return alg;
 			}
@@ -107,8 +111,7 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	public LayoutAlgorithmConfiguration copy() {
 		LayoutAlgorithmConfiguration res = new LayoutAlgorithmConfiguration();
 		
-		res.currentAlgorithm = res.algorithms.get(this.algorithms.indexOf(this.currentAlgorithm));
+		res.currentAlgorithm = res.algorithms.get(this.indexOf(this.currentAlgorithm));
 		return res;
 	}
-
 }

@@ -167,4 +167,16 @@ public class ComposeDiagramNode extends DiagramNode {
 	public boolean containsInnerNode(DiagramNode node) {
 		return this.getFullListOfNodes().contains(node);
 	}
+
+	//Vertex Methods
+	@Override
+	public boolean getMark() {
+		boolean auxRes = false;
+		
+		for(DiagramNode node : this.inNodes) {
+			auxRes |= node.getMark();
+		}
+		
+		return super.getMark() || auxRes;
+	}
 }

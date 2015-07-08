@@ -43,18 +43,27 @@ public class AbstractGraph<V extends Vertex,E extends VisibleEdge<V>> implements
 	//Graph methods
 	@Override
 	public E addEdge(V arg0, V arg1) {
+		//It is neccessary that the vertices are included in the graph
+		if(!this.containsVertex(arg0) || ! this.containsVertex(arg1)) {
+			return null;
+		}
+		
+		//We check if it is a loop edge and if they are allowed
 		if(!this.loopsAvaible && arg0.equals(arg1)) {
 			return null;
 		}
 		
+		//We check if the edge is already included in the graph
 		E edge = this.getEdge(arg0, arg1);
 		
 		if(edge == null) {
+			//If not, we create the new edge
 			edge = this.getEdgeFactory().createEdge(arg0, arg1);
 		
 			this.adyacencyList.get(arg0).add(edge);
 		}
 		
+		//Return the edge created
 		return edge;
 	}
 

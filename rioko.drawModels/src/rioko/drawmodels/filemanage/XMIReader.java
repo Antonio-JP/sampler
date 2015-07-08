@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -14,6 +16,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -75,10 +78,34 @@ public class XMIReader {
 		((ResourceSetImpl)this.resSet).setURIResourceMap(new HashMap<>());
 		
 		//We create the Root resource
+		try {
 		this.resource = this.resSet.createResource(URI.createURI(file.getFullPath().makeAbsolute().toString()));
 		resource.load(this.getDefaultLoadConfiguration());
 			
 		Files.put(file, this);
+		} catch (IOException e) {
+			//No registered package. Trying to register from the same folder
+			try {
+			IContainer folder = file.getParent();
+			for(IResource res : folder.members()) {
+				if(res.getFileExtension().equals("ecore")) {
+					Resource aux = this.resSet.createResource(URI.createURI(res.getFullPath().makeAbsolute().toString()));
+					aux.load(this.getDefaultLoadConfiguration());
+					
+					EPackage pack = (EPackage) aux.getContents().get(0);
+					EPackage.Registry.INSTANCE.put(pack.getNsURI().toString(), aux.getContents().get(0));
+				}
+			}
+			
+			this.resource = this.resSet.createResource(URI.createURI(file.getFullPath().makeAbsolute().toString()));
+			resource.load(this.getDefaultLoadConfiguration());
+				
+			Files.put(file, this);
+			} catch(Exception e2) {
+				e.printStackTrace();
+				throw new IOException("No meta-model found. Please register the meta-model.");
+			}
+		}
 	}
 	
 	public static XMIReader getReaderFromFile(IFile file) throws IOException {

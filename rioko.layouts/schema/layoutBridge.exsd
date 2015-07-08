@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="rioko.layouts" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="rioko.layouts" id="layoutBridges" name="Graph Layout Bridges"/>
+      </appinfo>
+      <documentation>
+         This extension poitn allows third-party plug-ins to crate bridges between different graph viewers and the Layout Algorithms provided in this plug-in.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="bridge" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="bridge">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name the Bridge will show in the OGSi registry.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique identificator of the Bridge in the registry
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The java class implementing the required interface.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":rioko.layouts.bridge.LayoutBridge"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         1.0.0.qualifier
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         The following is an example of how use this extension point:
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension point=&quot;rioko.layouts.layoutBridges&quot;&gt;
+  &lt;bridge
+   id=&quot;xxx.example.yyy.myNewBridge&quot;
+   name=&quot;My New Bridge&quot;
+   class=&quot;xxx.example.yyy.MyNewBridge&quot; /&gt;
+ &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         Each bridge declared in this extension point should implement the interface &lt;samp&gt;rioko.layouts.bridge.LayoutBridge&lt;/samp&gt;.
+      </documentation>
+   </annotation>
+
+
+
+</schema>

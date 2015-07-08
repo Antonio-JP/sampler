@@ -9,7 +9,7 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
 import rioko.drawmodels.swt.composites.AddRemoveTable;
 import rioko.drawmodels.wizards.listeners.AddRemoveMouseListener;
 import rioko.graphabstraction.display.NestedGraphBuilder;
-import rioko.runtime.registers.RegisterBuilderSteps;
+import rioko.graphabstraction.runtime.registers.RegisterBuilderSteps;
 
 public class GraphBuilderAddRemoveListener<T extends NestedGraphBuilder> extends AddRemoveMouseListener<T> {
 

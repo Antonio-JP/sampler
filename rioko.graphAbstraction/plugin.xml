@@ -4,7 +4,6 @@
    <extension-point id="steps" name="Steps" schema="schema/steps.exsd"/>
    <extension-point id="abstractionAlgorithms" name="Graph Abstraction Algorithms" schema="schema/abstractionAlgorithms.exsd"/>
    <extension-point id="searches" name="Search Criteria" schema="schema/searches.exsd"/>
-   <extension-point id="layoutAlgorithms" name="Graph Layout Algorithms" schema="schema/layoutAlgorithms.exsd"/>
    <extension
          point="rioko.graphabstraction.steps">
       <global
@@ -40,25 +39,5 @@
             id="rioko.graphAbstraction.algorithms.connectedComponents"
             name="Connected Components Algorithm">
       </algorithm>
-   </extension>
-   <extension point="rioko.graphabstraction.layoutAlgorithms">
-   		<algorithm
-   			class="rioko.zest.layout.system.TreeLayout"
-   			id="rioko.zest.layouts.treeLayout"
-   			name="Tree Graph Layout" />
-   		<algorithm
-   			class="rioko.zest.layout.system.SpringLayout"
-   			id="rioko.zest.layouts.springLayout"
-   			name="Spring Graph Layout" />
-     <algorithm
-           class="rioko.zest.layout.custom.DiamondLayoutAlgorithm"
-           id="rioko.zest.layouts.diamondLayout"
-           name="Diamond Graph Layout">
-     </algorithm>
-     <algorithm
-           class="rioko.zest.layout.custom.RandomLayoutAlgorithm"
-           id="rioko.zest.layouts.randomLayout"
-           name="Random Graph Layout">
-     </algorithm>
    </extension>
 </plugin>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="layoutAlgorithms" name="Graph Layout Algorithms" schema="schema/layoutAlgorithms.exsd"/>
+   <extension-point id="layoutBridge" name="Graph Layout Bridge" schema="schema/layoutBridge.exsd"/>
+   <extension
+         point="rioko.layouts.layoutAlgorithms">
+      <algorithm
+            class="rioko.layouts.algorithms.examples.DiamondLayoutAlgorithm"
+            id="rioko.layouts.diamondLayout"
+            name="Diamond Layout Algorithm">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.algorithms.examples.RandomLayoutAlgorithm"
+            id="rioko.layouts.randomLayout"
+            name="Random Layout Algorithm">
+      </algorithm>
+   </extension>
+
+</plugin>

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -74,8 +75,13 @@ public class OpenFile extends AbstractGenericHandler {
 					((ZestEditor)newEditor).updateView();
 				} catch (IOException e) {
 					Log.exception(e);
+					MessageDialog.openError(null, "No meta-model found!", 
+							e.getMessage() + "\n\n" + 
+							"Use Epsilon or similar tools to register the model; or put the meta-model file in the same folder of the model file.");
 				} catch (PartInitException e) {
 					Log.exception(e);
+					MessageDialog.openError(null, "No meta-model found!", 
+							e.getMessage());
 				}
 			}
 		}

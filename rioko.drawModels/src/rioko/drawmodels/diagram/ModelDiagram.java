@@ -213,13 +213,21 @@ public class ModelDiagram implements IEditorInput{
 	@Override
 	public ImageDescriptor getImageDescriptor() { return null; }
 
+	private String customName = null;
 	@Override
 	public String getName() { 
-		if(this.xmiReader == null) {
+		if(!(customName == null)) {
+			return this.customName;
+		} else if(this.xmiReader == null) {
 			return "ZestEditor";
 		} else {
-			return this.xmiReader.getFileName();}
+			return this.xmiReader.getFileName();
 		}
+	}
+	
+	public void setName(String name) {
+		this.customName = new String(name);
+	}
 
 	@Override
 	public IPersistableElement getPersistable() { return null; }

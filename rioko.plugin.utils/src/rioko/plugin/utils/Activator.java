@@ -1,5 +1,9 @@
 package rioko.plugin.utils;
 
+import java.io.File;
+
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -46,5 +50,26 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-
+	
+	/* Static methods to manage the plug-in names and folders */	
+	public static File getMetadataFolder()  {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		
+		File metadata = new File(workspace.getRoot().getLocation().toOSString() + "\\.metadata");
+		if(!metadata.exists()) {
+			metadata.mkdir();
+		}
+		
+		File plugins = new File(metadata.getAbsolutePath() + "\\.plugins");
+		if(!plugins.exists()) {
+			plugins.mkdir();
+		}
+		
+		File pluginFolder = new File(plugins.getAbsolutePath() + "\\" + PLUGIN_ID);
+		if(!pluginFolder.exists()) {
+			pluginFolder.mkdir();
+		}
+		
+		return pluginFolder;
+	}
 }

@@ -8,7 +8,7 @@ import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.ComboConfiguration;
 import rioko.graphabstraction.configurations.TypeOfConfiguration;
-import rioko.runtime.registers.RegisterBuilderAlgorithm;
+import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
 
 public class AggregationAlgorithmConfiguration implements ComboConfiguration {
 

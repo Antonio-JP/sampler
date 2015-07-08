@@ -22,6 +22,8 @@ public abstract class DiagramNode implements Vertex, Drawable {
 
 	private boolean beRoot = false;
 	
+	private boolean marked = false;
+	
 	//Builders
 	public DiagramNode() { }
 	
@@ -50,6 +52,17 @@ public abstract class DiagramNode implements Vertex, Drawable {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	//Vertex methods
+	@Override
+	public boolean getMark() {
+		return this.marked;
+	}
+
+	@Override
+	public void setMark(boolean marked) {
+		this.marked = marked;
 	}
 	
 	//Special methods

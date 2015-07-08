@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Text;
 
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.diagram.DiagramGraph;
-import rioko.runtime.registers.RegisterBuilderAlgorithm;
+import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.swt.StringTableRow;

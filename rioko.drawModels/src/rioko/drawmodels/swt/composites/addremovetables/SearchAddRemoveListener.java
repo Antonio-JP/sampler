@@ -10,7 +10,7 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
 import rioko.drawmodels.swt.composites.AddRemoveTable;
 import rioko.drawmodels.wizards.listeners.AddRemoveMouseListener;
 import rioko.graphabstraction.diagram.filters.FilterOfVertex;
-import rioko.runtime.registers.RegisterSearchersCriteria;
+import rioko.graphabstraction.runtime.registers.RegisterSearchersCriteria;
 
 public class SearchAddRemoveListener extends AddRemoveMouseListener<FilterOfVertex> {
 

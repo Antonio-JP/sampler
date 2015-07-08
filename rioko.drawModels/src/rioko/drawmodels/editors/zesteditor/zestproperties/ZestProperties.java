@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
-import org.eclipse.zest.layouts.LayoutAlgorithm;
-
 import rioko.utilities.Copiable;
 import rioko.utilities.Log;
 import rioko.utilities.Pair;
@@ -17,6 +15,7 @@ import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.display.DisplayOptions;
 import rioko.graphabstraction.display.FilterNestedBuilder;
+import rioko.layouts.algorithms.LayoutAlgorithm;
 import rioko.drawmodels.algorithms.display.JustFiltersBuilder;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;

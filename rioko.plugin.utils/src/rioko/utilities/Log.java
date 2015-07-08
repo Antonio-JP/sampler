@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import rioko.plugin.utils.Activator;
+
 public final class Log {
 	private static PrintStream xmlLog = null;
 	private static PrintStream exceptionLog = null;
@@ -72,7 +74,11 @@ public final class Log {
 	}
 	
 	public static void open() {
-		open("C:\\Users\\All users\\rioko_logs\\xmlLog.log", "C:\\Users\\All users\\rioko_logs\\exceptionLog.log");
+		File folder = Activator.getMetadataFolder();
+		
+		String basePath = folder.getAbsolutePath();
+		
+		open(basePath+"\\xmlLog.log", basePath+"\\exceptionLog.log");
 	}
 	
 	public static void open(String XMLpath, String ExceptionPath) {

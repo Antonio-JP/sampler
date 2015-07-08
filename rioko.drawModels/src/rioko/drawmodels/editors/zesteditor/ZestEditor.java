@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -25,6 +26,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.zest.layouts.LayoutStyles;
 
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramGraph;
@@ -32,6 +34,8 @@ import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.graphabstraction.display.ExpandComposeNodeNestedBuilder;
+import rioko.graphabstraction.runtime.registers.NotRegisteredException;
+import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.drawmodels.draw2d.listeners.ChangeRootMouseListener;
 import rioko.drawmodels.editors.AbstractEditorPart;
 import rioko.drawmodels.editors.listeners.OpenNewVisualizacionEditorMouseListener;
@@ -41,16 +45,18 @@ import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.filemanage.XMIReader;
 import rioko.drawmodels.jface.ZestEditorStructuredSelection;
 import rioko.events.listeners.AbstractListener;
-import rioko.runtime.registers.NotRegisteredException;
-import rioko.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.utilities.Log;
 import rioko.zest.ExtendedGraphViewer;
+import rioko.zest.layout.bridge.ZestLayoutAlgorithm;
 
 public class ZestEditor extends AbstractEditorPart implements ISelectionProvider {
 
 	private Label label;
 	private ModelDiagram model;
+	
 	private ExtendedGraphViewer viewer;
+	private ZestLayoutAlgorithm viewerLayout = new ZestLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+	
 	private XMIReader xmiReader = null;
 	
 	//Hidden attributes
@@ -104,6 +110,11 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 					this.xmiReader = XMIReader.getReaderFromFile(this.getFile());
 					this.model = this.xmiReader.getModel();
 				} catch (IOException e) {
+					Log.exception(e);
+					MessageDialog.openError(null, "No meta-model found!", 
+							e.getMessage() + "\n" + 
+							"Use Epsilon or similar tools to register the model o put \n"+
+							"the meta-model file in the same folder of the model file.");
 					throw new PartInitException("Rioko ERROR: no such file loaded");
 				}
 			} else if(input instanceof ModelDiagram) {
@@ -157,6 +168,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		    viewer.setLayoutApplicable(false);	//Se evita que se aplique el layout siempre
 		    viewer.setContentProvider(new ZestEditorContentProvider(this.model));	
 		    viewer.setLabelProvider(new ZestEditorLabelProvider(this.model));
+		    viewer.setLayoutAlgorithm(this.viewerLayout);
 		    viewer.setInput(this.model.getPrintDiagram().vertexSet());
 		    
 		    viewer.getControl().addMouseListener(new ChangeRootMouseListener(this));
@@ -272,7 +284,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		
 		//Ponemos el layout si hace falta
 		if((updates & UPDATE_LAYOUT) != 0) {
-			this.viewer.setLayoutAlgorithm(this.properties.getActualLayout());
+			this.viewerLayout.setLayoutAlgorithm(this.properties.getActualLayout());
 			this.viewer.forceApplyLayout();
 		}
 	}
@@ -332,8 +344,10 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	public void createNavigationEditor(Collection<DiagramNode> collection) {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
+			ModelDiagram newModel = new ModelDiagram((DiagramGraph)this.model.getModelDiagram().inducedSubgraph(collection));
+			newModel.setName(this.model.getName() + "/" + collection.iterator().next().getTitle());
 	        IDE.openEditor(page, 
-	        		new ModelDiagram((DiagramGraph)this.model.getModelDiagram().inducedSubgraph(collection)), 
+	        		newModel, 
 	        		this.getSite().getId());
 	    } catch ( PartInitException e ) {
 	        Log.exception(e);

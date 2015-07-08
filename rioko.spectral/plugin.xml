@@ -27,13 +27,5 @@
             name="Bi-Clustering Algorithm">
       </algorithm>
    </extension>
-   <extension
-         point="rioko.graphabstraction.layoutAlgorithms">
-      <algorithm
-            class="rioko.zest.layout.SpectralKorenLayoutAlgorithm"
-            id="rioko.spectral.layout.koren"
-            name="Spectral Koren Layout">
-      </algorithm>
-   </extension>
 
 </plugin>
