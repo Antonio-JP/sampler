@@ -6,7 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: rioko.graphabstraction.Activator
 Require-Bundle: rioko.layouts;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.ui,
- org.eclipse.zest.layouts;bundle-version="1.1.200";visibility:=reexport,
+ org.eclipse.zest.layouts;bundle-version="1.1.100";visibility:=reexport,
  org.eclipse.zest.core;bundle-version="1.5.100";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
