@@ -2,18 +2,27 @@
 <feature
       id="rioko.feature.utils"
       label="Rioko Utilities Feature"
-      version="1.0.0.qualifier">
+      version="1.0.0.qualifier"
+      provider-name="Miso - Rioukay">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description>
+      This feature include all the Eclipse plug-ins with different classes and utilities for Java programming.
+
+It gives access to:
+ 	- An abstract implementation of a graph using adjacency lists.
+ 	- Graph searching iteratos as the breath Search.
+ 	- Some Zest utilities
+ 	- A Copiable interface
+ 	- A Log system
+ 	- A Time measure system for performance testing.
+ 	- Some collections implementations:
+  		* A FIFO Set.
+  		* A Map which iterates over it keys in the same order they have been added.
+  	- A implementation of Set basic operation (union, intersection, symmetric difference, etc.)
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="">
+      Use this software freely but, whenever use it, make a reference to its creator and distributor.
    </license>
 
    <url>

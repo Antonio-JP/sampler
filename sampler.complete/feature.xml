@@ -4,16 +4,12 @@
       label="SAMPLER Complete Installation"
       version="1.0.0.qualifier">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description>
+      A feature that includes all the features from SAMPLER tool.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="">
+      Use this software freely but, whenever use it, make a reference to its creator and distributor.
    </license>
 
    <url>
