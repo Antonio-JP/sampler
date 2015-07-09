@@ -14,7 +14,7 @@
    </license>
 
    <url>
-      <update url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
+      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
       <discovery label="Epsilon Updates" url="http://download.eclipse.org/epsilon/updates/"/>
    </url>
 

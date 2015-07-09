@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/sampler.feature_1.0.0.201507091120.jar" id="sampler.feature" version="1.0.0.201507091120"/>
+   <feature url="features/sampler.emf_1.0.0.201507091145.jar" id="sampler.emf" version="1.0.0.201507091145">
+      <category name="sampler.category"/>
+   </feature>
+   <feature url="features/sampler.tools_1.0.0.201507091145.jar" id="sampler.tools" version="1.0.0.201507091145">
+      <category name="sampler.category"/>
+   </feature>
+   <feature url="features/rioko.feature.utils_1.0.0.201507091145.jar" id="rioko.feature.utils" version="1.0.0.201507091145">
+      <category name="rioko.category"/>
+   </feature>
+   <feature url="features/sampler.tools.spectral_1.0.0.201507091145.jar" id="sampler.tools.spectral" version="1.0.0.201507091145">
+      <category name="sampler.category"/>
+   </feature>
+   <category-def name="sampler.category" label="SAMPLER">
+      <description>
+         Category for the SAMPLER features
+      </description>
+   </category-def>
+   <category-def name="rioko.category" label="Rioko Features">
+      <description>
+         This is the category for different features developed independly by Rioko working in Miso.
+      </description>
+   </category-def>
 </site>
