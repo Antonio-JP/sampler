@@ -23,6 +23,7 @@
 
    <requires>
       <import feature="rioko.feature.utils" version="1.0.0.qualifier"/>
+      <import feature="org.eclipse.zest" version="1.6.0.201505170205"/>
    </requires>
 
    <plugin
