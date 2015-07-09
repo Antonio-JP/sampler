@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/sampler.emf_1.0.0.201507091145.jar" id="sampler.emf" version="1.0.0.201507091145">
+   <feature url="features/sampler.emf_1.0.0.201507091153.jar" id="sampler.emf" version="1.0.0.201507091153">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.tools_1.0.0.201507091145.jar" id="sampler.tools" version="1.0.0.201507091145">
+   <feature url="features/sampler.tools_1.0.0.201507091153.jar" id="sampler.tools" version="1.0.0.201507091153">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/rioko.feature.utils_1.0.0.201507091145.jar" id="rioko.feature.utils" version="1.0.0.201507091145">
+   <feature url="features/rioko.feature.utils_1.0.0.201507091153.jar" id="rioko.feature.utils" version="1.0.0.201507091153">
       <category name="rioko.category"/>
    </feature>
-   <feature url="features/sampler.tools.spectral_1.0.0.201507091145.jar" id="sampler.tools.spectral" version="1.0.0.201507091145">
+   <feature url="features/sampler.tools.spectral_1.0.0.201507091153.jar" id="sampler.tools.spectral" version="1.0.0.201507091153">
       <category name="sampler.category"/>
    </feature>
    <category-def name="sampler.category" label="SAMPLER">
