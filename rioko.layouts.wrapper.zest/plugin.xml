@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="rioko.layouts.layoutAlgorithms">
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.GridZestLayout"
+            id="rioko.layouts.wrapper.zest.grid"
+            name="Grid Zest Layout">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.HorizontalShiftZestLayout"
+            id="rioko.layouts.wrapper.zest.horizontalShift"
+            name="Horizontal Shift Zest Layout">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.HorizontalTreeZestLayout"
+            id="rioko.layouts.wrapper.zest.horizontalTree"
+            name="Horizontal Tree Zest Layout">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.RadialZestLayout"
+            id="rioko.layouts.wrapper.zest.radial"
+            name="Radial Zest Layout">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.SpringZestLayout"
+            id="rioko.layouts.wrapper.zest.spring"
+            name="Spring Zest Layout">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.TreeZestLayout"
+            id="rioko.layouts.wrapper.zest.tree"
+            name="Tree Zest Layout">
+      </algorithm>
+      <algorithm
+            class="rioko.layouts.wrapper.zest.impl.VerticalZestLayout"
+            id="rioko.layouts.wrapper.zest.vertical"
+            name="Vertical Zest Layout">
+      </algorithm>
+   </extension>
+
+</plugin>

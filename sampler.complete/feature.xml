@@ -31,4 +31,9 @@
          version="0.0.0"
          search-location="both"/>
 
+   <includes
+         id="sampler.layouts.wrapper"
+         version="0.0.0"
+         search-location="both"/>
+
 </feature>

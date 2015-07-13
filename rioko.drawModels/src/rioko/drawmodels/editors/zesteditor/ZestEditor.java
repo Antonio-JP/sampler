@@ -34,6 +34,7 @@ import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.graphabstraction.display.ExpandComposeNodeNestedBuilder;
+import rioko.graphabstraction.layouts.bridge.ZestLayoutAlgorithm;
 import rioko.graphabstraction.runtime.registers.NotRegisteredException;
 import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.drawmodels.draw2d.listeners.ChangeRootMouseListener;
@@ -47,7 +48,6 @@ import rioko.drawmodels.jface.ZestEditorStructuredSelection;
 import rioko.events.listeners.AbstractListener;
 import rioko.utilities.Log;
 import rioko.zest.ExtendedGraphViewer;
-import rioko.zest.layout.bridge.ZestLayoutAlgorithm;
 
 public class ZestEditor extends AbstractEditorPart implements ISelectionProvider {
 

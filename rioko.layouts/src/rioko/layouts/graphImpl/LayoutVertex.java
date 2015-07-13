@@ -12,7 +12,7 @@ public class LayoutVertex implements Vertex {
 	
 	private Point move = Point.ZERO;
 	
-	private int id = ++nNodes;
+	protected int id = ++nNodes;
 	
 	private double width, height;
 	
@@ -62,6 +62,10 @@ public class LayoutVertex implements Vertex {
 	
 	public double getHeight() {
 		return this.height;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	//Other methods

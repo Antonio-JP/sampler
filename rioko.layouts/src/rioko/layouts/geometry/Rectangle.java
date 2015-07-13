@@ -6,13 +6,13 @@ public class Rectangle {
 	
 	private Point firstPoint;
 	private Point origin;
-	private double width, height;
+	private Double width, height;
 	
-	public Rectangle(double width, double height) {
+	public Rectangle(Double width, Double height) {
 		this(new Point(), width, height);
 	}
 	
-	public Rectangle(Point point, double width, double height) {
+	public Rectangle(Point point, Double width, Double height) {
 		this.firstPoint = point;
 		this.origin = point;
 		
@@ -20,7 +20,7 @@ public class Rectangle {
 		this.height = height;
 	}
 	
-	public Rectangle(Point point, Point origin, double width, double height) throws OutOfBundlesException{
+	public Rectangle(Point point, Point origin, Double width, Double height) throws OutOfBundlesException{
 		this(point, width, height);
 		
 		this.setOrigin(origin);
@@ -36,27 +36,27 @@ public class Rectangle {
 	}
 	
 	//Getting methods
-	public double getLeft() {
+	public Double getLeft() {
 		return this.firstPoint.getX();
 	}
 	
-	public double getRight() {
+	public Double getRight() {
 		return this.firstPoint.getX() + this.width;
 	}
 	
-	public double getTop() {
+	public Double getTop() {
 		return this.firstPoint.getY();
 	}
 	
-	public double getBottom() {
+	public Double getBottom() {
 		return this.firstPoint.getY() + this.height;
 	}
 	
-	public double getWidth() {
+	public Double getWidth() {
 		return this.width;
 	}
 	
-	public double getHeight() {
+	public Double getHeight() {
 		return this.height;
 	}
 	
@@ -116,7 +116,7 @@ public class Rectangle {
 		return false;
 	}
 	
-	public Rectangle expandRectangle(double scale) {
+	public Rectangle expandRectangle(Double scale) {
 		Point center = this.getCenter();
 		Point aux = new Point(this.width*scale, this.height*scale);
 		

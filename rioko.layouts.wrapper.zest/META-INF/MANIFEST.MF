@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Zest Layouts Wrapper
+Bundle-SymbolicName: rioko.layouts.wrapper.zest;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: rioko.layouts.wrapper.zest.Activator
+Bundle-Vendor: Miso - Rioukay
+Require-Bundle: org.eclipse.core.runtime,
+ rioko.layouts;bundle-version="1.0.0";visibility:=reexport,
+ org.eclipse.zest.core;bundle-version="1.5.200",
+ org.eclipse.zest.layouts;bundle-version="1.1.200",
+ rioko.plugin.utils
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
