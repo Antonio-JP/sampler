@@ -32,25 +32,25 @@ import rioko.utilities.Pair;
 
 public class ConfigurationTable extends LabelDataTable {
 
-	private ModelDiagram model;
+	private ModelDiagram<?> model;
 	
 	private Configurable currentConfiguration;
 	
 	//Builders
-	public ConfigurationTable(Composite parent, int style, ModelDiagram model) {
+	public ConfigurationTable(Composite parent, int style, ModelDiagram<?> model) {
 		super(parent, style);
 		
 		this.model = model;
 	}
 
-	public ConfigurationTable(Composite parent, int style, String label, String data, ModelDiagram model) {
+	public ConfigurationTable(Composite parent, int style, String label, String data, ModelDiagram<?> model) {
 		super(parent, style, label, data);
 		
 		this.model = model;
 	}
 	
 	//Getters & Setters
-	public void setModel(ModelDiagram model) {
+	public void setModel(ModelDiagram<?> model) {
 		this.model = model;
 	}
 
@@ -88,7 +88,7 @@ public class ConfigurationTable extends LabelDataTable {
 
 		private ConfigurationTable controlledTable;
 		
-		public ConfigurationTableEdditingSupport(ColumnViewer viewer, ModelDiagram model, Configurable newConf, ConfigurationTable table) {
+		public ConfigurationTableEdditingSupport(ColumnViewer viewer, ModelDiagram<?> model, Configurable newConf, ConfigurationTable table) {
 			super(viewer);
 
 			this.configurations = newConf.getConfiguration();

@@ -4,10 +4,11 @@ Bundle-Name: Graph Abstraction Tools
 Bundle-SymbolicName: rioko.graphabstraction;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: rioko.graphabstraction.Activator
-Require-Bundle: rioko.layouts;bundle-version="1.0.0";visibility:=reexport,
+Require-Bundle: rioko.layouts;bundle-version="1.0.0",
  org.eclipse.ui,
- org.eclipse.zest.layouts;bundle-version="1.1.100";visibility:=reexport,
- org.eclipse.zest.core;bundle-version="1.5.100";visibility:=reexport
+ org.eclipse.zest.layouts;bundle-version="1.1.100",
+ org.eclipse.zest.core;bundle-version="1.5.100",
+ rioko.plugin.utils;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: rioko.graphabstraction;uses:="org.osgi.framework,org.eclipse.jface.resource,org.eclipse.ui.plugin",

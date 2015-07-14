@@ -18,7 +18,8 @@ import rioko.utilities.Log;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
-import rioko.drawmodels.filemanage.XMIReader;
+import rioko.drawmodels.filemanage.GeneralReader;
+import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.handlers.AbstractGenericHandler;
 import rioko.drawmodels.wizards.SelectSpecialAlgorithmWizard;
 
@@ -36,13 +37,13 @@ public class OpenFile extends AbstractGenericHandler {
 			if(obj instanceof IFile) {
 				IFile file = (IFile)obj;
 				
-				XMIReader xmiReader;
+				Reader<?> reader;
 				try {
 					Log.xOpen("wizard");
 					Log.xPrint("Reading the model...");
-					xmiReader = XMIReader.getReaderFromFile(file);
+					reader = GeneralReader.getReaderFromFile(file);
 				
-					ModelDiagram model = xmiReader.getModel();
+					ModelDiagram<?> model = reader.getModel();
 					ZestEditor editor = new ZestEditor();
 					
 					Log.xPrint("Creating wizard...");

@@ -24,7 +24,7 @@ import org.junit.runners.Parameterized.Parameters;
 import rioko.drawmodels.algorithms.display.test.SimpleGlobalAndLocalAlgorithm;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
-import rioko.drawmodels.filemanage.XMIReader;
+import rioko.drawmodels.filemanage.GeneralReader;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.display.DisplayOptions;
 import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
@@ -40,7 +40,7 @@ public class JDTASTPerformance {
 	
 	private String path = "";
 	
-	private ModelDiagram model = null;
+	private ModelDiagram<?> model = null;
 	private IFile file = null;
 	
 	//Static methods
@@ -90,7 +90,7 @@ public class JDTASTPerformance {
 		Log.print("("+ currentSet+") : &&&& Measuring the reading...");
 		tOpen.begginTiming(currentSet);
 			try {
-				this.model = XMIReader.getReaderFromFile(file).getModel();
+				this.model = GeneralReader.getReaderFromFile(file).getModel();
 			} catch (IOException e) {
 				Log.exception(e);
 				Log.print("("+ currentSet + "): Error creating the model for the test " + path + ".");
@@ -112,7 +112,7 @@ public class JDTASTPerformance {
 		//Cleaning the memory
 		this.path = null;
 		this.model = null;
-		XMIReader.closeFile(this.file);
+		GeneralReader.closeFile(this.file);
 		System.gc();
 	}
 	

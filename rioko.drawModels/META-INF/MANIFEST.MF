@@ -4,68 +4,28 @@ Bundle-Name: Drawing Models Plug-In
 Bundle-SymbolicName: rioko.drawmodels;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: rioko.drawmodels.Activator
-Require-Bundle: rioko.graphabstraction;visibility:=reexport,
+Require-Bundle: rioko.graphabstraction,
  org.eclipse.core.resources,
  org.eclipse.ui.ide,
+ org.eclipse.zest.core;bundle-version="1.5.200",
  org.eclipse.zest.layouts;bundle-version="1.1.100",
  org.eclipse.emf.edit,
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.6.0",
  org.eclipse.core.runtime.compatibility;bundle-version="3.2.200",
- org.eclipse.jface,
- org.eclipse.swt,
- org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.xmi
+ org.eclipse.emf.ecore.xmi,
+ rioko.layouts;bundle-version="1.0.0",
+ rioko.plugin.utils;bundle-version="1.0.0",
+ org.eclipse.draw2d
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: rioko.drawmodels.algorithms.display.test;uses:="rioko.graphabstraction.algorithms",
- rioko.drawmodels.configurations;
-  uses:="org.eclipse.emf.ecore,
-   rioko.graphabstraction.display.configurations,
-   rioko.drawmodels.diagram,
-   rioko.graphabstraction.configurations,
-   rioko.layouts.algorithms,
-   org.eclipse.jface.dialogs,
-   rioko.graphabstraction.algorithms,
-   rioko.graphabstraction.diagram",
- rioko.drawmodels.diagram;
-  uses:="org.eclipse.emf.ecore,
-   org.eclipse.ui,
-   org.eclipse.jface.resource,
-   rioko.drawmodels.filemanage,
-   rioko.graphabstraction.diagram,
-   rioko.drawmodels.diagram.XMIDiagram",
- rioko.drawmodels.diagram.XMIDiagram;
-  uses:="org.eclipse.emf.ecore,
-   rioko.utilities,
-   org.eclipse.draw2d,
-   rioko.grapht,
-   rioko.graphabstraction.diagram,
-   org.jgrapht",
- rioko.drawmodels.diagram.filters;
-  uses:="rioko.utilities,
-   rioko.graphabstraction.configurations,
-   rioko.graphabstraction.diagram.filters,
-   rioko.drawmodels.configurations,
-   rioko.graphabstraction.diagram",
- rioko.drawmodels.display.filter;
-  uses:="rioko.graphabstraction.configurations,
-   rioko.graphabstraction.diagram.filters,
-   rioko.graphabstraction.display,
-   rioko.graphabstraction.diagram",
- rioko.drawmodels.editors.zesteditor,
- rioko.drawmodels.editors.zesteditor.zestproperties;
-  uses:="rioko.drawmodels.diagram,
-   rioko.utilities,
-   rioko.graphabstraction.configurations,
-   rioko.layouts.algorithms,
-   rioko.graphabstraction.algorithms,
-   rioko.graphabstraction.display,
-   rioko.graphabstraction.diagram",
- rioko.drawmodels.filemanage;
-  uses:="org.eclipse.emf.ecore,
-   rioko.drawmodels.diagram,
-   org.eclipse.core.resources,
-   rioko.graphabstraction.diagram,
-   rioko.drawmodels.diagram.XMIDiagram"
+Export-Package: rioko.drawmodels,
+ rioko.drawmodels.algorithms.display,
+ rioko.drawmodels.algorithms.display.test,
+ rioko.drawmodels.configurations,
+ rioko.drawmodels.diagram,
+ rioko.drawmodels.diagram.edgeFactories,
+ rioko.drawmodels.display.local,
+ rioko.drawmodels.editors.zesteditor.zestproperties,
+ rioko.drawmodels.filemanage
 Bundle-Vendor: Miso - Rioukay

@@ -18,7 +18,7 @@ public class ModelTreeAlgorithm extends TreeContainerAlgorithm {
 		ModelRootNodeConfiguration rootConf = new ModelRootNodeConfiguration();
 		
 		if(data != null && properties != null) {
-			ModelDiagram model = new ModelDiagram(data);
+			ModelDiagram<?> model = ModelDiagram.getModelDiagramForGraph(data);
 			rootConf.setModel(model);
 			DiagramNode finalNode = null;
 			for(DiagramNode node : model.getModelDiagram().vertexSet()) {

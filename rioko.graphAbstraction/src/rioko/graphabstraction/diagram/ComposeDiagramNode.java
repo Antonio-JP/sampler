@@ -7,9 +7,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.swt.graphics.Color;
 
-import rioko.grapht.VertexFactory;
-
-public class ComposeDiagramNode extends DiagramNode {
+public abstract class ComposeDiagramNode extends DiagramNode {
 	
 	protected ArrayList<DiagramNode> inNodes = new ArrayList<>();
 	
@@ -65,10 +63,10 @@ public class ComposeDiagramNode extends DiagramNode {
 		return this.inNodes.size();
 	}
 	
-	@Override
-	public VertexFactory<?> getVertexFactory() {
-		return new ComposeDiagramNodeFactory();
-	}
+//	@Override
+//	public VertexFactory<?> getVertexFactory() {
+//		return new ComposeDiagramNodeFactory();
+//	}
 	
 	@Override 
 	public DiagramNode getRootNode()

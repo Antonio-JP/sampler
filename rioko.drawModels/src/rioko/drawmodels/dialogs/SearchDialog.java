@@ -2,14 +2,11 @@ package rioko.drawmodels.dialogs;
 
 import java.util.ArrayList;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -19,11 +16,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
-import rioko.drawmodels.configurations.EClassConfiguration;
 import rioko.drawmodels.diagram.ModelDiagram;
-import rioko.drawmodels.diagram.XMIDiagram.AbstractAttribute;
-import rioko.drawmodels.diagram.XMIDiagram.XMIDiagramNode;
-import rioko.drawmodels.diagram.filters.ByEClass;
 import rioko.drawmodels.swt.LabelValueDataLine;
 import rioko.drawmodels.swt.composites.AddRemoveTable;
 import rioko.drawmodels.swt.composites.ComboBox;
@@ -34,8 +27,7 @@ import rioko.drawmodels.swt.composites.addremovetables.TableConfigurationListene
 import rioko.drawmodels.swt.composites.labeldatatables.ConfigurationTable;
 import rioko.events.DataChangeEvent;
 import rioko.events.listeners.AbstractDataChangeListener;
-import rioko.graphabstraction.configurations.BadArgumentException;
-import rioko.graphabstraction.configurations.BadConfigurationException;
+import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.filters.AndComposeFilter;
 import rioko.graphabstraction.diagram.filters.ComposeFilter;
@@ -45,7 +37,7 @@ import rioko.utilities.collections.ListenedArrayList;
 
 public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 
-	private ModelDiagram model;
+	private ModelDiagram<?> model;
 	private DiagramNode node;
 	
 	//Visualization fields
@@ -57,11 +49,11 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 	
 	//Control fields
 	private ListenedArrayList<FilterOfVertex> listOfCriteria = new ListenedArrayList<>(); 
-	private EClass eClassSelected = null;
+//	private EClass eClassSelected = null;
 	private ComposeFilter filter;
 	
 	//Builders
-	public SearchDialog(Shell parent, ModelDiagram model) {
+	public SearchDialog(Shell parent, ModelDiagram<?> model) {
 		super(parent);
 		
 		this.model = model;
@@ -86,8 +78,8 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 		area.setLayout(layout);
 		
 		//Primera fila: Un ComboBox para seleccionar la EClass del nodo a buscar
-		eClassSelector = new ComboBox(area, SWT.NONE, "EClass");
-		eClassSelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		eClassSelector = new ComboBox(area, SWT.NONE, "EClass");
+//		eClassSelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//Segunda fila: Un AddRemoveTable para añadir criterios de búsqueda y un LabelDataTable para configurar cada criterio
 		Composite secondRow = new Composite(area, SWT.BORDER);
@@ -142,25 +134,25 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 	
 	private void createLogicPart() {
 		//Configuración de la primera fila
-		eClassSelector.setInput(model.getEClassListNames().toArray(new String[0]));
-		eClassSelector.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				for(EClass eClass : model.getEClassList()) {
-					if(eClass.getName().equals(eClassSelector.getText())) {
-						eClassSelected = eClass;
-						new DataChangeEvent(eClassSelector);
-						return;
-					}
-				}
-
-				if(eClassSelected != null) {
-					eClassSelected = null;
-					new DataChangeEvent(eClassSelector);
-				}
-			}
-		});
-		
+		eClassSelector.setInput(new String[0]/*model.getEClassListNames().toArray(new String[0])*/);
+//		eClassSelector.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				for(EClass eClass : model.getEClassList()) {
+//					if(eClass.getName().equals(eClassSelector.getText())) {
+//						eClassSelected = eClass;
+//						new DataChangeEvent(eClassSelector);
+//						return;
+//					}
+//				}
+//
+//				if(eClassSelected != null) {
+//					eClassSelected = null;
+//					new DataChangeEvent(eClassSelector);
+//				}
+//			}
+//		});
+//		
 		//Configuración de la segunda fila
 		searchCriteria.setMouseListener(new SearchAddRemoveListener(searchCriteria, true, listOfCriteria), 
 	    		new SearchAddRemoveListener(searchCriteria, false, listOfCriteria));
@@ -298,14 +290,14 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 		firstFilter.addAllFilters(listOfCriteria);
 		
 		filter = new AndComposeFilter();
-		ByEClass part = new ByEClass();
-		try {
-			part.setConfiguration(new EClassConfiguration(this.model, eClassSelected));
-		} catch (BadConfigurationException | BadArgumentException e) {
-			// Impossible exception
-			e.printStackTrace();
-		}
-		filter.addFilter(part);
+//		ByEClass part = new ByEClass();
+//		try {
+//			part.setConfiguration(new EClassConfiguration(this.model, eClassSelected));
+//		} catch (BadConfigurationException | BadArgumentException e) {
+//			// Impossible exception
+//			e.printStackTrace();
+//		}
+//		filter.addFilter(part);
 		
 		filter.addFilter(firstFilter);
 		
@@ -319,8 +311,8 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 	private void updateNodeInfo() {
 		ArrayList<LabelValueDataLine> lines = new ArrayList<>();
 
-		if(node instanceof XMIDiagramNode) {
-			for(AbstractAttribute attr : ((XMIDiagramNode) node).getAttributes()) {
+		if(node instanceof DiagramNode) {
+			for(AbstractAttribute attr : ((DiagramNode) node).getAttributes()) {
 				lines.add(new LabelValueDataLine(attr.getName(), attr.getValue().toString()));
 			}
 		}

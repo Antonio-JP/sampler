@@ -1,23 +1,25 @@
 package rioko.drawmodels.diagram;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
-import rioko.drawmodels.diagram.XMIDiagram.XMIDiagramNode;
-import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
-import rioko.drawmodels.filemanage.XMIReader;
+import rioko.drawmodels.filemanage.Reader;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.graphabstraction.diagram.ProxyDiagramNode;
 import rioko.utilities.Pair;
 
 
@@ -28,12 +30,63 @@ import rioko.utilities.Pair;
  * @author Antonio
  *
  */
-public class ModelDiagram implements IEditorInput{
+public abstract class ModelDiagram<T> implements IEditorInput{
+	private static final String ID_DIAGRAM_EXTENSION = "rioko.drawmodels.diagrams";
+	
 	private DiagramGraph graph;
 	
 	private DiagramGraph printable;
 	
-	private XMIReader xmiReader = null;
+	private Reader<T> reader = null;
+	
+	//Static generic builder for a ModelDiagram
+	/**
+	 * This method create a new ModelDiagram using the type of the elements contained inside.
+	 * 
+	 * @param graph The DiagramGraph used to create the ModelDiagram
+	 * 
+	 * @return The new ModelDiagram based in the Graph argument
+	 * 
+	 * @throws IllegalArgumentException if there is no ModelDiagram valid for this Graph
+	 */
+	public static ModelDiagram<?> getModelDiagramForGraph(DiagramGraph graph) throws IllegalArgumentException{
+		
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		
+		IConfigurationElement[] elements = registry.getConfigurationElementsFor(ID_DIAGRAM_EXTENSION);
+		ArrayList<IConfigurationElement> possibleModels = new ArrayList<>();
+		
+		for(IConfigurationElement element : elements) {
+			boolean valid = true;
+			
+			try {
+				valid &= element.createExecutableExtension("node").getClass().isAssignableFrom(graph.getVertexClass());
+				valid &= element.createExecutableExtension("edge").getClass().isAssignableFrom(graph.getEdgeClass());
+				valid &= element.createExecutableExtension("compose").getClass().isAssignableFrom(graph.getComposeClass());
+			} catch (InvalidRegistryObjectException | CoreException e) {
+				throw new IllegalArgumentException("A class from " + element + " is not accesible");
+			}
+			
+			if(valid) {
+				possibleModels.add(element);
+			}
+			
+			if(possibleModels.isEmpty()) {
+				throw new IllegalArgumentException("There is no possible reader registered for the graph");
+			} else {
+				try {
+					ModelDiagram<?> fooModel = (ModelDiagram<?>) possibleModels.get(0).createExecutableExtension("diagram");
+					//We use the Constructor with the IFile parameter and throw and exception if it does not exist
+					return fooModel.getClass().getConstructor(DiagramGraph.class).newInstance(graph);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException | CoreException e) {
+					throw new IllegalArgumentException("Reader " + possibleModels.get(0).getAttribute("diagram") + " not have a simple DiagramGraph Constructor or a empty Constructor");
+				}
+			}
+		}
+		
+		return null;
+	}
 	
 	//Builders
 	public ModelDiagram()
@@ -49,15 +102,6 @@ public class ModelDiagram implements IEditorInput{
 		
 		this.printable = this.graph;
 	}
-	
-//	public ModelDiagram(XMIReader xmiReader) throws IOException
-//	{
-//		this.xmiReader = xmiReader;
-//		
-//		this.graph = xmiReader.getDiagram();
-//		
-//		this.printable = this.graph;
-//	}
 	
 	public ModelDiagram(DiagramGraph graph) 
 	{
@@ -82,8 +126,8 @@ public class ModelDiagram implements IEditorInput{
 		this.printable = printable;
 	}
 
-	public void setXMIReader(XMIReader xmiReader) {
-		this.xmiReader = xmiReader;
+	public void setReader(Reader<T> reader) {
+		this.reader = reader;
 	}
 	
 	//Diagram Gestion methods
@@ -110,52 +154,23 @@ public class ModelDiagram implements IEditorInput{
 	}
 	
 	//Meta-model analysis methods
-	private Set<EClass> eClassList = null;
-	private Set<String> eClassNames = null;
-	public Set<EClass> getEClassList() {
-		if(this.eClassList == null) {
-			this.eClassList = new HashSet<EClass>();
-			
-			if(this.graph != null) {
-				for(DiagramNode node : this.graph.vertexSet()) {
-					if(node instanceof XMIDiagramNode) {
-						this.eClassList.add(((XMIDiagramNode) node).getEClass());
-					}
-				}
-			}
-		}
-		
-		return this.eClassList;
-	}
-	
-	public Set<String> getEClassListNames() {
-		if(this.eClassNames == null) {
-			if(this.eClassList == null) {
-				this.getEClassList();
-			}
-			
-			this.eClassNames = new HashSet<String>();
-			
-			for(EClass eClass : this.eClassList) {
-				this.eClassNames.add(eClass.getName());
-			}
-		}
-		
-		return this.eClassNames;
-	}
+	public abstract void buildMetaData();
+	public abstract Object getMetaData();
 	
 	//Proxy methods
-	public boolean resolveProxy(XMIProxyDiagramNode proxy) {
-		if(this.graph.containsVertex(proxy)) {
-			EObject resolved = this.xmiReader.resolve(proxy);
+	public boolean resolveProxy(ProxyDiagramNode<?> proxy) {
+		ProxyDiagramNode<T> tProxy = this.castProxy(proxy);
+		
+		if(this.graph.containsVertex((DiagramNode)tProxy)) {
+			T resolved = this.reader.resolve(tProxy);
 			
-			if(resolved == null || resolved == proxy.getProxyObject()) {
+			if(resolved == null || resolved == tProxy.getProxyObject()) {
 				return false;
 			}
 			
 			DiagramNode newNode = this.graph.getVertexFactory().createVertex(resolved);
 
-			this.changeNode(proxy, newNode, resolved);
+			this.changeNode(tProxy, newNode, resolved);
 			
 			return true;
 		} else {
@@ -163,19 +178,21 @@ public class ModelDiagram implements IEditorInput{
 		}
 	}
 
-	public ModelDiagram getModelFromProxy(XMIProxyDiagramNode proxy) {
-		if(this.containsVertex(proxy)) {
-			return this.xmiReader.getModel(proxy);
+	public ModelDiagram<T> getModelFromProxy(ProxyDiagramNode<?> proxy) throws IllegalArgumentException {
+		ProxyDiagramNode<T> tProxy = this.castProxy(proxy);
+		
+		if(this.containsVertex((DiagramNode)tProxy)) {
+			return this.reader.getModel(tProxy);
 		}
 		
 		return null;
 	}
 	
-	public void changeNode(XMIProxyDiagramNode proxy, DiagramNode resolved, EObject eObject) {
+	public void changeNode(ProxyDiagramNode<T> proxy, DiagramNode resolved, T object) {
 		ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsTo = new ArrayList<>();
 		ArrayList<Pair<typeOfConnection, DiagramNode>> connectionsFrom = new ArrayList<>();
 		
-		for(DiagramEdge<DiagramNode> edge : this.graph.edgesOf(proxy)) {
+		for(DiagramEdge<DiagramNode> edge : this.graph.edgesOf((DiagramNode)proxy)) {
 			if(edge.getTarget().equals(proxy)) {
 				connectionsTo.add(new Pair<>(edge.getType(), edge.getSource()));
 			} else {
@@ -184,11 +201,11 @@ public class ModelDiagram implements IEditorInput{
 		}
 		
 		//Remove the previous vertex from the graph
-		this.graph.removeVertex(proxy);
+		this.graph.removeVertex((DiagramNode)proxy);
 		
 		//Add the new resolved node to the graph
-		resolved.setId(proxy.getId());
-		this.xmiReader.processNode(resolved, eObject);
+		resolved.setId(((DiagramNode)proxy).getId());
+		this.reader.processNode(resolved, object);
 
 		//Adding the in-edges
 		for(Pair<typeOfConnection,DiagramNode> nodeTo : connectionsTo) {
@@ -200,6 +217,18 @@ public class ModelDiagram implements IEditorInput{
 			this.graph.addEdge(resolved, nodeTo.getLast()).setType(nodeTo.getFirst());
 		}
 	}
+	
+	private ProxyDiagramNode<T> castProxy(ProxyDiagramNode<?> proxy) throws IllegalArgumentException {
+		Class<?> modelClass = (Class<?>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		Class<?> proxyClass = (Class<?>) ((ParameterizedType) proxy.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		if(modelClass.equals(proxyClass)) {
+			throw new IllegalArgumentException("The parmeters of the model and proxy are not the same: " + modelClass.getSimpleName() + " vs " + proxyClass.getSimpleName());
+		}
+		
+		@SuppressWarnings("unchecked")
+		ProxyDiagramNode<T> tProxy = (ProxyDiagramNode<T>)proxy;
+		return tProxy;
+	}
 
 	//IEditorInput methods
 	//Todos están vacíos porque no quiero nada de ellos
@@ -208,7 +237,7 @@ public class ModelDiagram implements IEditorInput{
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class arg0) { return null; }
 
 	@Override
-	public boolean exists() { return (this.graph!=null || this.xmiReader != null); }
+	public boolean exists() { return (this.graph!=null || this.reader != null); }
 
 	@Override
 	public ImageDescriptor getImageDescriptor() { return null; }
@@ -218,10 +247,10 @@ public class ModelDiagram implements IEditorInput{
 	public String getName() { 
 		if(!(customName == null)) {
 			return this.customName;
-		} else if(this.xmiReader == null) {
+		} else if(this.reader == null) {
 			return "ZestEditor";
 		} else {
-			return this.xmiReader.getFileName();
+			return this.reader.getFileName();
 		}
 	}
 	

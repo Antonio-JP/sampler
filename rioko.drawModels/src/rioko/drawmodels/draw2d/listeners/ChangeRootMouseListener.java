@@ -5,8 +5,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
+import rioko.graphabstraction.diagram.ProxyDiagramNode;
 import rioko.graphabstraction.draw2d.ModelNodeFigure;
-import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 
 /**
@@ -50,8 +50,8 @@ public class ChangeRootMouseListener implements MouseListener {
 						
 						if(ndFig.getReferredNode() instanceof ComposeDiagramNode) {
 							this.controler.extendComposeNode((ComposeDiagramNode)ndFig.getReferredNode());
-						} else if(ndFig.getReferredNode() instanceof XMIProxyDiagramNode){
-							this.controler.extendProxyNode((XMIProxyDiagramNode)ndFig.getReferredNode().getRootNode());
+						} else if(ndFig.getReferredNode() instanceof ProxyDiagramNode){
+							this.controler.extendProxyNode((ProxyDiagramNode<?>)ndFig.getReferredNode().getRootNode());
 						} else {
 							this.controler.changeRoot(ndFig.getReferredNode().getRootNode());
 						}

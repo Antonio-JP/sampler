@@ -15,13 +15,13 @@ import rioko.drawmodels.diagram.ModelDiagram;
 
 public class ZestEditorLabelProvider extends LabelProvider implements IFigureProvider, IEntityConnectionStyleProvider {
 	
-	private ModelDiagram model = null;
+	private ModelDiagram<?> model = null;
 	
 	private boolean showingData = true;
 
 	private boolean showingConnectionLabels = false;
 	
-	public ZestEditorLabelProvider(ModelDiagram model) {
+	public ZestEditorLabelProvider(ModelDiagram<?> model) {
 		this.model = model;
 	}
 	

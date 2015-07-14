@@ -268,7 +268,7 @@ public class ZestProperties implements Copiable {
 	}
 	
 	//Building methods
-	public DiagramGraph getDrawGraph(ModelDiagram model) {
+	public DiagramGraph getDrawGraph(ModelDiagram<?> model) {
 		DiagramGraph printable = this.applyFilters(this.getActualNestedAlgorithm().createNestedGraph(model.getModelDiagram(), this.algorithmConf));
 		model.setPrintDiagram(printable);
 		

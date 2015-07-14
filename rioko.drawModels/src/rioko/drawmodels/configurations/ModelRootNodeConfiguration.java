@@ -27,13 +27,13 @@ public class ModelRootNodeConfiguration extends RootNodeConfiguration implements
 	}
 
 	@Override
-	public void setModel(ModelDiagram model) {
+	public void setModel(ModelDiagram<?> model) {
 		this.setGraph(model.getModelDiagram());
 	}
 	
 	@Override
 	public Dialog getDialog() {
-		return new SearchDialog(null, new ModelDiagram(this.graph));
+		return new SearchDialog(null, ModelDiagram.getModelDiagramForGraph(this.graph));
 	}
 	
 	@Override

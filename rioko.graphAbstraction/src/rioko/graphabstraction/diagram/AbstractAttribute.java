@@ -1,4 +1,4 @@
-package rioko.drawmodels.diagram.XMIDiagram;
+package rioko.graphabstraction.diagram;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;

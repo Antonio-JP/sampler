@@ -8,9 +8,9 @@ import rioko.drawmodels.diagram.ModelDiagram;
 
 public class ZestEditorContentProvider extends ArrayContentProvider  implements IGraphEntityContentProvider {
 	
-	ModelDiagram model;
+	ModelDiagram<?> model;
 	
-	public ZestEditorContentProvider(ModelDiagram model) {
+	public ZestEditorContentProvider(ModelDiagram<?> model) {
 		this.model = model;
 	}
 	

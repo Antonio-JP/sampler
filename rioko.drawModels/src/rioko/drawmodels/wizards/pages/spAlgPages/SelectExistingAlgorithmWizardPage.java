@@ -115,7 +115,7 @@ public class SelectExistingAlgorithmWizardPage extends CustomWizardPage {
 			thirdRowLayout.horizontalSpacing = 4;
 			thirdRow.setLayout(thirdRowLayout);
 			
-			ModelDiagram model = new ModelDiagram(this.model);
+			ModelDiagram<?> model = ModelDiagram.getModelDiagramForGraph(this.model);
 			generalConf = new ConfigurationTable(thirdRow, SWT.NONE, model);
 			generalConf.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
 			

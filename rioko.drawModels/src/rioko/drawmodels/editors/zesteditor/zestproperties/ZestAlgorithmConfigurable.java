@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import rioko.drawmodels.configurations.EClassConfiguration;
+//import rioko.drawmodels.configurations.EClassConfiguration;
 import rioko.drawmodels.configurations.ModelRootNodeConfiguration;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.configurations.BadArgumentException;
@@ -24,7 +24,7 @@ public class ZestAlgorithmConfigurable implements Configurable {
 	private UnsignedIntConfiguration toShow = new UnsignedIntConfiguration();
 	private ModelRootNodeConfiguration rootConf = new ModelRootNodeConfiguration();
 	private UnsignedIntConfiguration toExpand = new UnsignedIntConfiguration(); 
-	private EClassConfiguration toFilter = new EClassConfiguration();
+//	private EClassConfiguration toFilter = new EClassConfiguration();
 	private BooleanConfiguration strongCon = new BooleanConfiguration();
 	private UnsignedIntConfiguration clusterNum = new UnsignedIntConfiguration();
 	
@@ -65,9 +65,9 @@ public class ZestAlgorithmConfigurable implements Configurable {
 	
 	public void setConfiguration(DisplayOptions option, Object value) throws BadConfigurationException, BadArgumentException {
 		switch(option) {
-			case ECLASS_FILTER:
-				this.toFilter.setConfiguration(value);
-				break;
+//			case ECLASS_FILTER:
+//				this.toFilter.setConfiguration(value);
+//				break;
 			case LEVELS_TS:
 				this.toExpand.setConfiguration(value);
 				break;
@@ -86,14 +86,14 @@ public class ZestAlgorithmConfigurable implements Configurable {
 	
 	public Object getConfiguration(DisplayOptions option) {
 		switch(option) {
-			case ECLASS_FILTER:
-				return this.toFilter.getConfiguration();
+//			case ECLASS_FILTER:
+//				return this.toFilter.getConfiguration();
 			case LEVELS_TS:
 				return this.toExpand.getConfiguration();
 			case MAX_NODES:
 				return this.toShow.getConfiguration();
 			case ROOT_NODE:
-				return this.toFilter.getConfiguration();
+				return this.rootConf.getConfiguration();
 			default:
 				break;
 		}
@@ -104,8 +104,8 @@ public class ZestAlgorithmConfigurable implements Configurable {
 	//Private methods
 	private Configuration selectConfiguration(DisplayOptions option) {
 		switch(option) {
-			case ECLASS_FILTER:
-				return this.toFilter;
+//			case ECLASS_FILTER:
+//				return this.toFilter;
 			case LEVELS_TS:
 				return this.toExpand;
 			case MAX_NODES:
@@ -145,11 +145,11 @@ public class ZestAlgorithmConfigurable implements Configurable {
 			Configuration current = iterator.next();
 			
 			switch(option) {
-				case ECLASS_FILTER:
-					if(!(current instanceof EClassConfiguration)){
-						throw new BadArgumentException(EClassConfiguration.class, current.getClass());
-					}
-					break;
+//				case ECLASS_FILTER:
+//					if(!(current instanceof EClassConfiguration)){
+//						throw new BadArgumentException(EClassConfiguration.class, current.getClass());
+//					}
+//					break;
 				case LEVELS_TS:
 					if(!(current instanceof UnsignedIntConfiguration)){
 						throw new BadArgumentException(UnsignedIntConfiguration.class, current.getClass());
@@ -183,7 +183,7 @@ public class ZestAlgorithmConfigurable implements Configurable {
 
 		res.rootConf = this.rootConf.copy();
 		res.toExpand = this.toExpand.copy();
-		res.toFilter = this.toFilter.copy();
+//		res.toFilter = this.toFilter.copy();
 		res.toShow = this.toShow.copy();
 		res.strongCon = this.strongCon.copy();
 		

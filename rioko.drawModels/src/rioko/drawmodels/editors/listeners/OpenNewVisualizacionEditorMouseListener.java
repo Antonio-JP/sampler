@@ -8,9 +8,9 @@ import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.graphabstraction.diagram.ProxyDiagramNode;
 import rioko.graphabstraction.diagram.iterators.TreeDirectedSearchIterator;
 import rioko.graphabstraction.draw2d.ModelNodeFigure;
-import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.zest.ExtendedGraphViewer;
 
@@ -38,8 +38,8 @@ public class OpenNewVisualizacionEditorMouseListener implements MouseListener {
 						
 						this.controler.createNavigationEditor(compose);	//Abrimos la nueva ventana
 						return;
-					} else if(mdFig.getReferredNode() instanceof XMIProxyDiagramNode) {
-						XMIProxyDiagramNode proxy = (XMIProxyDiagramNode)mdFig.getReferredNode();
+					} else if(mdFig.getReferredNode() instanceof ProxyDiagramNode<?>) {
+						ProxyDiagramNode<?> proxy = (ProxyDiagramNode<?>)mdFig.getReferredNode();
 						
 						this.controler.createNavigationEditor(proxy);
 					}

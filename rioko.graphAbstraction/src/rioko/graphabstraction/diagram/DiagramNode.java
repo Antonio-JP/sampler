@@ -207,4 +207,6 @@ public abstract class DiagramNode implements Vertex, Drawable {
 	}
 	//Private methods
 	protected abstract IFigure buildDataFigure();
+	
+	public abstract AbstractAttribute[] getAttributes();
 }

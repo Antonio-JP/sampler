@@ -85,7 +85,7 @@ public abstract class AlgorithmConfigurationWizardPage extends CustomWizardPage 
 		confLabel.setFont(new Font(null, "Arial", 0, 15));
 		confLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 			    
-		this.configurationTable = new ConfigurationTable(secondColumn, SWT.NONE, new ModelDiagram(this.getModel()));
+		this.configurationTable = new ConfigurationTable(secondColumn, SWT.NONE, ModelDiagram.getModelDiagramForGraph(this.getModel()));
 		this.configurationTable.setLayoutData(new GridData(GridData.FILL_BOTH));	//Lo añadimos en la segunda columna
 		
 		this.particularSectionsView();

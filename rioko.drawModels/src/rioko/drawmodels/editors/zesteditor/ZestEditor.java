@@ -31,8 +31,8 @@ import org.eclipse.zest.layouts.LayoutStyles;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.graphabstraction.diagram.ProxyDiagramNode;
 import rioko.drawmodels.diagram.ModelDiagram;
-import rioko.drawmodels.diagram.XMIDiagram.XMIProxyDiagramNode;
 import rioko.graphabstraction.display.ExpandComposeNodeNestedBuilder;
 import rioko.graphabstraction.layouts.bridge.ZestLayoutAlgorithm;
 import rioko.graphabstraction.runtime.registers.NotRegisteredException;
@@ -43,7 +43,8 @@ import rioko.drawmodels.editors.listeners.OpenNewVisualizacionEditorMouseListene
 import rioko.drawmodels.editors.listeners.PropertiesChangeListener;
 import rioko.drawmodels.editors.listeners.ZestClickSelectionMouseListener;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
-import rioko.drawmodels.filemanage.XMIReader;
+import rioko.drawmodels.filemanage.GeneralReader;
+import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.jface.ZestEditorStructuredSelection;
 import rioko.events.listeners.AbstractListener;
 import rioko.utilities.Log;
@@ -52,12 +53,12 @@ import rioko.zest.ExtendedGraphViewer;
 public class ZestEditor extends AbstractEditorPart implements ISelectionProvider {
 
 	private Label label;
-	private ModelDiagram model;
+	private ModelDiagram<?> model;
 	
 	private ExtendedGraphViewer viewer;
 	private ZestLayoutAlgorithm viewerLayout = new ZestLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
 	
-	private XMIReader xmiReader = null;
+	private Reader<?> reader = null;
 	
 	//Hidden attributes
 	private ZestProperties properties = new ZestProperties();
@@ -72,7 +73,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	}
 	
 	//Getters
-	public ModelDiagram getModel() {
+	public ModelDiagram<?> getModel() {
 		return model;
 	}
 
@@ -107,8 +108,8 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 			//Cargamos el fichero y el metamodelo
 			if(input instanceof FileEditorInput) {
 				try {
-					this.xmiReader = XMIReader.getReaderFromFile(this.getFile());
-					this.model = this.xmiReader.getModel();
+					this.reader = GeneralReader.getReaderFromFile(this.getFile());
+					this.model = this.reader.getModel();
 				} catch (IOException e) {
 					Log.exception(e);
 					MessageDialog.openError(null, "No meta-model found!", 
@@ -118,10 +119,10 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 					throw new PartInitException("Rioko ERROR: no such file loaded");
 				}
 			} else if(input instanceof ModelDiagram) {
-	        	this.model = (ModelDiagram)this.getEditorInput();
+	        	this.model = (ModelDiagram<?>)this.getEditorInput();
 	        } else if(input instanceof SpecialInputZestEditor) {
 				this.properties = ((SpecialInputZestEditor) input).getProperties();
-	        	this.model = new ModelDiagram(((SpecialInputZestEditor) input).getModel());
+	        	this.model = ModelDiagram.getModelDiagramForGraph(((SpecialInputZestEditor) input).getModel());
 			}
 			
 			return;
@@ -344,7 +345,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	public void createNavigationEditor(Collection<DiagramNode> collection) {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			ModelDiagram newModel = new ModelDiagram((DiagramGraph)this.model.getModelDiagram().inducedSubgraph(collection));
+			ModelDiagram<?> newModel = ModelDiagram.getModelDiagramForGraph((DiagramGraph)this.model.getModelDiagram().inducedSubgraph(collection));
 			newModel.setName(this.model.getName() + "/" + collection.iterator().next().getTitle());
 	        IDE.openEditor(page, 
 	        		newModel, 
@@ -359,16 +360,16 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		this.createNavigationEditor(compose.getNodes());
 	}
 	
-	public void createNavigationEditor(XMIProxyDiagramNode proxy)
+	public void createNavigationEditor(ProxyDiagramNode<?> proxy)
 	{
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			ModelDiagram newModel = this.model.getModelFromProxy(proxy);
+			ModelDiagram<?> newModel = this.model.getModelFromProxy(proxy);
 			if(newModel == null) {
 				throw new Exception("The proxy is not contained in the model");
 			}
 			
-	        IDE.openEditor(page, this.model.getModelFromProxy(proxy), this.getSite().getId());
+	        IDE.openEditor(page, newModel, this.getSite().getId());
 	    } catch ( Exception e ) {
 	        Log.exception(e);
 	    } 
@@ -385,7 +386,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		}
 	}
 	
-	public void extendProxyNode(XMIProxyDiagramNode proxy)
+	public void extendProxyNode(ProxyDiagramNode<?> proxy)
 	{
 		if(this.model.resolveProxy(proxy)) {
 			this.updateView();

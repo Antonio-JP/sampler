@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="diagrams" name="Diagrams" schema="schema/diagrams.exsd"/>
 	<?Comandos añadidos?>
 	<extension point="org.eclipse.ui.commands">
 		<category
@@ -286,12 +287,12 @@
 			icon="icons/sample.gif"
 			id="rioko.drawmodels.views.zestProperties"
 			name="View Preferences"/>
-		<view
+		<!--view
 			category="rioko.drawModels.views.category"
 			class="rioko.drawmodels.views.nodeInformation.NodeInformationView"
 			icon="icons/sample.gif"
 			id="rioko.drawmodels.views.nodeInformation"
-			name="Node information"/>
+			name="Node information"/-->
 		<view
 			category="rioko.drawModels.views.category"
 			class="rioko.drawmodels.views.filtersView.FiltersView"
@@ -312,11 +313,6 @@
  	
  	<?Pasos de algoritmos?>
  	<extension point="rioko.graphabstraction.steps">
-     <filter
-           class="rioko.drawmodels.display.filter.FilterEClass"
-           id="rioko.drawModels.filters.eClass"
-           name="EClass">
-     </filter>
      <local
            class="rioko.drawmodels.display.local.ModelTreeAlgorithm"
            id="rioko.drawModels.locals.treeContainer"
@@ -325,16 +321,6 @@
  	</extension>
  	<?Algorithmos implementados?>
 	<extension point="rioko.graphabstraction.abstractionAlgorithms">
-		<algorithm
- 			class="rioko.drawmodels.algorithms.display.test.EClassFilterAlgorithm"
-			id="rioko.drawModels.algorithms.eClassFilterAlgorithm"
-			name="EClass Filter">
-		</algorithm>
-		<algorithm
-			class="rioko.drawmodels.algorithms.display.test.FullStepsTestAlgorithm"
-			id="rioko.drawModels.algorithms.fullStepsAlgorithm"
-			name="Full Steps Algorithm">
-		</algorithm>
   <algorithm
         class="rioko.drawmodels.algorithms.display.test.SimpleGlobalAndLocalAlgorithm"
         id="rioko.drawModels.algorithms.leavesLocal"
@@ -347,18 +333,4 @@
   </algorithm>
   	</extension>
   	<?Criterios de búsqueda?>
-  	<extension point="rioko.graphabstraction.searches">
-  		<search
-  			id="rioko.drawmodels.searches.byEClass"
-  			name="EClass search"
-  			class="rioko.drawmodels.diagram.filters.ByEClass"/>
-  		<search
-  			id="rioko.drawmodels.searches.byHaveAttribute"
-  			name="Having Attribute Search"
-  			class="rioko.drawmodels.diagram.filters.ByHaveAttribute"/>
-  		<search
-  			id="rioko.drawmodels.searches.byAttributeValue"
-  			name="Attribute Value search"
-  			class="rioko.drawmodels.diagram.filters.ByAttributeValue"/>
-  	</extension>
 </plugin>
