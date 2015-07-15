@@ -18,6 +18,10 @@ Basic Tools to use with GraphML models.
       <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
    </url>
 
+   <requires>
+      <import feature="sampler.tools" version="1.0.0.qualifier"/>
+   </requires>
+
    <plugin
          id="rioko.gmlDrawer"
          download-size="0"
