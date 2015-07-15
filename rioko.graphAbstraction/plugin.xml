@@ -40,12 +40,4 @@
             name="Connected Components Algorithm">
       </algorithm>
    </extension>
-   <extension
-         point="rioko.layouts.layoutBridge">
-      <bridge
-            class="rioko.graphabstraction.layouts.bridge.ZestLayoutBridge"
-            id="rioko.graphAbstraction.layouts.bridges.zest"
-            name="Zest Bridge">
-      </bridge>
-   </extension>
 </plugin>

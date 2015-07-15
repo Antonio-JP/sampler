@@ -332,5 +332,13 @@
         name="Local criteria">
   </algorithm>
   	</extension>
+ <extension
+       point="rioko.layouts.layoutBridge">
+    <bridge
+          class="rioko.drawmodels.layouts.bridge.ZestLayoutBridge"
+          id="rioko.drawModels.layouts.bridges.zest"
+          name="Zest Bridge">
+    </bridge>
+ </extension>
   	<?Criterios de búsqueda?>
 </plugin>

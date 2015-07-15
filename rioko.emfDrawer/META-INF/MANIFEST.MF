@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EmfDrawer
+Bundle-SymbolicName: rioko.emfDrawer;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: rioko.emfdrawer.Activator
+Bundle-Vendor: Miso - Rioukay
+Require-Bundle: org.eclipse.draw2d,
+ org.eclipse.ui,
+ org.eclipse.osgi,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ rioko.plugin.utils,
+ rioko.graphabstraction,
+ rioko.drawmodels,
+ org.eclipse.emf.ecore
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: rioko.emfdrawer,
+ rioko.emfdrawer.algorithms,
+ rioko.emfdrawer.configurations,
+ rioko.emfdrawer.display.filter,
+ rioko.emfdrawer.filters,
+ rioko.emfdrawer.xmiDiagram,
+ rioko.emfdrawer.xmiDiagram.factories,
+ rioko.emfdrawer.xmiReader

@@ -43,12 +43,6 @@ Export-Package: rioko.graphabstraction;uses:="org.osgi.framework,org.eclipse.jfa
    org.eclipse.draw2d,
    rioko.graphabstraction.diagram",
  rioko.graphabstraction.draw2d.listeners;uses:="rioko.draw2d.listeners,org.eclipse.swt.graphics,org.eclipse.draw2d",
- rioko.graphabstraction.layouts.bridge;
-  uses:="rioko.layouts.bridge,
-   rioko.layouts.graphImpl,
-   rioko.layouts.algorithms,
-   org.eclipse.zest.layouts.algorithms,
-   org.eclipse.zest.layouts.dataStructures",
  rioko.graphabstraction.runtime.registers;uses:="rioko.graphabstraction.runtime.registers.algorithm,rioko.graphabstraction.algorithms",
  rioko.graphabstraction.runtime.registers.algorithm;uses:="rioko.utilities.collections,rioko.graphabstraction.algorithms"
 Bundle-ClassPath: .

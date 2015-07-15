@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="rioko.drawmodels.diagrams">
+      <diagram
+            compose="rioko.emfdrawer.xmiDiagram.ComposeXMIDiagramNode"
+            diagram="rioko.emfdrawer.XMIModelDiagram"
+            edge="rioko.emfdrawer.xmiDiagram.XMIDiagramEdge"
+            id="rioko.emfDrawer.emfDiagram"
+            name="XMI Model Diagram"
+            node="rioko.emfdrawer.xmiDiagram.XMIDiagramNode"
+            proxy="rioko.emfdrawer.xmiDiagram.XMIProxyDiagramNode"
+            reader="rioko.emfdrawer.xmiReader.XMIReader">
+         <fileExtension
+               fileExtension="xmi">
+         </fileExtension>
+         <fileExtension
+               fileExtension="webmodel">
+         </fileExtension>
+         <fileExtension
+               fileExtension="school">
+         </fileExtension>
+      </diagram>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.searches">
+      <search
+            class="rioko.emfdrawer.filters.ByEClass"
+            id="rioko.emfDrawer.searches.byEClass"
+            name="EClass search">
+      </search>
+      <search
+            class="rioko.emfdrawer.filters.ByHaveAttribute"
+            id="rioko.emfDrawer.searches.byHaveAttribute"
+            name="Having Attribute Search">
+      </search>
+      <search
+            class="rioko.emfdrawer.filters.ByAttributeValue"
+            id="rioko.emfDrawer.searches.byAttributeValue"
+            name="Attribute Value search">
+      </search>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.steps">
+      <filter
+            class="rioko.emfdrawer.display.filter.FilterEClass"
+            id="rioko.emfDrawer.filters.EClass"
+            name="EClass Filter">
+      </filter>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.abstractionAlgorithms">
+      <algorithm
+            class="rioko.emfdrawer.algorithms.EClassFilterAlgorithm"
+            id="rioko.emfDrawer.algorithms.eClassFilter"
+            name="EClass Filter Algorithm">
+      </algorithm>
+   </extension>
+
+</plugin>
