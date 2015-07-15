@@ -5,7 +5,11 @@ import java.util.Collection;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+
+import rioko.draw2d.figures.VerticalFigure;
 
 public abstract class ComposeDiagramNode extends DiagramNode {
 	
@@ -43,10 +47,22 @@ public abstract class ComposeDiagramNode extends DiagramNode {
 	@Override
 	public IFigure buildDataFigure() {
 		if(this.inNodes.size() == 1) {
-			return this.inNodes.get(0).buildDataFigure();
-		} else {
-			return new Label("Contiene "+this.inNodes.size()+" nodos");
+			return this.inNodes.get(0).getDataFigure();
+		} else if(this.inNodes.size() != 0){
+			//Inicializamos los datos a utilizar
+			IFigure figure = new VerticalFigure();
+			int nNodes = this.getFullListOfNodes().size();
+			
+			//Etiqueta principal
+			Label contains = new Label("Contains " + nNodes + " nodes.");
+			Font boldFont = new Font(null, "Arial", 10, SWT.BOLD);
+			contains.setFont(boldFont);
+			figure.add(contains);
+			
+			return figure;
 		}
+		
+		return null;
 	}
 	
 	public boolean isCompose()

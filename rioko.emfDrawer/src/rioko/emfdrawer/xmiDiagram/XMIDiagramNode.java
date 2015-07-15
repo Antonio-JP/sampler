@@ -2,7 +2,6 @@ package rioko.emfdrawer.xmiDiagram;
 
 import java.util.ArrayList;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
@@ -10,9 +9,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import rioko.draw2d.figures.VerticalFigure;
 import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.graphabstraction.diagram.StringAttribute;
 
 public class XMIDiagramNode extends DiagramNode {
 	
@@ -82,19 +81,6 @@ public class XMIDiagramNode extends DiagramNode {
 	}
 	
 	//Overriden methods
-	@Override
-	public IFigure buildDataFigure() 
-	{
-		this.dataFigure = new VerticalFigure();
-			
-		for(AbstractAttribute attr : this.getAttributes())
-		{
-			this.dataFigure.add(attr.getFigure());
-		}
-		
-		return this.dataFigure;
-	}
-
 	@Override
 	public DiagramNode copy() {
 		XMIDiagramNode copy = new XMIDiagramNode(this.object);

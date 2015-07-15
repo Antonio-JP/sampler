@@ -36,4 +36,8 @@
          version="0.0.0"
          search-location="both"/>
 
+   <includes
+         id="sampler.graphML"
+         version="0.0.0"/>
+
 </feature>

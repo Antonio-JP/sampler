@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="rioko.drawmodels.diagrams">
+      <diagram
+            compose="rioko.gmldrawer.gmlDiagram.ComposeGMLDiagramNode"
+            diagram="rioko.gmldrawer.GMLModelDiagram"
+            edge="rioko.gmldrawer.gmlDiagram.GMLDiagramEdge"
+            id="rioko.gmlDrawer.gmlDiagram"
+            name="GraphML Model Diagram"
+            node="rioko.gmldrawer.gmlDiagram.GMLDiagramNode"
+            proxy="rioko.gmldrawer.gmlDiagram.GMLProxyDiagramNode"
+            reader="rioko.gmldrawer.gmlReader.GMLReader">
+         <fileExtension
+               fileExtension="gml">
+         </fileExtension>
+      </diagram>
+   </extension>
+
+</plugin>

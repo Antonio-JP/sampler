@@ -8,6 +8,7 @@ import org.eclipse.swt.graphics.Color;
 
 import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.ProxyDiagramNode;
+import rioko.graphabstraction.diagram.StringAttribute;
 
 public class XMIProxyDiagramNode extends XMIDiagramNode implements ProxyDiagramNode<EObject> {
 

@@ -43,9 +43,9 @@ import rioko.emfdrawer.xmiDiagram.ComposeXMIDiagramNode;
 
 public class XMIReader implements Reader<EObject> {
 	
-	public static final Class<? extends DiagramEdge<DiagramNode>> TYPEOFEDGES = XMIDiagramEdge.class;
-	public static final Class<? extends DiagramNode> TYPEOFNODES = XMIDiagramNode.class;
-	public static final Class<? extends ComposeDiagramNode> TYPEOFCOMPOSE = ComposeXMIDiagramNode.class;
+	private static final Class<? extends DiagramEdge<DiagramNode>> TYPEOFEDGES = XMIDiagramEdge.class;
+	private static final Class<? extends DiagramNode> TYPEOFNODES = XMIDiagramNode.class;
+	private static final Class<? extends ComposeDiagramNode> TYPEOFCOMPOSE = ComposeXMIDiagramNode.class;
 	
 	private static HashMap<Object, XMIReader> Files = new HashMap<>();
 	

@@ -6,6 +6,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.graphics.Color;
 
 import rioko.zest.Drawable;
+import rioko.draw2d.figures.VerticalFigure;
 import rioko.graphabstraction.draw2d.ModelNodeFigure;
 import rioko.grapht.Vertex;
 
@@ -206,7 +207,16 @@ public abstract class DiagramNode implements Vertex, Drawable {
 		return ComposeDiagramNode.class;
 	}
 	//Private methods
-	protected abstract IFigure buildDataFigure();
+	protected IFigure buildDataFigure() {
+		this.dataFigure = new VerticalFigure();
+		
+		for(AbstractAttribute attr : this.getAttributes())
+		{
+			this.dataFigure.add(attr.getFigure());
+		}
+		
+		return this.dataFigure;
+	}
 	
 	public abstract AbstractAttribute[] getAttributes();
 }

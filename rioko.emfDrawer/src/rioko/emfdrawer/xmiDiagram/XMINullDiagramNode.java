@@ -6,6 +6,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.graphics.Color;
 
 import rioko.graphabstraction.diagram.AbstractAttribute;
+import rioko.graphabstraction.diagram.StringAttribute;
 
 public class XMINullDiagramNode extends XMIDiagramNode {
 	public XMINullDiagramNode(String string) {

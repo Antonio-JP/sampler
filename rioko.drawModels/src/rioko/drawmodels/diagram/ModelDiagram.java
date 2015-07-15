@@ -70,22 +70,20 @@ public abstract class ModelDiagram<T> implements IEditorInput{
 			if(valid) {
 				possibleModels.add(element);
 			}
-			
-			if(possibleModels.isEmpty()) {
-				throw new IllegalArgumentException("There is no possible reader registered for the graph");
-			} else {
-				try {
-					ModelDiagram<?> fooModel = (ModelDiagram<?>) possibleModels.get(0).createExecutableExtension("diagram");
-					//We use the Constructor with the IFile parameter and throw and exception if it does not exist
-					return fooModel.getClass().getConstructor(DiagramGraph.class).newInstance(graph);
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException | NoSuchMethodException | SecurityException | CoreException e) {
-					throw new IllegalArgumentException("Reader " + possibleModels.get(0).getAttribute("diagram") + " not have a simple DiagramGraph Constructor or a empty Constructor");
-				}
-			}
 		}
 		
-		return null;
+		if(possibleModels.isEmpty()) {
+			throw new IllegalArgumentException("There is no possible model registered for the graph");
+		} else {
+			try {
+				ModelDiagram<?> fooModel = (ModelDiagram<?>) possibleModels.get(0).createExecutableExtension("diagram");
+				//We use the Constructor with the IFile parameter and throw and exception if it does not exist
+				return fooModel.getClass().getConstructor(DiagramGraph.class).newInstance(graph);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException | CoreException e) {
+				throw new IllegalArgumentException("Reader " + possibleModels.get(0).getAttribute("diagram") + " not have a simple DiagramGraph Constructor or a empty Constructor");
+			}
+		}
 	}
 	
 	//Builders

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="sampler.graphML"
+      label="SAMPLER GraphML"
+      version="1.0.0.qualifier"
+      provider-name="Miso - Rioukay">
+
+   <description>
+      This feature include all the plug-ins that adapt the SAMPLER
+Basic Tools to use with GraphML models.
+   </description>
+
+   <license url="">
+      Use this software freely but, whenever use it, make a reference to its creator and distributor.
+   </license>
+
+   <url>
+      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
+   </url>
+
+   <plugin
+         id="rioko.gmlDrawer"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
