@@ -20,4 +20,11 @@
       <import feature="sampler.tools" version="1.0.0.qualifier"/>
    </requires>
 
+   <plugin
+         id="rioko.emfDrawer"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

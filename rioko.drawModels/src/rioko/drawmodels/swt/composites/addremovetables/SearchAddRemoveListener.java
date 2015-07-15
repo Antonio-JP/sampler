@@ -9,10 +9,13 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
 
 import rioko.drawmodels.swt.composites.AddRemoveTable;
 import rioko.drawmodels.wizards.listeners.AddRemoveMouseListener;
+import rioko.eclipse.registry.RegistryManagement;
 import rioko.graphabstraction.diagram.filters.FilterOfVertex;
 import rioko.graphabstraction.runtime.registers.RegisterSearchersCriteria;
 
 public class SearchAddRemoveListener extends AddRemoveMouseListener<FilterOfVertex> {
+
+	private static final String EXTENSION_ID_SEARCHES = "rioko.graphabstraction.searches";
 
 	public SearchAddRemoveListener(AddRemoveTable sourceTable, boolean addOrRemove, ArrayList<FilterOfVertex> controledList) {
 		super(sourceTable, addOrRemove, controledList, FilterOfVertex.class);
@@ -33,15 +36,8 @@ public class SearchAddRemoveListener extends AddRemoveMouseListener<FilterOfVert
 		ArrayList<FilterOfVertex> list = new ArrayList<>();
 		if(result != null) {
 			for(Object obj : result) {
-				try {
-					list.add((FilterOfVertex) Class.forName((String)obj).newInstance());
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+				FilterOfVertex filter = (FilterOfVertex) RegistryManagement.getInstance(EXTENSION_ID_SEARCHES, (String)obj);
+				list.add(filter);
 			}
 		}
 		

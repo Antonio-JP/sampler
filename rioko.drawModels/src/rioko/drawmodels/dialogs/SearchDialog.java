@@ -78,8 +78,8 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 		area.setLayout(layout);
 		
 		//Primera fila: Un ComboBox para seleccionar la EClass del nodo a buscar
-//		eClassSelector = new ComboBox(area, SWT.NONE, "EClass");
-//		eClassSelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		eClassSelector = new ComboBox(area, SWT.NONE, "EClass");
+		eClassSelector.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//Segunda fila: Un AddRemoveTable para añadir criterios de búsqueda y un LabelDataTable para configurar cada criterio
 		Composite secondRow = new Composite(area, SWT.BORDER);
