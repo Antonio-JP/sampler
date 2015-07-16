@@ -1,10 +1,8 @@
 package rioko.layouts.graphImpl;
 
-import org.jgrapht.EdgeFactory;
+import rioko.grapht.AbstractEdge;
 
-import rioko.grapht.VisibleEdge;
-
-public class LayoutEdge extends VisibleEdge<LayoutVertex> {
+public class LayoutEdge extends AbstractEdge<LayoutVertex> {
 	
 	public LayoutEdge() {
 		super();
@@ -15,10 +13,8 @@ public class LayoutEdge extends VisibleEdge<LayoutVertex> {
 	}
 	
 	@Override
-	public EdgeFactory<LayoutVertex, LayoutEdge> getEdgeFactory()
+	public LayoutEdgeFactory getEdgeFactory()
 	{
 		return new LayoutEdgeFactory();
 	}
-
-	private static final long serialVersionUID = 1277671342583507857L;
 }

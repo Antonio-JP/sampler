@@ -210,7 +210,7 @@ public abstract class DiagramNode implements Vertex, Drawable {
 	protected IFigure buildDataFigure() {
 		this.dataFigure = new VerticalFigure();
 		
-		for(AbstractAttribute attr : this.getAttributes())
+		for(AbstractAttribute attr : this.getDrawableData())
 		{
 			this.dataFigure.add(attr.getFigure());
 		}
@@ -218,5 +218,21 @@ public abstract class DiagramNode implements Vertex, Drawable {
 		return this.dataFigure;
 	}
 	
-	public abstract AbstractAttribute[] getAttributes();
+	public AbstractAttribute[] getData() {
+		ArrayList<AbstractAttribute> data = new ArrayList<>();
+		
+		for(AbstractAttribute attr : this.getNonDrawableData()) {
+			data.add(attr);
+		}
+		
+		for(AbstractAttribute attr : this.getDrawableData()) {
+			data.add(attr);
+		}
+		
+		return data.toArray(new AbstractAttribute[0]);
+	}
+	
+	protected abstract AbstractAttribute[] getNonDrawableData();
+
+	public abstract AbstractAttribute[] getDrawableData();
 }

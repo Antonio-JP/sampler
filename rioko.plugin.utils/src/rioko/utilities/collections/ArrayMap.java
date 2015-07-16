@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Map implementation which preserves the order of the keys when it is needed loop over them.
  * 
- * @author Rioko
+ * @author Antonio
  *
  * @param <K> Class for the keys
  * @param <V> Class for the values

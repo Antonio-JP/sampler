@@ -5,7 +5,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
-import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.ProxyDiagramNode;
@@ -54,7 +53,7 @@ public class OpenNewVisualizacionEditorMouseListener implements MouseListener {
 					ModelNodeFigure mdFig = (ModelNodeFigure)figure;
 					DiagramGraph graph = this.controler.getModel().getModelDiagram();
 					DiagramNode root = mdFig.getReferredNode().getRootNode();
-					this.controler.createNavigationEditor(graph.getSubTree(new TreeDirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>>(graph, root))); 
+					this.controler.createNavigationEditor(graph.getSubTree(new TreeDirectedSearchIterator<DiagramNode>(graph, root))); 
 					
 					break;
 				}

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import rioko.utilities.Log;
 import rioko.graphabstraction.configurations.Configurable;
-import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.iterators.TreeUndirectedSearchIterator;
@@ -26,7 +25,7 @@ public class GlobalLeavesCompactificationNestedBuilder extends GlobalNestedBuild
 		
 		DiagramNode root = data.vertexSet().iterator().next();
 		
-		TreeUndirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>> iterator = new TreeUndirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>>(data, root, true);
+		TreeUndirectedSearchIterator<DiagramNode> iterator = new TreeUndirectedSearchIterator<DiagramNode>(data, root, true);
 		
 		Log.xPrint(" --- Working on the graph nodes - Getting leaves");
 		Log.xOpen("nodes-iteration");

@@ -1,12 +1,10 @@
 package rioko.graphabstraction.diagram;
 
-import org.jgrapht.EdgeFactory;
+import rioko.grapht.EdgeFactory;
 
-import rioko.grapht.VisibleEdge;
+import rioko.grapht.AbstractEdge;
 
-public class DiagramEdge<V extends DiagramNode> extends VisibleEdge<V> {
-
-	private static final long serialVersionUID = 3465920667910496532L;
+public class DiagramEdge<V extends DiagramNode> extends AbstractEdge<V> {
 	
 	private typeOfConnection type = null;
 	

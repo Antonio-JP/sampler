@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Set implementation which, when it is needed to iterate over it, preserves the order of the element in order of adding.
  * 
- * @author Rioukay
+ * @author Antonio
  *
  * @param <E> Class for the set elements
  */

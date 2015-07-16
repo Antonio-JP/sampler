@@ -1,6 +1,6 @@
 package rioko.emfdrawer.xmiDiagram.factories;
 
-import org.jgrapht.EdgeFactory;
+import rioko.grapht.EdgeFactory;
 
 import rioko.emfdrawer.xmiDiagram.XMIDiagramEdge;
 import rioko.graphabstraction.diagram.DiagramNode;

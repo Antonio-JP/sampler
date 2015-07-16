@@ -1,6 +1,6 @@
 package rioko.layouts.graphImpl;
 
-import org.jgrapht.EdgeFactory;
+import rioko.grapht.EdgeFactory;
 
 public class LayoutEdgeFactory implements EdgeFactory<LayoutVertex, LayoutEdge> {
 

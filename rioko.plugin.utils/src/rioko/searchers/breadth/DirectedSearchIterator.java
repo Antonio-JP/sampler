@@ -1,26 +1,33 @@
 package rioko.searchers.breadth;
 
-import rioko.grapht.AbstractGraph;
+import rioko.grapht.AdjacencyListGraph;
+import rioko.grapht.Edge;
 import rioko.grapht.Vertex;
-import rioko.grapht.VisibleEdge;
 import rioko.searchers.BreadthSearchIterator;
 
-public class DirectedSearchIterator<V extends Vertex,E extends VisibleEdge<V>> extends BreadthSearchIterator<V,E> {
+/**
+ * Breadth Searcher for graphs where an edge is valid if and only if the current vertex is the source of the edge.
+ * 
+ * @author Antonio
+ *
+ * @param <V> Class of the vertex of the graph.
+ */
+public class DirectedSearchIterator<V extends Vertex> extends BreadthSearchIterator<V> {
 
-	public DirectedSearchIterator(AbstractGraph<V,E> graph, V root) {
+	public DirectedSearchIterator(AdjacencyListGraph<V,? extends Edge<V>> graph, V root) {
 		super(graph, root);
 		
 		this.setSearchAll(false);
 	}
 	
-	public DirectedSearchIterator(AbstractGraph<V,E> graph, V root, boolean searchAll) {
+	public DirectedSearchIterator(AdjacencyListGraph<V,? extends Edge<V>> graph, V root, boolean searchAll) {
 		super(graph, root);
 		
 		this.setSearchAll(searchAll);
 	}
 
 	@Override
-	protected boolean isValidEdge(E edge, V currentVertex) {
+	protected boolean isValidEdge(Edge<V> edge, V currentVertex) {
 		return edge.getSource().equals(currentVertex);
 	}
 }

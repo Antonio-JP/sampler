@@ -1,8 +1,9 @@
 package rioko.events;
 
 /**
- * Event created to manage the changes in a class. It has the information of the object changed, so it is possible to control if a listener has to be execute
- * or not.
+ * Event created to manage the changes in a class. It has the information of 
+ * the object changed, so it is possible to control if a listener has to be 
+ * execute or not.
  * 
  * @author Antonio
  */
@@ -24,7 +25,8 @@ public class DataChangeEvent extends AbstractEvent {
 		
 		this.data = data;
 		
-		/* If thhis event is a real DataChangeEvent, we execute the event. Otherwhise, this is a subclass of this and it could be not constructed yet. */
+		/* If this event is a real DataChangeEvent, we execute the event. Otherwise, 
+		 * this is a subclass of this and it could be not constructed yet. */
 		if(this.getClass().getSimpleName().equals(DataChangeEvent.class.getSimpleName())) {
 			this.processEvent();
 		}
@@ -33,7 +35,8 @@ public class DataChangeEvent extends AbstractEvent {
 	//Getters
 	/**
 	 * Public method to get the data Object
-	 * @return
+	 * 
+	 * @return The Object data
 	 */
 	public Object getData()
 	{

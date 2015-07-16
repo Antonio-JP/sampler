@@ -312,7 +312,7 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 		ArrayList<LabelValueDataLine> lines = new ArrayList<>();
 
 		if(node instanceof DiagramNode) {
-			for(AbstractAttribute attr : ((DiagramNode) node).getAttributes()) {
+			for(AbstractAttribute attr : ((DiagramNode) node).getDrawableData()) {
 				lines.add(new LabelValueDataLine(attr.getName(), attr.getValue().toString()));
 			}
 		}

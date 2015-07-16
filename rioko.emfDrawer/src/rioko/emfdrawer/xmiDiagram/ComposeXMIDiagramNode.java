@@ -124,7 +124,12 @@ public class ComposeXMIDiagramNode extends ComposeDiagramNode {
 	}
 
 	@Override
-	public AbstractAttribute[] getAttributes() {
+	public AbstractAttribute[] getDrawableData() {
+		return new AbstractAttribute[0];
+	}
+
+	@Override
+	protected AbstractAttribute[] getNonDrawableData() {
 		return new AbstractAttribute[0];
 	}
 }

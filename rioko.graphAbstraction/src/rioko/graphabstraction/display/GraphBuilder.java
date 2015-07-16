@@ -9,40 +9,37 @@ public interface GraphBuilder {
 	/**
 	 * Method that creates a new Graph using a DiagramGraph as data witho some configuration
 	 * 
-	 * @param data Graph to modify
-	 * @param properties Configuration of the execution
+	 * @param data {@link rioko.graphabstraction.diagram.DiagramGraph} used to build a new Graph
+	 * @param properties {@link rioko.graphabstraction.configurations.Configurable} of the execution
 	 * 
-	 * @return A new Graph ready to draw
+	 * @return A new {@link rioko.graphabstraction.diagram.DiagramGraph}
 	 */
 	public DiagramGraph createNestedGraph(DiagramGraph data, Configurable properties);
-	
-	//Generic methods	
+		
 	/**
-	 * Public method to generate the news vertex of the graph to draw
+	 * Public method to generate the new vertices of the graph
 	 * 
-	 * @param target DiagramGraph object where insert the new vertex
-	 * @param data DiagramGraph used as data
-	 * @param properties DisplayProperties used to configure the algorithm
+	 * @param data {@link rioko.graphabstraction.diagram.DiagramGraph} used as data
+	 * @param properties {@link rioko.graphabstraction.configurations.Configurable} used to configure the algorithm
 	 * 
-	 * @return DiagramGraph with the printable graph
+	 * @return {@link rioko.graphabstraction.diagram.DiagramGraph} with the printable nodes
 	 * 
 	 * @throws Exception if there is any error
 	 */
 	public DiagramGraph buildNodes(DiagramGraph data, Configurable properties) throws Exception;
 	
 	/**
-	 * Method to check in each algorithm if the configuration with properties is complete
+	 * Method to check if the configuration is correct to build a Graph
 	 * 
-	 * @param properties DisplayProperties with the configuration
+	 * @param properties {@link rioko.graphabstraction.configurations.Configurable} with the configuration
 	 * 
 	 * @return true if it is correct and false otherwise
 	 */
 	boolean checkProperties(Configurable properties);
 	
 	/**
-	 * Method to check if the configuration is complete
-	 * 
-	 * @param properties DisplayProperties with the configuration
+	 * Method to check if the configuration is correct to build a Graph. It check if the builder needs 
+	 * some configuration to work
 	 * 
 	 * @return true if it is correct and false otherwise
 	 */
@@ -51,15 +48,17 @@ public interface GraphBuilder {
 	}
 	
 	/**
-	 * Se unen todos los vértices que dentro de sí mismos contengan vértices que en le grafo inicial ya estaban unidos.
+	 * Method to add to a target Graph the edges required to finish the new Graph created by this builder 
+	 * with {@link rioko.graphabstraction.display.GraphBuilder#buildNodes(DiagramGraph, Configurable)}
 	 * 
-	 * @param target Grafo donde se van a generar las nuevas aristas
-	 * @param source Grafo del que se van extraer las conexiones
+	 * @param target {@link rioko.graphabstraction.diagram.DiagramGraph DiagramGraph} where we will add the new edges
+	 * @param data {@link rioko.graphabstraction.diagram.DiagramGraph DiagramGraph} from we will take information to 
+	 * create the edges.
 	 */
 	public void buildEdges(DiagramGraph target, DiagramGraph data);
 	
 	/**
-	 * Methods that returns what configuration is needed by this algortihm
+	 * Method that returns what configuration is needed by this builder
 	 * 
 	 * @return Collection with the options needed
 	 */

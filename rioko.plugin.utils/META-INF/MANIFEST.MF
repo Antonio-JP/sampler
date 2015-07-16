@@ -11,10 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/jgrapht-core-0.9.0.jar
-Export-Package: org.jgrapht,
- rioko.draw2d.borders,
+Bundle-ClassPath: .
+Export-Package: rioko.draw2d.borders,
  rioko.draw2d.figures,
  rioko.draw2d.listeners,
  rioko.eclipse.registry,

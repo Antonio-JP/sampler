@@ -16,14 +16,14 @@ import org.eclipse.zest.core.viewers.GraphViewer;
 public class ExtendedGraphViewer extends GraphViewer {
 	
 	/**
-	 * Private field that manages if a layout algorithm is applyed instantly or not
+	 * Private field that manages if a layout algorithm is applied instantly or not
 	 */
 	private boolean layoutApplicable = true;
 	
 	/**
 	 * Public builder of an ExtendedGraphViewer.
 	 * 
-	 * @param composite Composite in wich the viewer will be placed. It must have a FillLayout.
+	 * @param composite Composite in which the viewer will be placed. It must have a FillLayout.
 	 * @param style SWT style associated to this GraphViewer.
 	 */
 	public ExtendedGraphViewer(Composite composite, int style) {
@@ -84,8 +84,8 @@ public class ExtendedGraphViewer extends GraphViewer {
 	/**
 	 * Public method to get the IFigures in a position given its coordinates. It is equivalent to getFiguresAtposition(new point(x,y)).
 	 * 
-	 * @param x X coordinate of the poitn where this method will search.
-	 * @param y Y coordinate of the poitn where this method will search.
+	 * @param x X coordinate of the point where this method will search.
+	 * @param y Y coordinate of the point where this method will search.
 	 * @return An array of IFigures
 	 */
 	public IFigure[] getFiguresAtPosition(int x, int y)

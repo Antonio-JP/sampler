@@ -287,12 +287,12 @@
 			icon="icons/sample.gif"
 			id="rioko.drawmodels.views.zestProperties"
 			name="View Preferences"/>
-		<!--view
+		<view
 			category="rioko.drawModels.views.category"
 			class="rioko.drawmodels.views.nodeInformation.NodeInformationView"
 			icon="icons/sample.gif"
 			id="rioko.drawmodels.views.nodeInformation"
-			name="Node information"/-->
+			name="Node information"/>
 		<view
 			category="rioko.drawModels.views.category"
 			class="rioko.drawmodels.views.filtersView.FiltersView"

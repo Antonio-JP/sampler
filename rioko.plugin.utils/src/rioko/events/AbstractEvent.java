@@ -8,8 +8,9 @@ import org.eclipse.swt.widgets.Event;
 import rioko.events.listeners.AbstractListener;
 
 /**
- * Abstract Class implementic the basic and generic mechanism to handle different kind of customs events. It is specially usefull for events 
- * not registered in the API which is being used.
+ * Abstract Class implementing the basic and generic mechanism to handle different kind 
+ * of customs events. It is specially usefull for events not registered in the API which 
+ * is being used.
  * 
  * @author Antonio
  */
@@ -24,6 +25,7 @@ public abstract class AbstractEvent extends Event {
 	 * Static method to register a listener to the system
 	 * 
 	 * @param listener AbstractListener to register
+	 * 
 	 * @throws Exception If the listener has no event associated
 	 */
 	public static void addListener(AbstractListener listener) throws Exception
@@ -56,8 +58,9 @@ public abstract class AbstractEvent extends Event {
 	}
 	
 	/**
-	 * Method to handle a new event. It is protected to let freedom to change in subclasses. This default implementation execute the
-	 * handleEvent method of the AbstractListener class associated to all the listener of this event.
+	 * Method to handle a new event. It is protected to let freedom to change in subclasses. 
+	 * This default implementation execute the handleEvent method of the AbstractListener 
+	 * class associated to all the listener of this event.
 	 */
 	protected void processEvent()
 	{

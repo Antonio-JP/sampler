@@ -1,6 +1,6 @@
 package rioko.gmldrawer.gmlDiagram.factories;
 
-import org.jgrapht.EdgeFactory;
+import rioko.grapht.EdgeFactory;
 
 import rioko.gmldrawer.gmlDiagram.GMLDiagramEdge;
 import rioko.graphabstraction.diagram.DiagramNode;

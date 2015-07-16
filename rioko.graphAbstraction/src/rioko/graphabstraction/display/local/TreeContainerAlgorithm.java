@@ -17,15 +17,6 @@ import rioko.graphabstraction.display.LocalNestedBuilder;
 public abstract class TreeContainerAlgorithm extends LocalNestedBuilder {
 		
 	//GraphBuilder methods
-	/**
-	 * Algoritmo para generar los nodos agrupados a partir de un grafo más amplio y un nodo raíz
-	 * 
-	 * @param target Grafo en el se guardará la información
-	 * @param source Grafo del que se obtendrá la información
-	 * @param root Nodo raíz de donde se comienza el algoritmo
-	 * 
-	 * @throws Exception Si hay un error imposible
-	 */
 	@Override
 	public DiagramGraph buildNodes(DiagramGraph data, Configurable properties) throws Exception{
 		

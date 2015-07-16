@@ -12,7 +12,6 @@ import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.Configurable;
 import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
-import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
 //import rioko.graphabstraction.diagram.XMIDiagram.ComposeXMIDiagramNode;
@@ -37,7 +36,7 @@ public class ExpandComposeNodeNestedBuilder extends NestedGraphBuilder {
 		//Primero hacemos una busqueda en anchura del grafo data para saber su distribución
 		DiagramNode root = this.baseGraph.vertexSet().iterator().next();
 		
-		TreeUndirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>> iterator = new TreeUndirectedSearchIterator<DiagramNode, DiagramEdge<DiagramNode>>(data, this.getDataNode(root, data), true);
+		TreeUndirectedSearchIterator<DiagramNode> iterator = new TreeUndirectedSearchIterator<DiagramNode>(data, this.getDataNode(root, data), true);
 		
 		//Creamos una lista para almacenar los niveles
 		ArrayList<ArrayList<DiagramNode>> listOfLevels = new ArrayList<>();

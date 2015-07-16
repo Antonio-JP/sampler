@@ -6,8 +6,8 @@ import rioko.draw2d.borders.BottomBorder;
 
 /**
  * Specific Figure with just a Label with left alignment and a bottom line.
+ * 
  * @author Antonio
- *
  */
 public class TitleFigure extends VerticalFigure {
 

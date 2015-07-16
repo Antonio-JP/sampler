@@ -20,13 +20,11 @@ import rioko.drawmodels.views.listeners.PropertiesChangeListener;
 import rioko.drawmodels.wizards.AbstractWizard;
 import rioko.drawmodels.wizards.CreateSpecialAlgorithmWizard;
 import rioko.events.listeners.AbstractDataChangeListener;
-//import rioko.events.listeners.GlobalChangeListener;
 
 public class ZestPropertiesView extends ZestEditorDependingViewPart implements IWindowListener {
 	private ConfigurationTable basicConf;
 	private ConfigurationTable algConf;
 		
-//	private WizardWindowListener wizardListener = null;
 	private PropertiesChangeListener listener = null;
 	private ZestEditor activeEditor;
 	private ZestProperties properties;
@@ -80,7 +78,7 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart implements I
 		}
 		
 		//Creamos el lstener para actualizar la vista al cerrar el wizard correspondiente
-		/*this.wizardListener = */new WizardWindowListener(AbstractWizard.class,this) {
+		new WizardWindowListener(AbstractWizard.class,this) {
 
 			@Override
 			protected void openWizard(WizardWindowEvent wwe) { /* Do nothing */}

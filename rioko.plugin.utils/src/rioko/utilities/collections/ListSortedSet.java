@@ -7,6 +7,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.SortedSet;
 
+/**
+ * Implementation of SortedSet where the elements are iterate in the same order they are added.
+ * 
+ * @author Antonio
+ *
+ * @param <E> Class of the elements of the Set.
+ */
 public abstract class ListSortedSet<E> implements SortedSet<E> {
 
 	private ArrayList<E> sortedElements = new ArrayList<>();
@@ -184,5 +191,10 @@ public abstract class ListSortedSet<E> implements SortedSet<E> {
 	}
 	
 	//Abstract methods
+	/**
+	 * Public method to instantiate a new empty set of the same class of the current Set.
+	 * 
+	 * @return An empty SortedSet of the same class.
+	 */
 	public abstract SortedSet<E> getEmptySet();
 }

@@ -6,6 +6,13 @@ import java.util.function.Predicate;
 
 import rioko.events.DataChangeEvent;
 
+/**
+ * Extension of an ArrayList which throw a new Event whenever it changes.
+ * 
+ * @author Antonio
+ *
+ * @param <E> Class of the elements of the List.
+ */
 public class ListenedArrayList<E> extends ArrayList<E> {
 
 	private static final long serialVersionUID = -2895438079627325877L;
@@ -24,6 +31,9 @@ public class ListenedArrayList<E> extends ArrayList<E> {
 	}
 	
 	//Event throw method
+	/**
+	 * Private method to throw the Event associated to this List.
+	 */
 	private void throwEvent() {
 		new DataChangeEvent(this);
 	}

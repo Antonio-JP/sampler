@@ -2,15 +2,12 @@ package rioko.emfdrawer.xmiDiagram;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EReference;
-import org.jgrapht.EdgeFactory;
 
 import rioko.emfdrawer.xmiDiagram.factories.XMIDiagramEdgeFactory;
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramNode;
 
 public class XMIDiagramEdge extends DiagramEdge<DiagramNode>{
-
-	private static final long serialVersionUID = -4920605455476935132L;
 	
 	private EReference ref;
 
@@ -36,7 +33,7 @@ public class XMIDiagramEdge extends DiagramEdge<DiagramNode>{
 	}
 	
 	@Override
-	public EdgeFactory<DiagramNode, XMIDiagramEdge> getEdgeFactory()
+	public XMIDiagramEdgeFactory getEdgeFactory()
 	{
 		return new XMIDiagramEdgeFactory();
 	}

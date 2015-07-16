@@ -3,6 +3,14 @@ package rioko.searchers;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * Search iterator throught different elements. This abstract class gives an interface to 
+ * code search algorithms.
+ * 
+ * @author Antonio
+ *
+ * @param <E> Class of the elements that are being searched.
+ */
 public abstract class SearchIterator<E> implements Iterator<E> {
 	protected HashMap<E,E> parentOf;
 	
@@ -13,7 +21,8 @@ public abstract class SearchIterator<E> implements Iterator<E> {
 	
 	//Search methods
 	/**
-	 * Public method that allows to know if an element has been found in the search. It is necessary to use before getParent() method.
+	 * Public method that allows to know if an element has been found in the search. It is 
+	 * necessary to use before getParent() method.
 	 * 
 	 * @param object Object to check
 	 * 
@@ -24,8 +33,9 @@ public abstract class SearchIterator<E> implements Iterator<E> {
 	}
 	
 	/**
-	 * Public method to get the parent of an element that has been found in the search. Return null if it is the root. If the object has not been 
-	 * yet found, this method will return null too. ¡Be careful!
+	 * Public method to get the parent of an element that has been found in the search. Return 
+	 * null if it is the root. If the object has not been yet found, this method will return 
+	 * null too. ¡Be careful!
 	 * 
 	 * @param object Object to check
 	 * 

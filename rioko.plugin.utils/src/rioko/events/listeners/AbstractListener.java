@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.Listener;
 import rioko.events.AbstractEvent;
 
 /**
- * Abstrac class representing a general listener of the custom events developed in this package.
+ * Abstract class representing a general listener of the custom events developed in this package.
  * 
  * It has information about the object which want to listen something.
  * 
@@ -20,9 +20,9 @@ public abstract class AbstractListener implements Listener {
 	protected Object parent = null;
 	
 	/**
-	 * Static method to destroy a Listener. It calls the AbstractEvent#destroyListener method.
+	 * Static method to destroy an AbstractListener. It calls the {@link rioko.events.AbstractEvent#removeListener removeListener} method.
 	 * 
-	 * @param listener Listener to be disposed.
+	 * @param listener AbstractListener to be disposed.
 	 */
 	public static void destroyListener(AbstractListener listener)
 	{
@@ -33,9 +33,9 @@ public abstract class AbstractListener implements Listener {
 	}
 	
 	/**
-	 * Public builder to create a new Listener.
+	 * Public builder to create a new AbstractListener.
 	 * 
-	 * @param parent Object which want to listen something.
+	 * @param parent Object which want to follow.
 	 */
 	public AbstractListener(Object parent)
 	{
@@ -58,7 +58,7 @@ public abstract class AbstractListener implements Listener {
 	/**
 	 * Abstract method to get the required event class for a listener been run.
 	 * 
-	 * @return Class<?> with the class of the event.
+	 * @return The class of the event (extending {@link rioko.events.AbstractEvent}).
 	 */
 	public abstract Class<? extends AbstractEvent> getAssociatedEvent();
 }

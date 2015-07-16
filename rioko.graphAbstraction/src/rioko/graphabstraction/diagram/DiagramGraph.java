@@ -2,11 +2,11 @@ package rioko.graphabstraction.diagram;
 
 import org.eclipse.zest.core.viewers.EntityConnectionData;
 
-import rioko.grapht.AbstractGraph;
+import rioko.grapht.AdjacencyListGraph;
 import rioko.grapht.VertexFactory;
 import rioko.utilities.Log;
 
-public class DiagramGraph extends AbstractGraph<DiagramNode, DiagramEdge<DiagramNode>> {
+public class DiagramGraph extends AdjacencyListGraph<DiagramNode, DiagramEdge<DiagramNode>> {
 
 	private Class<? extends ComposeDiagramNode> composeClass = ComposeDiagramNode.class;
 	private VertexFactory<? extends ComposeDiagramNode> composeFactory = null;

@@ -30,7 +30,7 @@ public class ByHaveAttribute extends FilterOfVertex {
 		if(node instanceof XMIDiagramNode) {
 			XMIDiagramNode xmiNode = (XMIDiagramNode)node;
 			
-			for(AbstractAttribute attr : xmiNode.getAttributes()) {
+			for(AbstractAttribute attr : xmiNode.getDrawableData()) {
 				if(attr.getName().equals(attribute)) {
 					return true;
 				}

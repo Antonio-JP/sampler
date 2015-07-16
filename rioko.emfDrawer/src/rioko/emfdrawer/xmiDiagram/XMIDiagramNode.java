@@ -17,10 +17,6 @@ public class XMIDiagramNode extends DiagramNode {
 	
 	private EObject object = null;
 	
-//	private ArrayList<AbstractAttribute> attrs;
-	
-//	private EClass classNode;
-	
 	//Builders	
 	public XMIDiagramNode()
 	{
@@ -50,17 +46,27 @@ public class XMIDiagramNode extends DiagramNode {
 	}
 	
 	//Getters & Setters
-	public AbstractAttribute[] getAttributes()
+	public AbstractAttribute[] getDrawableData()
 	{
 		this.checkEObject();
 		
 		EList<EAttribute> eAllAttributes = this.getEClass().getEAllAttributes();
-		ArrayList<AbstractAttribute> attrs = new ArrayList<>();
+		ArrayList<AbstractAttribute> attrs = new ArrayList<>(eAllAttributes.size());
 		for(EAttribute attr : eAllAttributes) {
 			attrs.add(new StringAttribute(attr.getName(), this.getStringFromData(this.object.eGet(attr))));
 		}
 		
 		return attrs.toArray(new AbstractAttribute[0]);
+	}
+
+	@Override
+	protected AbstractAttribute[] getNonDrawableData() {
+		AbstractAttribute[] attrs = new AbstractAttribute[2];
+		
+		attrs[0] = new StringAttribute("ID", ""+this.getId());
+		attrs[1] = new StringAttribute("EClass", this.object.eClass().getName());
+		
+		return attrs;
 	}
 	
 	public EClass getEClass()

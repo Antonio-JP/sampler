@@ -1,7 +1,21 @@
 package rioko.utilities;
 
+/**
+ * Class to manage pair of elements. Those elements are generic and can be configured when create the Pair object.
+ * 
+ * @author Antonio
+ *
+ * @param <T> Class for the First element of the Pair
+ * @param <P> Class for the Last element of the Pair
+ */
 public class Pair<T,P> {
+	/**
+	 * First element of the Pair
+	 */
 	private T first;
+	/**
+	 * Last element of the Pair
+	 */
 	private P last;
 	
 	public Pair() {
@@ -14,18 +28,34 @@ public class Pair<T,P> {
 	}
 	
 	//Getters & Setters
+	/**
+	 * Getter method for the first element
+	 * @return T with the first element of the Pair. It could be a null object.
+	 */
 	public T getFirst() {
 		return first;
 	}
 
+	/**
+	 * Setter method for the first element
+	 * @param first T object which will be the First element of this Pair. It could be null.
+	 */
 	public void setFirst(T first) {
 		this.first = first;
 	}
 
+	/**
+	 * Getter method for the last element
+	 * @return P with the last element of the Pair. It could be a null object.
+	 */
 	public P getLast() {
 		return last;
 	}
 
+	/**
+	 * Setter method for the last element
+	 * @param last P object which will be the Last element of this Pair. It could be null.
+	 */
 	public void setLast(P last) {
 		this.last = last;
 	}

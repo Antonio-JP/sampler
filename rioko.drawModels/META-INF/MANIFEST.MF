@@ -24,7 +24,6 @@ Export-Package: rioko.drawmodels,
  rioko.drawmodels.algorithms.display.test,
  rioko.drawmodels.configurations,
  rioko.drawmodels.diagram,
- rioko.drawmodels.diagram.edgeFactories,
  rioko.drawmodels.display.local,
  rioko.drawmodels.editors.zesteditor.zestproperties,
  rioko.drawmodels.filemanage

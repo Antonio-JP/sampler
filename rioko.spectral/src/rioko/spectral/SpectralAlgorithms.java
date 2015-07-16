@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import rioko.grapht.AbstractGraph;
+import rioko.grapht.AdjacencyListGraph;
 import rioko.grapht.Vertex;
 import rioko.lalg.EigDecomposition;
 import rioko.lalg.Matrix;
@@ -15,7 +15,7 @@ import rioko.utilities.Pair;
 import rioko.utilities.collections.ListSet;
 
 public class SpectralAlgorithms {
-	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getHierarchicalCluster(AbstractGraph<V, ?> graph, int k, Class<T> matrixClass) {
+	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getHierarchicalCluster(AdjacencyListGraph<V, ?> graph, int k, Class<T> matrixClass) {
 		ArrayList<Pair<Set<V>, EigDecomposition<T,R>>> clusters = new ArrayList<>();
 		
 		
@@ -57,7 +57,7 @@ public class SpectralAlgorithms {
 		return res;
 	}
 	
-	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getIterativeCluster(AbstractGraph<V, ?> graph, int k, Class<T> matrixClass) {
+	public static <V extends Vertex, T extends Matrix<T, R>, R extends Vector<R>> Set<Set<V>> getIterativeCluster(AdjacencyListGraph<V, ?> graph, int k, Class<T> matrixClass) {
 		Set<Set<V>> res = new ListSet<>();
 		
 		/* Easy cases */
@@ -121,7 +121,7 @@ public class SpectralAlgorithms {
 		return res;
 	}
 
-	public static <V extends Vertex, T extends Matrix<T,R>, R extends Vector<R>> Set<Set<V>> getBiCluster(AbstractGraph<V, ?> graph, Class<T> matrixClass) {
+	public static <V extends Vertex, T extends Matrix<T,R>, R extends Vector<R>> Set<Set<V>> getBiCluster(AdjacencyListGraph<V, ?> graph, Class<T> matrixClass) {
 		T laplacian = GraphMatrixUtil.getLaplacianMatrix(graph, matrixClass, false);
 		
 		EigDecomposition<T, R> decomposition = laplacian.getEigenvalueDecomposition();

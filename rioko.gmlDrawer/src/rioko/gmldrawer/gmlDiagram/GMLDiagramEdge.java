@@ -5,8 +5,6 @@ import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramNode;
 
 public class GMLDiagramEdge extends DiagramEdge<DiagramNode> {
-
-	private static final long serialVersionUID = -4095775825166972427L;
 	
 	public GMLDiagramEdge() { }
 	

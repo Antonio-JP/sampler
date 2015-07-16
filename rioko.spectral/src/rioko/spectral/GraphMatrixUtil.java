@@ -3,9 +3,9 @@ package rioko.spectral;
 import java.util.HashMap;
 
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
-import rioko.grapht.AbstractGraph;
+import rioko.grapht.AdjacencyListGraph;
 import rioko.grapht.Vertex;
-import rioko.grapht.VisibleEdge;
+import rioko.grapht.Edge;
 import rioko.lalg.Matrix;
 import rioko.lalg.Vector;
 
@@ -16,11 +16,11 @@ public class GraphMatrixUtil {
 	private static final double CONTAINMENT_VALUE = 4;
 
 	/* Wrapping methods */
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getAdjacencyMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getAdjacencyMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass) {
 		return getAdjacencyMatrix(graph, matrixClass, true);
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getAdjacencyMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getAdjacencyMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
 		try {
 			T matrix = (matrixClass.newInstance()).getNewMatrix(graph.vertexSet().size(), graph.vertexSet().size());
 			
@@ -32,7 +32,7 @@ public class GraphMatrixUtil {
 			}
 			
 			int row, col;
-			for(VisibleEdge<?> edge : graph.edgeSet()) {
+			for(Edge<?> edge : graph.edgeSet()) {
 				row = association.get(edge.getSource());
 				col = association.get(edge.getTarget());
 				
@@ -57,11 +57,11 @@ public class GraphMatrixUtil {
 		return null;
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getDegreeMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getDegreeMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass) {
 		return getDegreeMatrix(graph, matrixClass, true);
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getDegreeMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getDegreeMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
 		T ad = getAdjacencyMatrix(graph, matrixClass, directed);
 		if(ad != null) {
 			T res = ad.getNewMatrix(ad.rows(), ad.cols());
@@ -81,19 +81,19 @@ public class GraphMatrixUtil {
 		return null;
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getLaplacianMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass) {
 		return getLaplacianMatrix(graph, matrixClass, true);
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getLaplacianMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
 		return getDegreeMatrix(graph,matrixClass,directed).sub(getAdjacencyMatrix(graph, matrixClass,directed));
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getSignlessLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getSignlessLaplacianMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass) {
 		return getSignlessLaplacianMatrix(graph, matrixClass, true);
 	}
 	
-	public static <T extends Matrix<T, R>, R extends Vector<R>> T getSignlessLaplacianMatrix(AbstractGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
+	public static <T extends Matrix<T, R>, R extends Vector<R>> T getSignlessLaplacianMatrix(AdjacencyListGraph<?,?> graph, Class<T> matrixClass, boolean directed) {
 		return getDegreeMatrix(graph,matrixClass,directed).add(getAdjacencyMatrix(graph, matrixClass,directed));
 	}
 

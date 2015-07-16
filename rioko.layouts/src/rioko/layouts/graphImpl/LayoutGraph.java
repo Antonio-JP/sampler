@@ -1,8 +1,8 @@
 package rioko.layouts.graphImpl;
 
-import rioko.grapht.AbstractGraph;
+import rioko.grapht.AdjacencyListGraph;
 
-public class LayoutGraph extends AbstractGraph<LayoutVertex, LayoutEdge> {
+public class LayoutGraph extends AdjacencyListGraph<LayoutVertex, LayoutEdge> {
 
 	public LayoutGraph() {
 		super(LayoutEdge.class, LayoutVertex.class);

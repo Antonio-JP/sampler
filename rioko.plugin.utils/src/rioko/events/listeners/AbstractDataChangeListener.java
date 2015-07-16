@@ -6,9 +6,9 @@ import rioko.events.AbstractEvent;
 import rioko.events.DataChangeEvent;
 
 /**
- * Abstract class to listen a DataChangeEvent. It has the information of which Object is being followed and 
+ * Abstract class to listen a DataChangeEvent. It has the information of which Object is being followed.
+ * 
  * @author Antonio
- *
  */
 public abstract class AbstractDataChangeListener extends AbstractListener {
 	
@@ -22,6 +22,7 @@ public abstract class AbstractDataChangeListener extends AbstractListener {
 	 * 
 	 * @param data Data to be followed
 	 * @param parent Object which want to follow data
+	 * 
 	 * @throws Exception If there is a null parameter
 	 */
 	public AbstractDataChangeListener(Object data, Object parent) throws Exception

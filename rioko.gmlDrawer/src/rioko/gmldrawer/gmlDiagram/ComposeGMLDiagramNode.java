@@ -33,8 +33,13 @@ public class ComposeGMLDiagramNode extends ComposeDiagramNode {
 	}
 
 	@Override
-	public AbstractAttribute[] getAttributes() {
-	return new AbstractAttribute[0];
+	public AbstractAttribute[] getDrawableData() {
+		return new AbstractAttribute[0];
+	}
+
+	@Override
+	protected AbstractAttribute[] getNonDrawableData() {
+		return new AbstractAttribute[0];
 	}
 
 }

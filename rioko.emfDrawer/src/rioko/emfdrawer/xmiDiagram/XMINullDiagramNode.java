@@ -18,7 +18,7 @@ public class XMINullDiagramNode extends XMIDiagramNode {
 	}
 	
 	@Override
-	public AbstractAttribute[] getAttributes()
+	public AbstractAttribute[] getDrawableData()
 	{
 		this.checkEObject();
 		

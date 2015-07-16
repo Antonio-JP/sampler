@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * Static class with the methods needed to open a generic IFile with a Reader<> without know which Readers are implemented.
+ * Static class with the methods needed to open a generic IFile with a Reader without know which Readers are implemented.
  * 
  * @author Antonio
  */
@@ -27,7 +27,7 @@ public class GeneralReader {
 	 * 
 	 * @param file IFile we want to read
 	 * 
-	 * @return Reader<?> with the reader of the file
+	 * @return Reader with the reader of the file
 	 * 
 	 * @throws IOException If any error happens. The message gove more information of the error.
 	 */
@@ -74,6 +74,8 @@ public class GeneralReader {
 
 	/**
 	 * This method takes an IFile and a Reader class and try to create a new Reader of that class for the IFile provided.
+	 *  
+	 * @param <T> Class of the Reader we want to create to that file.
 	 *  
 	 * @param file The file we want to read
 	 * @param readerClass The Reader class we want to use

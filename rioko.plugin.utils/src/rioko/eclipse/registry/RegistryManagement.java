@@ -9,6 +9,12 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 
+/**
+ * Static class with some methods used to Manage the Eclipse Registry. It allow to get Attributes from an extension
+ * point or instantiate the java objects declared in the registry.
+ * 
+ * @author Antonio
+ */
 public class RegistryManagement {	
 	//Methods to get and check elements for Extension ID
 	/**
@@ -160,6 +166,8 @@ public class RegistryManagement {
 	 * extends that abstract class, i.e., this method does not use the constructor of the 
 	 * class given.
 	 * 
+	 * @param <T> The class we want to search used as a parameter of this method.
+	 * 
 	 * @param element Eclipse Registry Element we want to use
 	 * @param clazz Class we want to instantiate.
 	 * 
@@ -181,6 +189,8 @@ public class RegistryManagement {
 	/**
 	 * Method to know if there is any instantiable object of a certain class.
 	 * 
+	 * @param <T> The class we want to check used as a parameter of this method.
+	 * 
 	 * @param element Eclipse Registry Element we want to check
 	 * @param clazz Class we want to search
 	 * 
@@ -192,6 +202,8 @@ public class RegistryManagement {
 	
 	/**
 	 * Method to get all the instances that extend a given class. 
+	 * 
+	 * @param <T> The class we want to instantiate used as a parameter of this method.
 	 * 
 	 * @param element Eclipse Registry Element we want to use
 	 * @param clazz Class we want to get
@@ -258,6 +270,8 @@ public class RegistryManagement {
 	 * Method analogous to getInstance(String, String) but now recieves the Class object instead 
 	 * its canonical name. This allows to return subclasses of the given class.
 	 * 
+	 * @param <T> The class we want to instantiate used as a parameter of this method.
+	 * 
 	 * @param extensionId Identifier of the extension point where we want to search
 	 * @param clazz Class we want to find
 	 * 
@@ -277,6 +291,8 @@ public class RegistryManagement {
 	/**
 	 * Method that returns all the objects that are instantiable in an extension point and extend
 	 * the class given.
+	 * 
+	 * @param <T> The class we want to instantiate used as a parameter of this method.
 	 * 
 	 * @param extensionId Identifier of the extension point where we want to search
 	 * @param clazz Class we want to find

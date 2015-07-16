@@ -53,7 +53,7 @@ public class GMLDiagramNode extends DiagramNode {
 	}
 
 	@Override
-	public AbstractAttribute[] getAttributes() {
+	public AbstractAttribute[] getDrawableData() {
 		ArrayList<AbstractAttribute> attrs = new ArrayList<>();
 		
 		String id = this.data.getAttribute("id");
@@ -71,6 +71,11 @@ public class GMLDiagramNode extends DiagramNode {
 		}
 
 		return attrs.toArray(new AbstractAttribute[0]);
+	}
+
+	@Override
+	protected AbstractAttribute[] getNonDrawableData() {
+		return new AbstractAttribute[0];
 	}
 
 	//Other methods

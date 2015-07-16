@@ -21,7 +21,7 @@ public class XMIProxyDiagramNode extends XMIDiagramNode implements ProxyDiagramN
 	}
 	
 	@Override
-	public AbstractAttribute[] getAttributes()
+	public AbstractAttribute[] getDrawableData()
 	{
 		this.checkEObject();
 		
