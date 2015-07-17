@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
+
+import rioko.drawmodels.dialogs.SelectReaderDialog;
+import rioko.eclipse.registry.RegistryManagement;
 
 /**
  * Static class with the methods needed to open a generic IFile with a Reader without know which Readers are implemented.
@@ -40,7 +42,7 @@ public class GeneralReader {
 		}
 		
 		//Else, we search in the Eclipse Registry the Diagram extensions
-		IConfigurationElement[] elements = getDiagramsExtensions();
+		IConfigurationElement[] elements = RegistryManagement.getElementsFor(ID_DIAGRAM_EXTENSION);
 		ArrayList<IConfigurationElement> possibleReaders = new ArrayList<>();
 		
 		//We search the correct readers for the file extension
@@ -54,21 +56,47 @@ public class GeneralReader {
 			}
 		}
 		
-		//If there is no valid reader, throw an exception
-		if(possibleReaders.isEmpty()) {
-			throw new IOException("There is no possible reader registered for extension " + file.getFileExtension());
-		} else {
-			//Else, there is a valid reader for the file. We use the first in the list
-			try {
-				Reader<?> fooReader = (Reader<?>) possibleReaders.get(0).createExecutableExtension("reader");
-				//We use the Constructor with the IFile parameter and throw and exception if it does not exist
-				Reader<?> reader = fooReader.getClass().getConstructor(IFile.class).newInstance(file);
-				mapFilesToReader.put(file, reader);
-				return reader;
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException | CoreException e) {
-				throw new IOException("Reader " + possibleReaders.get(0).getAttribute("reader") + " not have a simple IFile Constructor or a empty Constructor");
+		Reader<?> fooReader;
+		
+		//If there is no valid reader, or is more than one we ask the user which Reader want to use
+		if(possibleReaders.size() != 1) {
+			SelectReaderDialog dialog;
+			if(possibleReaders.size() == 0) {
+				dialog = new SelectReaderDialog(null, file, true);
+			} else {
+				MessageDialog.openInformation(null, "Multiple Readers", "There are multiple valid Readers for this file (" + file.getFileExtension() + ").\n\nPlease, select one from the following list.");
+				dialog = new SelectReaderDialog(null, file, false);
 			}
+			if(dialog.open() == Window.OK) {
+				String className = (String)dialog.getValue();
+			
+				fooReader =  (Reader<?>)RegistryManagement.getInstance(ID_DIAGRAM_EXTENSION, className);
+				if(fooReader == null) {
+					throw new IOException("Selected reader (" + className +") is not instantiable.");
+				}
+				
+			} else {
+				throw new IOException("No Reader has been selected. Aborting...  (File extension: " + file.getFileExtension() + ")");
+			}
+		} else {
+			//Else, there is just one valid reader for the file. We use it
+				fooReader = (Reader<?>)RegistryManagement.getInstance(possibleReaders.get(0), "reader");
+				if(fooReader == null) {
+					throw new IOException("Selected extension (" + possibleReaders.get(0).getName() +") has no \"reader\" instantiable attribute. Impossible!!");
+				}
+		}
+		
+		//We use the Constructor with the IFile parameter and throw and exception if it does not exist
+		Reader<?> reader;
+		try {
+			reader = fooReader.getClass().getConstructor(IFile.class).newInstance(file);
+			mapFilesToReader.put(file, reader);
+			return reader;
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException e) {
+			throw new IOException("Reader " + fooReader.getClass().getSimpleName() + " does not have a simple IFile Constructor.");
+		} catch (InvocationTargetException e) {
+			throw new IOException("Error while opening the file:\n"
+					+ e.getTargetException().getMessage());
 		}
 	}
 
@@ -85,8 +113,6 @@ public class GeneralReader {
 	 * @throws IOException If any error happens. The message gove more information of the error.
 	 */
 	public static <T extends Reader<?>> T getReaderFromFile(IFile file, Class<T> readerClass) throws IOException {
-		/* TODO: En esta función hay que mirar si la clase está en el registro de Reader y crear
-		 * el lector correspondiente utilizando el IFile del parámetro */
 		Reader<?> auxReader = mapFilesToReader.get(file);
 		if(auxReader != null) {
 			if(readerClass.isInstance(auxReader)) {
@@ -98,7 +124,7 @@ public class GeneralReader {
 			}
 		}
 		
-		IConfigurationElement[] elements = getDiagramsExtensions();
+		IConfigurationElement[] elements = RegistryManagement.getElementsFor(ID_DIAGRAM_EXTENSION);
 		
 		for(IConfigurationElement element : elements) {
 			if(element.getAttribute("reader").equals(readerClass.getCanonicalName())) {
@@ -127,14 +153,5 @@ public class GeneralReader {
 			mapFilesToReader.remove(file);
 		}
 	}
-
-	/**
-	 * Auxiliar method to get the Eclipse Registry for the Diagram Extension Point
-	 * @return
-	 */
-	private static IConfigurationElement[] getDiagramsExtensions() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		
-		return registry.getConfigurationElementsFor(ID_DIAGRAM_EXTENSION);
-	}
 }
+	

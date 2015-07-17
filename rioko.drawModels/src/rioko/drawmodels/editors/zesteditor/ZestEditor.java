@@ -112,11 +112,8 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 					this.model = this.reader.getModel();
 				} catch (IOException e) {
 					Log.exception(e);
-					MessageDialog.openError(null, "No meta-model found!", 
-							e.getMessage() + "\n" + 
-							"Use Epsilon or similar tools to register the model o put \n"+
-							"the meta-model file in the same folder of the model file.");
-					throw new PartInitException("Rioko ERROR: no such file loaded");
+					MessageDialog.openError(null, "Error loading the File", 
+							e.getMessage());
 				}
 			} else if(input instanceof ModelDiagram) {
 	        	this.model = (ModelDiagram<?>)this.getEditorInput();

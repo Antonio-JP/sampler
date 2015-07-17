@@ -76,12 +76,11 @@ public class OpenFile extends AbstractGenericHandler {
 					((ZestEditor)newEditor).updateView();
 				} catch (IOException e) {
 					Log.exception(e);
-					MessageDialog.openError(null, "No meta-model found!", 
-							e.getMessage() + "\n\n" + 
-							"Use Epsilon or similar tools to register the model; or put the meta-model file in the same folder of the model file.");
+					MessageDialog.openError(null, "Error loading the File", 
+							e.getMessage());
 				} catch (PartInitException e) {
 					Log.exception(e);
-					MessageDialog.openError(null, "No meta-model found!", 
+					MessageDialog.openError(null, "Error creating the Zest Editor", 
 							e.getMessage());
 				}
 			}

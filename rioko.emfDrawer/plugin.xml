@@ -15,12 +15,6 @@
          <fileExtension
                fileExtension="xmi">
          </fileExtension>
-         <fileExtension
-               fileExtension="webmodel">
-         </fileExtension>
-         <fileExtension
-               fileExtension="school">
-         </fileExtension>
       </diagram>
    </extension>
    <extension

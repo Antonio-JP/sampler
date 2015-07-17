@@ -105,8 +105,8 @@ public class XMIReader implements Reader<EObject> {
 				
 			Files.put(file, this);
 			} catch(Exception e2) {
-				e.printStackTrace();
-				throw new IOException("No meta-model found. Please register the meta-model.");
+				throw new IOException("Error loading the model\n"
+						+ "Consider if the meta-model is registered. If it is not, put the \".ecore\" file in the same folder of this file or register it using Epsilon or any similar tool");
 			}
 		}
 	}
