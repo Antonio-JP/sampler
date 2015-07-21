@@ -26,6 +26,7 @@ public class FiltersView extends ZestEditorDependingViewPart{
 	
 	private ListenedArrayList<FilterNestedBuilder> controledListOfFilters = new ListenedArrayList<>();
 	private boolean filtersHasChanged = false;
+	
 	private static HashMap<ZestEditor, ListenedArrayList<FilterNestedBuilder>> filtersForEditor = new HashMap<>();
 	
 	@Override
