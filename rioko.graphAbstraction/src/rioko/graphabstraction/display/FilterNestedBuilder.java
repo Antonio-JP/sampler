@@ -59,7 +59,7 @@ public abstract class FilterNestedBuilder extends NestedGraphBuilder {
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
 			BadArgumentException {
 		if(this.filter != null) {
 			this.filter.setConfiguration(newConf);

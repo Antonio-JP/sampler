@@ -18,7 +18,7 @@ public class AuxiliaryNestedGraphBuilder extends NestedGraphBuilder {
 	}
 
 	@Override
-	public Collection<DisplayOptions> getConfigurationNeeded() {
+	public Collection<Class<? extends Configuration>> getConfigurationNeeded() {
 		return new ArrayList<>();
 	}
 
@@ -28,7 +28,7 @@ public class AuxiliaryNestedGraphBuilder extends NestedGraphBuilder {
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
 			BadArgumentException {
 		/* Do nothing */
 	}

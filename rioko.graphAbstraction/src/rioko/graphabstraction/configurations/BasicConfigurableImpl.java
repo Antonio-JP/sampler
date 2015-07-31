@@ -47,7 +47,7 @@ public class BasicConfigurableImpl implements Configurable {
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf)
+	public void setNewConfiguration(Collection<Configuration> newConf)
 			throws BadConfigurationException, BadArgumentException {
 		for(Configuration conf : newConf) {
 			this.configurations.put(conf.getTextConfiguration(), conf);

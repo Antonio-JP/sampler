@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="rioko.graphabstraction" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="rioko.graphabstraction" id="configurations" name="Configurations"/>
+      </appinfo>
+      <documentation>
+         This Steps extension point allow third-party plug-ins to define new configurations which could be used in any place that need a configuration.
+
+There are some predefine configurations avaible in this plug-in:
+  - Boolean Configuration (&lt;samp&gt;bool&lt;/samp&gt; label)
+  - Integer Configuration (&lt;samp&gt;int&lt;/samp&gt; label)
+  - Text Configuration (&lt;samp&gt;string&lt;/samp&gt; label)
+  - Generic Configuration (&lt;samp&gt;conf&lt;/samp&gt; label)
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <choice>
+               <element ref="bool"/>
+               <element ref="conf"/>
+               <element ref="int"/>
+               <element ref="string"/>
+            </choice>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="bool">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.graphabstraction.configurations.BooleanConfiguration:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="int">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.graphabstraction.configurations.IntegerConfiguration:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="string">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="rioko.graphabstraction.configurations.TextConfiguration:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="conf">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":rioko.graphabstraction.configurations.Configuration"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         1.0.0.qualifier
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         The following is an example of how use this extension point:
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension point=&quot;rioko.graphabstraction.confs&quot;&gt;
+  &lt;bool
+   id=&quot;xxx.example.yyy.myBoolConf&quot;
+   name=&quot;My New Boolean Configuration&quot;
+   class=&quot;xxx.example.yyy.myBoolConf&quot; /&gt;
+  &lt;conf
+   id=&quot;xxx.example.yyy.aSimpleConfiguration&quot;
+   name=&quot;A Simple Configuration&quot;
+   class=&quot;xxx.example.yyy.ASimpleConfiguration&quot; /&gt;
+  &lt;string
+   id=&quot;xxx.example.yyy.aTextConfiguration&quot;
+   name=&quot;A Text Configuration&quot;
+   class=&quot;xxx.example.yyy.ATextConfiguration&quot; /&gt;
+ &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         Each type of element declared in this extension point should extend a particular class:
+
+ - Boolean Configurations (&lt;samp&gt;bool&lt;/samp&gt;): should extend &lt;samp&gt;rioko.graphabstraction.configurations.BooleanConfiguration&lt;/samp&gt; class
+ - Number Configuration (&lt;samp&gt;int&lt;/samp&gt;): should extend &lt;samp&gt;rioko.graphabstraction.configurations.IntegerConfiguration&lt;/samp&gt; class
+ - Text Configurations (&lt;samp&gt;string&lt;/samp&gt;): should extend &lt;samp&gt;rioko.graphabstraction.configurations.TextConfiguration&lt;/samp&gt; class
+ - Generic Configurations (&lt;samp&gt;conf&lt;/samp&gt;): should implement &lt;samp&gt;rioko.graphabstraction.configurations.Configuration&lt;/samp&gt; class
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>

@@ -1,6 +1,6 @@
 package rioko.graphabstraction.configurations;
 
-public class TextConfiguration implements Configuration {
+public abstract class TextConfiguration implements Configuration {
 	
 	private String value;
 	
@@ -33,15 +33,6 @@ public class TextConfiguration implements Configuration {
 	@Override
 	public String getTextConfiguration() {
 		return this.getConfiguration();
-	}
-
-	@Override
-	public Configuration copy() {
-		TextConfiguration res = new TextConfiguration();
-		
-		res.value = ""+this.value;
-		
-		return res;
 	}
 
 }

@@ -114,4 +114,9 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 		res.currentAlgorithm = res.algorithms.get(this.indexOf(this.currentAlgorithm));
 		return res;
 	}
+
+	@Override
+	public String getNameOfConfiguration() {
+		return "Layout Algorithm";
+	}
 }

@@ -27,5 +27,13 @@
             name="Bi-Clustering Algorithm">
       </algorithm>
    </extension>
+   <extension
+         point="rioko.graphabstraction.configurations">
+      <int
+            class="rioko.graphabstraction.configurations.MaxClusterConfiguration"
+            id="rioko.spectral.configurations.maxClustersConfiguration"
+            name="maximun Number of Clusters">
+      </int>
+   </extension>
 
 </plugin>

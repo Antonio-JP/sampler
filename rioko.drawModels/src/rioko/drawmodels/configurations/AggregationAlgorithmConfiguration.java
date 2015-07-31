@@ -113,4 +113,9 @@ public class AggregationAlgorithmConfiguration implements ComboConfiguration {
 		
 		return res;
 	}
+
+	@Override
+	public String getNameOfConfiguration() {
+		return "Visualization Criteria";
+	}
 }

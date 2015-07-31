@@ -60,7 +60,7 @@ public abstract class FilterOfVertex implements Configurable{
 			}
 
 			@Override
-			public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException {
+			public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException {
 				this.original.setConfiguration(newConf);
 			}
 			

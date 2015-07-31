@@ -27,6 +27,7 @@ import rioko.drawmodels.views.ZestEditorDependingViewPart;
 import rioko.drawmodels.views.listeners.NodeInformationViewClickSelectionMouseListener;
 import rioko.drawmodels.views.listeners.NodeInformationViewNavigationMouseListener;
 
+
 public class NodeInformationView extends ZestEditorDependingViewPart implements ISelectionChangedListener{
 
 	private Table simpleTable, aggregateTable;
@@ -37,9 +38,11 @@ public class NodeInformationView extends ZestEditorDependingViewPart implements 
 	
 	private NodeInformationViewNavigationMouseListener navListener = null;
 	private NodeInformationViewClickSelectionMouseListener clickListener= null;
+	
+
+
 	@Override
-	public void createPartControl(Composite parent) {
-		super.createPartControl(parent);
+	protected void createUIPart(Composite parent) {
 		//Creamos las tablas
 		
 		//Tabla para nodos simples
@@ -60,17 +63,17 @@ public class NodeInformationView extends ZestEditorDependingViewPart implements 
 		valueColumn.getColumn().setText("Value");
 		this.simpleTableViewer.setContentProvider(new ArrayContentProvider());
 		this.simpleTableViewer.setLabelProvider(new SimpleNodeInformationLabelProvider());
-		
+			
 		//Tablas para nodos compuestos
 		tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnWeightData(1));
 		tableLayout.addColumnData(new ColumnWeightData(1));
-		
+				
 		this.aggregateTable = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		this.aggregateTable.setLinesVisible(true);
 		this.aggregateTable.setHeaderVisible(true);
 		this.aggregateTable.setLayout(tableLayout);
-		
+				
 		this.aggregateTableViewer = new TableViewer(this.aggregateTable);
 		this.aggregateTableViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		labelColumn = new TableViewerColumn(this.aggregateTableViewer, SWT.NONE);
@@ -79,9 +82,11 @@ public class NodeInformationView extends ZestEditorDependingViewPart implements 
 		valueColumn.getColumn().setText("Value");
 		this.aggregateTableViewer.setContentProvider(new ArrayContentProvider());
 		this.aggregateTableViewer.setLabelProvider(new AggregateNodeInformationLabelProvider());
-				
-		//Agregamos los listeners necesarios
-		this.partActivated(this.getSite().getPage().getActiveEditor());
+	}
+	
+	@Override
+	protected void createLogicPart(Composite parent) {
+		// Do nothing
 	}
 
 	//ZestEditorDependingViewPart methods
@@ -94,7 +99,6 @@ public class NodeInformationView extends ZestEditorDependingViewPart implements 
 	
 	@Override
 	protected void doWhenActivate(IWorkbenchPart part) {
-			
 		//Cambiamos los wizardListener del ratón al nuevo editor
 		if(this.clickListener != null) {
 			this.aggregateTableViewer.getControl().removeMouseListener(this.clickListener);

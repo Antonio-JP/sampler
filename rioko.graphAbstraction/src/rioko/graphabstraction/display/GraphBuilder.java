@@ -3,6 +3,7 @@ package rioko.graphabstraction.display;
 import java.util.Collection;
 
 import rioko.graphabstraction.configurations.Configurable;
+import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.diagram.DiagramGraph;
 
 public interface GraphBuilder {
@@ -62,5 +63,5 @@ public interface GraphBuilder {
 	 * 
 	 * @return Collection with the options needed
 	 */
-	public Collection<DisplayOptions> getConfigurationNeeded();
+	public Collection<Class<? extends Configuration>> getConfigurationNeeded();
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
+import org.eclipse.swt.widgets.Event;
+
 import rioko.utilities.Copiable;
 import rioko.utilities.Log;
 import rioko.utilities.Pair;
@@ -11,28 +13,32 @@ import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.Configuration;
+import rioko.graphabstraction.configurations.events.ConfigurationChange;
+import rioko.graphabstraction.configurations.events.ConfigurationChangeListener;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
-import rioko.graphabstraction.display.DisplayOptions;
 import rioko.graphabstraction.display.FilterNestedBuilder;
+import rioko.graphabstraction.display.configurations.MaxNodesConfiguration;
+import rioko.graphabstraction.display.configurations.RootNodeConfiguration;
 import rioko.layouts.algorithms.LayoutAlgorithm;
 import rioko.drawmodels.algorithms.display.JustFiltersBuilder;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.events.PropertiesChangeEvent;
+import rioko.events.listeners.AbstractDataChangeListener;
 
 public class ZestProperties implements Copiable {
 	
 	//Constantes de la clase
 	private static final int MAX_NODES_DEFAULT = 4;
-	
-	public static final String STR_LAYOUT_ALG = "Layout Algorithm";
-	
-	public static final String STR_AGGREGATION_ALG = "Visualization Criteria";
-	
-	public static final String STR_SHOW_ATTR = "Show attributes";
-	
-	public static final String STR_SHOW_CON = "Show connections";
+
+//	public static final String STR_LAYOUT_ALG = "Layout Algorithm";
+//	
+//	public static final String STR_AGGREGATION_ALG = "Visualization Criteria";
+//	
+//	public static final String STR_SHOW_ATTR = "Show attributes";
+//	
+//	public static final String STR_SHOW_CON = "Show connections";
 	
 	//Configuraciones
 	private ZestGenericConfigurable genericConf = new ZestGenericConfigurable();
@@ -40,7 +46,7 @@ public class ZestProperties implements Copiable {
 	private ZestAlgorithmConfigurable algorithmConf = new ZestAlgorithmConfigurable();
 	
 	//Filtros posteriores
-	private NestedBuilderAlgorithm postAlgorithmFilters = new JustFiltersBuilder();
+	private JustFiltersBuilder postAlgorithmFilters = new JustFiltersBuilder();
 
 	//Pila de estados
 	private Stack<Pair<NestedBuilderAlgorithm, ZestAlgorithmConfigurable>> stackView = new Stack<>();
@@ -70,14 +76,49 @@ public class ZestProperties implements Copiable {
 			// Impossible Exception
 			e.printStackTrace();
 		}
-
+		
+		//We create the listener
 		try {
-			this.algorithmConf.setConfiguration(DisplayOptions.ROOT_NODE, root);
-			this.algorithmConf.setConfiguration(DisplayOptions.MAX_NODES, maxNodes);
-		} catch (BadConfigurationException | BadArgumentException e) {
+			new ConfigurationChangeListener(this.genericConf, this) {
+				
+				@Override
+				protected void run(ConfigurationChange event) {
+					//When the Generic Configuration Change, we throw a new Event associated to this Properties
+					new ZestPropertiesEvent((ZestProperties) this.parent, ZestPropertiesEvent.GENERIC);
+					//We update the algorithm configurated. If it has not changed, nothing happens
+					algorithmConf.setAlgorithm(
+							(NestedBuilderAlgorithm) genericConf.getConfiguration(ZestGenericProperties.AGGREGATION_ALG));
+				}
+			};
+			
+			new ConfigurationChangeListener(this.algorithmConf, this) {
+				
+				@Override
+				protected void run(ConfigurationChange event) {
+					//When the Generic Configuration Change, we throw a new Event associated to this Properties
+					new ZestPropertiesEvent((ZestProperties) this.parent, ZestPropertiesEvent.ALGORITHM);
+				}
+			};
+			
+			new AbstractDataChangeListener(this.postAlgorithmFilters, this) {
+				@Override
+				public void onDataChange(Event event) {
+					//When the Generic Configuration Change, we throw a new Event associated to this Properties
+					new ZestPropertiesEvent((ZestProperties) this.parent, ZestPropertiesEvent.FILTERS);
+				}
+			};
+		} catch (Exception e) {
 			// Impossible Exception
-			e.printStackTrace();
+			Log.exception(e);
 		}
+
+//		try {
+//			this.algorithmConf.setConfiguration(DisplayOptions.ROOT_NODE, root);
+//			this.algorithmConf.setConfiguration(DisplayOptions.MAX_NODES, maxNodes);
+//		} catch (BadConfigurationException | BadArgumentException e) {
+			// Impossible Exception
+//			e.printStackTrace();
+//		}
 	}
 	
 	//Getters & Setters	
@@ -129,14 +170,14 @@ public class ZestProperties implements Copiable {
 	}
 
 	public DiagramNode getRootNode() {
-		return (DiagramNode) this.algorithmConf.getConfiguration(DisplayOptions.ROOT_NODE);
+		return (DiagramNode) this.algorithmConf.getConfiguration(RootNodeConfiguration.class);
 	}
 
 	public void setRootNode(DiagramNode rootNode) {
 		this.stackConfiguration();
 		
 		try {
-			this.algorithmConf.setConfiguration(DisplayOptions.ROOT_NODE, rootNode);
+			this.algorithmConf.setConfiguration(RootNodeConfiguration.class, rootNode);
 		} catch (BadConfigurationException | BadArgumentException e) {
 			// Impossible Exception
 			e.printStackTrace();
@@ -146,14 +187,14 @@ public class ZestProperties implements Copiable {
 	}
 
 	public int getMaxNodes() {
-		return (int) this.algorithmConf.getConfiguration(DisplayOptions.MAX_NODES);
+		return (int) this.algorithmConf.getConfiguration(MaxNodesConfiguration.class);
 	}
 
 	public void setMaxNodes(int maxNodes) {
 		this.stackConfiguration();
 		
 		try {
-			this.algorithmConf.setConfiguration(DisplayOptions.MAX_NODES, maxNodes);
+			this.algorithmConf.setConfiguration(MaxNodesConfiguration.class, maxNodes);
 		} catch (BadConfigurationException | BadArgumentException e) {
 			// Impossible Exception
 			e.printStackTrace();
@@ -330,5 +371,9 @@ public class ZestProperties implements Copiable {
 		}
 		
 		return res;
+	}
+
+	public JustFiltersBuilder getFinalFilters() {
+		return this.postAlgorithmFilters;
 	}
 }

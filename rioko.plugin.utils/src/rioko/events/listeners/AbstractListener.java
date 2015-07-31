@@ -53,7 +53,7 @@ public abstract class AbstractListener implements Listener {
 	/**
 	 * Abstract method required in all subclasses needed to destroy any Listener.
 	 */
-	protected abstract void dispose();
+	protected void dispose() {/* Do nothing */}
 	
 	/**
 	 * Abstract method to get the required event class for a listener been run.

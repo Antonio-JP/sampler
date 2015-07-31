@@ -19,6 +19,7 @@ Export-Package: rioko.graphabstraction;uses:="org.osgi.framework,org.eclipse.jfa
    rioko.graphabstraction.diagram",
  rioko.graphabstraction.algorithms.test;uses:="rioko.graphabstraction.algorithms",
  rioko.graphabstraction.configurations;uses:="rioko.utilities,org.eclipse.jface.dialogs",
+ rioko.graphabstraction.configurations.events,
  rioko.graphabstraction.diagram;
   uses:="rioko.zest,
    org.eclipse.swt.graphics,

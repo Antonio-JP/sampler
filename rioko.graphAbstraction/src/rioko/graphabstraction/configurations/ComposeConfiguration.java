@@ -3,7 +3,7 @@ package rioko.graphabstraction.configurations;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class ComposeConfiguration implements Configuration {
+public abstract class ComposeConfiguration implements Configuration {
 	
 	HashMap<Class<? extends Configuration>, Configuration> configurations = new HashMap<>();
 
@@ -39,17 +39,6 @@ public class ComposeConfiguration implements Configuration {
 		}
 		
 		return map.toString();
-	}
-
-	@Override
-	public ComposeConfiguration copy() {
-		ComposeConfiguration res = new ComposeConfiguration();
-		
-		for(Class<? extends Configuration> conf : this.configurations.keySet()) {
-			res.configurations.put(conf, this.configurations.get(conf).copy());
-		}
-		
-		return res;
 	}
 
 }

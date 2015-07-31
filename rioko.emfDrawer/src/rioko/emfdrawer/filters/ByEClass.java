@@ -43,7 +43,7 @@ public class ByEClass extends FilterOfVertex {
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException {
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException {
 		if(newConf.size() != 1) {
 			throw new BadConfigurationException("This needs exactly 1 configuration");
 		}

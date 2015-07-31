@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import rioko.drawmodels.diagram.ModelDiagram;
+import rioko.emfdrawer.xmiDiagram.ComposeXMIDiagramNode;
 import rioko.emfdrawer.xmiDiagram.XMIDiagramNode;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
@@ -45,6 +46,13 @@ public class XMIModelDiagram extends ModelDiagram<EObject> {
 				for(DiagramNode node : this.getModelDiagram().vertexSet()) {
 					if(node instanceof XMIDiagramNode) {
 						this.eClassList.add(((XMIDiagramNode) node).getEClass());
+					}
+					if(node instanceof ComposeXMIDiagramNode) {
+						for(DiagramNode inNode : node.getFullListOfNodes()) {
+							if(inNode instanceof XMIDiagramNode) {
+								this.eClassList.add(((XMIDiagramNode) inNode).getEClass());
+							}
+						}
 					}
 				}
 			}

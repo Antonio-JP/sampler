@@ -27,7 +27,7 @@ public class BasicFilterOfVertex extends FilterOfVertex {
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException { }
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException { }
 
 	@Override
 	protected boolean filter(DiagramNode node, Configurable properties, DiagramGraph graph) {

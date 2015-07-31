@@ -8,6 +8,7 @@ import java.util.Set;
 import rioko.utilities.Log;
 import rioko.utilities.Pair;
 import rioko.graphabstraction.configurations.Configurable;
+import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
 import rioko.graphabstraction.diagram.DiagramGraph;
@@ -46,9 +47,9 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 		if(properties != null) {
 			boolean res = true;
 			
-			for(DisplayOptions option : this.getConfigurationNeeded()) {
+			for(Class<? extends Configuration> option : this.getConfigurationNeeded()) {
 //				res &= properties.isSet(option);
-				res &= (properties.getConfiguration(option.toString()) != null);
+				res &= (properties.getConfiguration(option) != null);
 			}
 			
 			return res;

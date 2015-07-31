@@ -56,20 +56,24 @@ public class ConfigurationTable extends LabelDataTable {
 
 	//Other methods
 	public void setNewConfigurable(Configurable newConf) {
-		//Cambiamos el contenido de la tabla
-		this.updateTable(newConf);
+		//We only change the Configurable and the Table data if the newConf is different from currentConfiguration
+		//Else, the table should be already updated.
+		if(this.currentConfiguration != newConf) {
+			//We change the value of currentConfiguration
+			this.currentConfiguration = newConf;
+		}
 		
-		//Cambiamos el editor de la tabla
-		this.setEditingSupport(new ConfigurationTableEdditingSupport(this.getValueViewer(), model, newConf, this));
-		
-		//Cambiamos el valor de currentConfiguration
-		this.currentConfiguration = newConf;
+		//We change the table data
+		this.updateTable();
+	
+		//We change the table editor support
+		this.setEditingSupport(new ConfigurationTableEdditingSupport(this.getValueViewer(), model, this.currentConfiguration, this));
 	}
 	
-	protected void updateTable(Configurable conf) {
+	protected void updateTable() {
 		ArrayList<LabelValueDataLine> lines = new ArrayList<>();
 		
-		for(Pair<String, Configuration> pair : conf.getConfiguration()) {
+		for(Pair<String, Configuration> pair : this.currentConfiguration.getConfiguration()) {
 			if(pair.getLast() == null) {
 				lines.add(new LabelValueDataLine(pair.getFirst(), ""));
 			} else {
@@ -97,9 +101,7 @@ public class ConfigurationTable extends LabelDataTable {
 			for(Pair<String, Configuration> pair: this.configurations) {
 				if(model != null) {
 					if(pair.getLast() instanceof ModelDepending) {
-						if(!((ModelDepending) pair.getLast()).hasModel()) {
-							((ModelDepending) pair.getLast()).setModel(model);
-						}
+						((ModelDepending) pair.getLast()).setModel(model);
 					}
 				}
 				switch(pair.getLast().getType()) {
@@ -164,7 +166,6 @@ public class ConfigurationTable extends LabelDataTable {
 		protected void setValue(Object element, Object value) {
 			boolean change = false;
 			if (element instanceof LabelValueDataLine && value instanceof String) {	//Caso de String
-				
 				LabelValueDataLine data = (LabelValueDataLine) element;
 				String newValue = (String) value;
 	            /* only set new value if it differs from old one */
@@ -211,10 +212,10 @@ public class ConfigurationTable extends LabelDataTable {
 	            	}
 	            	
 	            	//Actualizamos la tabla
-	            	updateTable(currentConfiguration);
-	            	new DataChangeEvent(this.controlledTable);
+//	            	updateTable();
+//	            	new DataChangeEvent(this.controlledTable);
 	            }
-	        } else if(element instanceof LabelValueDataLine && value instanceof DiagramNode) {	//Caso de Diagramnode
+	        } else if(element instanceof LabelValueDataLine && value instanceof DiagramNode) {	//Caso de DiagramNode
 	        	LabelValueDataLine data = (LabelValueDataLine) element;
 				DiagramNode newValue = (DiagramNode) value;
 	            /* only set new value if it differs from old one */
@@ -258,14 +259,15 @@ public class ConfigurationTable extends LabelDataTable {
 	        		}
 	        		
 					currentConfiguration.setConfiguration(updatedConf);
+	            	
+	            	//Actualizamos la tabla
+	            	updateTable();
+	            	new DataChangeEvent(this.controlledTable);
 				} catch (BadConfigurationException | BadArgumentException e) {
-					// TODO Auto-generated catch block
+					// Impossible Exception
 					e.printStackTrace();
+					Log.exception(e);
 				}
-            	
-            	//Actualizamos la tabla
-            	updateTable(currentConfiguration);
-            	new DataChangeEvent(this.controlledTable);
 			}
 		}		
 	}

@@ -58,7 +58,7 @@ public abstract class ComposeFilter extends FilterOfVertex {
 
 	@Override
 	@Deprecated
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException {
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException, BadArgumentException {
 		for(FilterOfVertex filter : this.filters) {
 			filter.setConfiguration(newConf);
 		}

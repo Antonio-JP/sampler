@@ -8,6 +8,7 @@ public interface Configuration extends Copiable{
 	public default void setConfiguration(Object value) throws BadConfigurationException, BadArgumentException {
 		if(value == null) {
 			this.setValueConfiguration(null);
+			
 			return;
 		}
 		
@@ -29,6 +30,8 @@ public interface Configuration extends Copiable{
 	public Object getConfiguration();
 	
 	public String getTextConfiguration();
+	
+	public String getNameOfConfiguration();
 	
 	public default boolean isValid() {
 		return true;

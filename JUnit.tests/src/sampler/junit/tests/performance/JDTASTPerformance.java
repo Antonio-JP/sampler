@@ -26,7 +26,9 @@ import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.filemanage.GeneralReader;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
-import rioko.graphabstraction.display.DisplayOptions;
+import rioko.graphabstraction.configurations.Configuration;
+import rioko.graphabstraction.display.configurations.MaxNodesConfiguration;
+import rioko.graphabstraction.display.configurations.RootNodeConfiguration;
 import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
 import rioko.utilities.Log;
 import rioko.utilities.Timing;
@@ -135,21 +137,11 @@ public class JDTASTPerformance {
 					Log.print("("+ currentSet + "): &&&& Testing algorithm " + algorithm.getAlgorithmName());
 					properties.changeNestedAlgorithm(algorithm);
 					//Configuring the algorithm
-					for(DisplayOptions option : algorithm.getConfigurationNeeded()) {
-						switch(option) {
-							case ECLASS_FILTER:
-								//TODO poner una clase aleatoria del grafo
-								break;
-							case LEVELS_TS:
-								break;
-							case MAX_NODES:
-								properties.setMaxNodes(r.nextInt(10)+1);
-								break;
-							case ROOT_NODE:
-								properties.setRootNode(model.getModelDiagram().vertexSet().iterator().next());
-								break;
-							default:
-								break;
+					for(Class<? extends Configuration> option : algorithm.getConfigurationNeeded()) {
+						if(option.equals(MaxNodesConfiguration.class)) {
+							properties.setMaxNodes(r.nextInt(10)+1);
+						} else if(option.equals(RootNodeConfiguration.class)) {
+							properties.setRootNode(model.getModelDiagram().vertexSet().iterator().next());
 						}
 					}
 					// ---- Measuring time

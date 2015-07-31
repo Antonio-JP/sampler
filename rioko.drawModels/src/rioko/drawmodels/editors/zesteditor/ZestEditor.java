@@ -46,9 +46,18 @@ import rioko.drawmodels.filemanage.GeneralReader;
 import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.jface.ZestEditorStructuredSelection;
 import rioko.drawmodels.layouts.bridge.ZestLayoutAlgorithm;
+import rioko.drawmodels.views.listeners.ZestPropertiesListener;
+import rioko.events.DataChangeEvent;
 import rioko.events.listeners.AbstractListener;
 import rioko.utilities.Log;
 import rioko.zest.ExtendedGraphViewer;
+
+// TODO Tiene el modelo, las propiedades y el visor (ExtendedGraphViewer)
+// TODO Las propiedades tienen dos partes: genérica y de algoritmo
+// TODO Las propiedades generales afectan a las propiedades de algoritmo
+// TODO Las propiedades afectan al visor (actualizan el dibujo del modelo)
+// TODO El modelo tiene guardado la lista de filtros posteriores al algoritmo.
+// TODO Recibe información de la vista de preferencias y de la vista de filtros
 
 public class ZestEditor extends AbstractEditorPart implements ISelectionProvider {
 
@@ -62,6 +71,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	
 	//Hidden attributes
 	private ZestProperties properties = new ZestProperties();
+	private ZestPropertiesListener propertiesListener;
 	private PropertiesChangeListener changeListener;
 	
 	//Constantes para Flags de actualizacion
@@ -122,6 +132,9 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	        	this.model = ModelDiagram.getModelDiagramForGraph(((SpecialInputZestEditor) input).getModel());
 			}
 			
+			//Create the listeners to maintain updated the viewer
+			this.createPropertiesListener();
+			
 			return;
 		}		
 		
@@ -155,8 +168,8 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	        label.setFont(new Font(label.getDisplay(), new FontData("Arial", 16, SWT.BOLD)));
 			
 			if(this.properties.getRootNode() == null) {
-	        	DiagramNode root = this.model.getModelDiagram().vertexSet().iterator().next();
-	        	this.properties.setRootNode(root);
+//	        	DiagramNode root = this.model.getModelDiagram().vertexSet().iterator().next();
+//	        	this.properties.setRootNode(root);
 	        }
 	        
 			this.properties.getDrawGraph(this.model);
@@ -241,6 +254,11 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	public void changeZestProperties(ZestProperties properties)
 	{
 		this.properties = properties;
+		//We throw an event to tell other parts that we have change drastically the Properties of the editor
+		new DataChangeEvent(this);
+		
+		//We update the listener of the properties
+		this.createPropertiesListener();
 		AbstractListener.destroyListener(this.changeListener);
 		try {
 			this.changeListener = new PropertiesChangeListener(this.properties, this);
@@ -249,7 +267,35 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		}
 	}
 	
-	
+	private void createPropertiesListener() {
+		try {
+			if(this.propertiesListener != null) {
+				AbstractListener.destroyListener(this.propertiesListener);
+			}
+		
+			this.propertiesListener = new ZestPropertiesListener(this.properties, this) {
+				
+				@Override
+				protected void doWhenGenericChange() {
+					updateView(UPDATE_LAYOUT | UPDATE_NODES | UPDATE_CONNECTIONS);
+				}
+				
+				@Override
+				protected void doWhenAlgorithmChange() {
+					updateView(UPDATE_ALL);
+				}
+
+				@Override
+				protected void doWhenFiltersChange() {
+					updateView(UPDATE_ALL);
+				}
+			};
+		} catch (Exception e) {
+			//Impossible Exception
+			Log.exception(e);
+		}
+	}
+
 	//Updating methods	
 	private void updateTitle()
 	{

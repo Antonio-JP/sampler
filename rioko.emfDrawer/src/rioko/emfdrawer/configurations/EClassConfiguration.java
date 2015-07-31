@@ -151,4 +151,9 @@ public class EClassConfiguration implements ModelDepending, ComboConfiguration {
 		return res;
 	}
 
+	@Override
+	public String getNameOfConfiguration() {
+		return "EClass to Filter";
+	}
+
 }

@@ -8,14 +8,15 @@ import java.util.HashSet;
 import rioko.utilities.Copiable;
 import rioko.utilities.Log;
 import rioko.graphabstraction.configurations.Configurable;
+import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
-import rioko.graphabstraction.display.DisplayOptions;
 import rioko.graphabstraction.display.FilterNestedBuilder;
 import rioko.graphabstraction.display.GlobalNestedBuilder;
 import rioko.graphabstraction.display.GraphBuilder;
 import rioko.graphabstraction.display.LocalNestedBuilder;
 import rioko.graphabstraction.display.NestedGraphBuilder;
+import rioko.graphabstraction.display.configurations.RootNodeConfiguration;
 
 public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, Copiable{
 	
@@ -42,9 +43,9 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	private ArrayList<NestedGraphBuilder> allSteps = new ArrayList<>();
 	
 	/**
-	 * Flag to check if every steps have their own configuration
+	 * Flag to check if draw specially the Root Nodes
 	 */
-//	private boolean allConfigurated = true;
+	protected boolean searchRoots = true;
 	
 	//Builders
 	public NestedBuilderAlgorithm() {
@@ -53,6 +54,29 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	
 	public NestedBuilderAlgorithm(String algorithmName) {
 		super(algorithmName);
+	}
+	
+	//Getters & Setters methods
+	protected ArrayList<NestedGraphBuilder> getPreProcessor() {
+		return this.preProcessor;
+	}
+	protected ArrayList<FilterNestedBuilder> getFilters() {
+		return this.filters;
+	}
+	protected ArrayList<NestedGraphBuilder> getMidProcessorFilter() {
+		return this.midProcessorFilter;
+	}
+	protected ArrayList<GlobalNestedBuilder> getGlobalCriteria() {
+		return this.globalCriteria;
+	}
+	protected ArrayList<NestedGraphBuilder> getMidProcessorGlobal() {
+		return this.midProcessorGlobal;
+	}
+	protected ArrayList<LocalNestedBuilder> getLocalCriteria() {
+		return this.localCriteria;
+	}
+	protected ArrayList<NestedGraphBuilder> getPostProcessor() {
+		return this.postProcessor;
 	}
 	
 	//Copiable methods
@@ -358,11 +382,13 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 		Log.xClose("pos-proc");
 		Log.xPrint("Done");
 
-		Log.xPrint("Getting root nodes...");
-		applyRootNodes(currentGraph, rootNodes);
-		Log.xPrint("Done");
-		Log.xPrint("Execution of algorithm completed");
-		Log.xClose("steps");
+		if(this.searchRoots) {
+			Log.xPrint("Getting root nodes...");
+			applyRootNodes(currentGraph, rootNodes);
+			Log.xPrint("Done");
+			Log.xPrint("Execution of algorithm completed");
+			Log.xClose("steps");
+		}
 		
 		return currentGraph;
 	}
@@ -375,8 +401,8 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 			Object objConf = step.getConfiguration("Root Node");
 			if(objConf instanceof DiagramNode) {
 				rootNodes.add((DiagramNode)objConf);
-			} else if(properties.getConfiguration(DisplayOptions.ROOT_NODE.toString()) != null){
-				rootNodes.add((DiagramNode) properties.getConfiguration(DisplayOptions.ROOT_NODE.toString()));
+			} else if(properties.getConfiguration(RootNodeConfiguration.class) != null){
+				rootNodes.add((DiagramNode) properties.getConfiguration(RootNodeConfiguration.class));
 			}
 			Log.print("Running step " + step.getClass().getSimpleName() + "...");
 			Log.xOpen("step");
@@ -408,8 +434,14 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	@Override
 	public boolean checkProperties(Configurable properties) {
 		for(NestedGraphBuilder step : this.allSteps) {
-			for(DisplayOptions option : this.getNeededOptions(step)) {
-				if(properties.getConfiguration(option.toString()) == null) {
+			for(Class<? extends Configuration> option : this.getNeededOptions(step)) {
+				try {
+					if(properties.getConfiguration(option.newInstance().getNameOfConfiguration()) == null) {
+						return false;
+					}
+				} catch (InstantiationException | IllegalAccessException e) {
+					//Impossible Exception
+					Log.exception(new Exception("There is no empty builder for " + option.getSimpleName(),e));
 					return false;
 				}
 			}
@@ -424,27 +456,24 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	}
 	
 	@Override
-	public Collection<DisplayOptions> getConfigurationNeeded() {
-		HashSet<DisplayOptions> options = new HashSet<>();
+	public Collection<Class<? extends Configuration>> getConfigurationNeeded() {
+		HashSet<Class<? extends Configuration>> options = new HashSet<>();
 		
 		for(NestedGraphBuilder step : this.allSteps) {
-			for(DisplayOptions opt : step.getConfigurationNeeded()) {
-				options.add(opt);
-			}
+			options.addAll(step.getConfigurationNeeded());
 		}
 		
 		return options;
 	}
 	
 	//Private method
-	private DisplayOptions[] getNeededOptions(NestedGraphBuilder step) {
-		ArrayList<DisplayOptions> list = new ArrayList<>();
+	private Collection<Class<? extends Configuration>> getNeededOptions(NestedGraphBuilder step) {
+		ArrayList<Class<? extends Configuration>> list = new ArrayList<>();
 		
-		for(DisplayOptions option : step.getConfigurationNeeded()) {
-				list.add(option);
-		}
+		list.addAll(step.getConfigurationNeeded());
 		
-		return list.toArray(new DisplayOptions[0]);
+		
+		return list;
 	}
 	
 }

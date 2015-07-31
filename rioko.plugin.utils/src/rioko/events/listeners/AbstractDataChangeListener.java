@@ -30,10 +30,12 @@ public abstract class AbstractDataChangeListener extends AbstractListener {
 		super(parent);
 		
 		if(data == null) {
+			AbstractDataChangeListener.destroyListener(this);
 			throw new Exception("Rioko ERROR: no data to follow");
 		}
 		
 		if(parent == null) {
+			AbstractDataChangeListener.destroyListener(this);
 			throw new Exception("Rioko ERROR: no parent to sent the event");
 		}
 		
@@ -44,10 +46,16 @@ public abstract class AbstractDataChangeListener extends AbstractListener {
 	public void handleEvent(Event event) {
 		if(event instanceof DataChangeEvent) {
 			DataChangeEvent dtEvent = (DataChangeEvent)event;
-			
-			if(this.dataToFollow == dtEvent.getData())
+			try{
+			if(this.dataToFollow.equals(dtEvent.getData()))
 			{
 				this.onDataChange(event);
+			}
+			} catch(NullPointerException e) {
+				int i = 0;
+				i++;
+				System.out.println(i);
+				e.printStackTrace();
 			}
 		}
 	}

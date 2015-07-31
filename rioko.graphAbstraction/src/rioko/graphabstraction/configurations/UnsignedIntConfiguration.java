@@ -1,8 +1,7 @@
 package rioko.graphabstraction.configurations;
 
-import rioko.utilities.Log;
 
-public class UnsignedIntConfiguration extends IntegerConfiguration {
+public abstract class UnsignedIntConfiguration extends IntegerConfiguration {
 
 	public UnsignedIntConfiguration() {
 		super();
@@ -21,17 +20,6 @@ public class UnsignedIntConfiguration extends IntegerConfiguration {
 		}
 		
 		super.setValueConfiguration(num);
-	}
-	
-	@Override
-	public UnsignedIntConfiguration copy() {
-		try {
-			return new UnsignedIntConfiguration(this.getConfiguration());
-		} catch (BadConfigurationException e) {
-			// Impossible Exception
-			Log.exception(e);
-			return null;
-		}
 	}
 
 }

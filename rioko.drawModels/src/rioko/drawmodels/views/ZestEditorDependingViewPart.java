@@ -22,6 +22,11 @@ public abstract class ZestEditorDependingViewPart extends ViewPart implements IP
 	public void createPartControl(Composite arg0) {
 		//Añadimos a la lista de wizardListener de la ventana
 		((IPartService)this.getSite().getService(IPartService.class)).addPartListener(this);
+		
+		createUIPart(arg0);
+		createLogicPart(arg0);
+
+		this.partActivated(this.getSite().getPage().getActiveEditor());
 	}
 
 	@Override
@@ -71,5 +76,9 @@ public abstract class ZestEditorDependingViewPart extends ViewPart implements IP
 	protected ZestEditor getZestEditor() {
 		return (ZestEditor)this.getSite().getPage().getActiveEditor();
 	}
+	
+	//Abstract methods
+	protected abstract void createUIPart(Composite parent);
+	protected abstract void createLogicPart(Composite parent);
 
 }

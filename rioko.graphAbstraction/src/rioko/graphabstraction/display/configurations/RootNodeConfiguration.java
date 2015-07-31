@@ -9,9 +9,10 @@ import rioko.graphabstraction.configurations.ComboConfiguration;
 import rioko.graphabstraction.configurations.TypeOfConfiguration;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.utilities.Log;
 import rioko.utilities.collections.ListSet;
 
-public abstract class RootNodeConfiguration implements ComboConfiguration {
+public class RootNodeConfiguration implements ComboConfiguration {
 
 	private DiagramNode root = null;
 	
@@ -113,5 +114,24 @@ public abstract class RootNodeConfiguration implements ComboConfiguration {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public String getNameOfConfiguration() {
+		return "Root Node";
+	}
+
+	@Override
+	public RootNodeConfiguration copy() {
+		RootNodeConfiguration res = new RootNodeConfiguration();
+		res.setGraph(this.graph);
+		try {
+			res.setRoot(this.root);
+		} catch (BadConfigurationException e) {
+			// Impossible Exception
+			Log.exception(e);
+		}
+		
+		return res;
 	}
 }

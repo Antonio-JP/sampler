@@ -1,6 +1,7 @@
 package rioko.drawmodels.swt.composites;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -109,7 +110,7 @@ public class AddRemoveTable extends Composite {
 		}
 	}
 
-	public void setInput(ArrayList<?> dataList) {
+	public void setInput(List<?> dataList) {
 		ArrayList<LabelValueDataLine> list = new ArrayList<>();
 		
 		int i = 1;

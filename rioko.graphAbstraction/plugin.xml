@@ -4,6 +4,7 @@
    <extension-point id="steps" name="Steps" schema="schema/steps.exsd"/>
    <extension-point id="abstractionAlgorithms" name="Graph Abstraction Algorithms" schema="schema/abstractionAlgorithms.exsd"/>
    <extension-point id="searches" name="Search Criteria" schema="schema/searches.exsd"/>
+   <extension-point id="configurations" name="Configurations" schema="schema/configurations.exsd"/>
    <extension
          point="rioko.graphabstraction.steps">
       <global
@@ -39,5 +40,23 @@
             id="rioko.graphAbstraction.algorithms.connectedComponents"
             name="Connected Components Algorithm">
       </algorithm>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.configurations">
+      <int
+            class="rioko.graphabstraction.display.configurations.MaxNodesConfiguration"
+            id="rioko.graphAbstraction..configurations.maxNodesConfiguration"
+            name="Maximum Nodes Configuration">
+      </int>
+      <conf
+            class="rioko.graphabstraction.display.configurations.RootNodeConfiguration"
+            id="rioko.graphAbstraction.configurations.rootNodeConfiguration"
+            name="Root Node configuration">
+      </conf>
+      <bool
+            class="rioko.graphabstraction.display.configurations.StrongConnectionConfiguration"
+            id="rioko.graphAbstraction.configurations.strongConnection"
+            name="Strong Connection Configuration">
+      </bool>
    </extension>
 </plugin>

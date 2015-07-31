@@ -17,6 +17,7 @@ import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.wizards.pages.spAlgPages.AlgorithmConfigurationWizardPage;
 import rioko.drawmodels.wizards.pages.spAlgPages.CreateBasicStepsAlgorithmWizardPage;
 import rioko.drawmodels.wizards.pages.spAlgPages.CreateOthersStepsAlgorithmWizardPage;
+import rioko.eclipse.registry.RegistryManagement;
 
 public class CreateSpecialAlgorithmWizard extends AbstractWizard {
 
@@ -95,14 +96,11 @@ public class CreateSpecialAlgorithmWizard extends AbstractWizard {
 		ArrayList<NestedGraphBuilder> list = new ArrayList<>();
 		if(result != null) {
 			for(Object obj : result) {
-				try {
-					list.add((NestedGraphBuilder)Class.forName((String)obj).newInstance());
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
+				NestedGraphBuilder newBuilder = (NestedGraphBuilder) RegistryManagement.getInstance("rioko.drawmodels.steps", (String)obj);
+				if(newBuilder == null) {
+					Log.exception(new Exception("Error while creating a " + obj.toString() + " after selecting as a possible step"));
+				} else {
+					list.add(newBuilder);
 				}
 			}
 		}

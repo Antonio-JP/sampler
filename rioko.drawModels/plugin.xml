@@ -340,5 +340,38 @@
           name="Zest Bridge">
     </bridge>
  </extension>
+ <extension
+       point="rioko.graphabstraction.configurations">
+    <conf
+          class="rioko.drawmodels.configurations.AggregationAlgorithmConfiguration"
+          id="rioko.drawModels.configurations.algorithmConfiguration"
+          name="Aggregate Algorithm Configuration">
+    </conf>
+    <conf
+          class="rioko.drawmodels.configurations.ModelRootNodeConfiguration"
+          id="rioko.drawModels.configurations.modelRootConfiguration"
+          name="Root Node Configuration (model version)">
+    </conf>
+    <bool
+          class="rioko.drawmodels.configurations.ShowAttrConfiguration"
+          id="rioko.drawModels.configurations.showAttributesConfiguration"
+          name="Show Attribute Configuration">
+    </bool>
+    <conf
+          class="rioko.drawmodels.configurations.ModelRootNodeConfiguration"
+          id="rioko.drawModels.configuration.modelRootConfiguration"
+          name="Root Node Configuration (model version)">
+    </conf>
+    <conf
+          class="rioko.drawmodels.configurations.LayoutAlgorithmConfiguration"
+          id="rioko.drawModels.configurations.layoutAlgorithmConfiguration"
+          name="Layout Algorithm Configuraton">
+    </conf>
+    <bool
+          class="rioko.drawmodels.configurations.ShowConnConfiguration"
+          id="rioko.drawModels.configurations.showConnConfiguration"
+          name="Show Connection Data Configuration">
+    </bool>
+ </extension>
   	<?Criterios de búsqueda?>
 </plugin>

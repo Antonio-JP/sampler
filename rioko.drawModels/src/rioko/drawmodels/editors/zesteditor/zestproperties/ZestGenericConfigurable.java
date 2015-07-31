@@ -6,12 +6,15 @@ import java.util.Iterator;
 
 import rioko.drawmodels.configurations.AggregationAlgorithmConfiguration;
 import rioko.drawmodels.configurations.LayoutAlgorithmConfiguration;
+import rioko.drawmodels.configurations.ShowAttrConfiguration;
+import rioko.drawmodels.configurations.ShowConnConfiguration;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.BooleanConfiguration;
 import rioko.graphabstraction.configurations.Configurable;
 import rioko.graphabstraction.configurations.Configuration;
+import rioko.graphabstraction.configurations.events.ConfigurationChange;
 import rioko.utilities.Pair;
 
 public class ZestGenericConfigurable implements Configurable {
@@ -20,22 +23,23 @@ public class ZestGenericConfigurable implements Configurable {
 	
 	private AggregationAlgorithmConfiguration aggregConf = new AggregationAlgorithmConfiguration();
 	
-	private BooleanConfiguration showAttrConf = new BooleanConfiguration(), showConnConf = new BooleanConfiguration();
+	private ShowAttrConfiguration showAttrConf = new ShowAttrConfiguration(); 
+	private ShowConnConfiguration showConnConf = new ShowConnConfiguration();
 	
 	@Override
 	public Collection<Pair<String, Configuration>> getConfiguration() {
 		ArrayList<Pair<String,Configuration>> configuration = new ArrayList<>();
 		
-		configuration.add(new Pair<>(ZestGenericProperties.LAYOUT_ALG.toString(), this.layoutConf));
-		configuration.add(new Pair<>(ZestGenericProperties.AGGREGATION_ALG.toString(), this.aggregConf));
-		configuration.add(new Pair<>(ZestGenericProperties.SHOW_ATTR.toString(), this.showAttrConf));
-		configuration.add(new Pair<>(ZestGenericProperties.SHOW_CON.toString(), this.showConnConf));
+		configuration.add(new Pair<>(this.layoutConf.getNameOfConfiguration(), this.layoutConf));
+		configuration.add(new Pair<>(this.aggregConf.getNameOfConfiguration(), this.aggregConf));
+		configuration.add(new Pair<>(this.showAttrConf.getNameOfConfiguration(), this.showAttrConf));
+		configuration.add(new Pair<>(this.showConnConf.getNameOfConfiguration(), this.showConnConf));
 		
 		return configuration;
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
 			BadArgumentException {
 		if(newConf.size() != 4) {
 			throw new BadConfigurationException("Need exactly 4 configurations");
@@ -66,19 +70,25 @@ public class ZestGenericConfigurable implements Configurable {
 	}
 	
 	public void setConfiguration(ZestGenericProperties option, Object value) throws BadConfigurationException, BadArgumentException {
-		switch(option) {
-			case AGGREGATION_ALG:
-				this.aggregConf.setConfiguration(value);
-				break;
-			case LAYOUT_ALG:
-				this.layoutConf.setConfiguration(value);
-				break;
-			case SHOW_ATTR:
-				this.showAttrConf.setConfiguration(value);
-				break;
-			case SHOW_CON:
-				this.showConnConf.setConfiguration(value);
-				break;	
+		try {
+			switch(option) {
+				case AGGREGATION_ALG:
+					this.aggregConf.setConfiguration(value);
+					break;
+				case LAYOUT_ALG:
+					this.layoutConf.setConfiguration(value);
+					break;
+				case SHOW_ATTR:
+					this.showAttrConf.setConfiguration(value);
+					break;
+				case SHOW_CON:
+					this.showConnConf.setConfiguration(value);
+					break;	
+			}
+	
+			new ConfigurationChange(this);
+		} catch(BadConfigurationException | BadArgumentException e) {
+			throw e;
 		}
 	}
 	

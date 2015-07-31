@@ -8,7 +8,7 @@ import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.ComboConfiguration;
 import rioko.graphabstraction.configurations.TypeOfConfiguration;
 
-public class BooleanConfiguration implements ComboConfiguration {
+public abstract class BooleanConfiguration implements ComboConfiguration {
 
 	private static final String TRUE_STR = "Yes";
 	private static final String FALSE_STR = "No";
@@ -74,15 +74,6 @@ public class BooleanConfiguration implements ComboConfiguration {
 	@Override
 	public Class<?> classOfOptions() {
 		return Boolean.class;
-	}
-
-	@Override
-	public BooleanConfiguration copy() {
-		BooleanConfiguration res = new BooleanConfiguration();
-		
-		res.value = this.value;
-		
-		return res;
 	}
 
 }

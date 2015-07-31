@@ -1,8 +1,7 @@
 package rioko.graphabstraction.configurations;
 
-import rioko.utilities.Log;
 
-public class IntegerConfiguration implements Configuration {
+public abstract class IntegerConfiguration implements Configuration {
 
 	private int value = 0;
 	
@@ -33,16 +32,4 @@ public class IntegerConfiguration implements Configuration {
 	public String getTextConfiguration() {
 		return ""+this.value;
 	}
-
-	@Override
-	public IntegerConfiguration copy() {
-		try {
-			return new IntegerConfiguration(this.value);
-		} catch (BadConfigurationException e) {
-			// Impossible Exception
-			Log.exception(e);
-			return null;
-		}
-	}
-
 }

@@ -10,7 +10,7 @@ package rioko.events;
 public class DataChangeEvent extends AbstractEvent {
 	
 	/**
-	 * Protected field in which save the object that has benn changed.
+	 * Protected field in which save the object that has been changed.
 	 */
 	protected Object data;	
 	

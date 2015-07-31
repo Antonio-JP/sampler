@@ -51,5 +51,23 @@
             name="EClass Filter Algorithm">
       </algorithm>
    </extension>
+   <extension
+         point="rioko.graphabstraction.configurations">
+      <string
+            class="rioko.emfdrawer.configurations.AttributeNameConfiguration"
+            id="rioko.emfDrawer.configurations.attributeNameConfiguration"
+            name="Attribute Name Configuration">
+      </string>
+      <string
+            class="rioko.emfdrawer.configurations.AttributeValueConfiguration"
+            id="rioko.emfDrawer.configurations.attributeValueConfiguration"
+            name="Attribute Value Configuration">
+      </string>
+      <conf
+            class="rioko.emfdrawer.configurations.EClassConfiguration"
+            id="rioko.emfDrawer.configurations.eClassConfiguration"
+            name="EClass Selector Configuration">
+      </conf>
+   </extension>
 
 </plugin>

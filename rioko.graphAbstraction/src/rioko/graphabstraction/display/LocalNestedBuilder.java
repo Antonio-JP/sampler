@@ -10,6 +10,7 @@ import rioko.graphabstraction.configurations.Configuration;
 import rioko.graphabstraction.configurations.UnsignedIntConfiguration;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
+import rioko.graphabstraction.display.configurations.MaxNodesConfiguration;
 import rioko.graphabstraction.display.configurations.RootNodeConfiguration;
 import rioko.utilities.Pair;
 
@@ -17,7 +18,7 @@ public abstract class LocalNestedBuilder extends NestedGraphBuilder {
 
 	
 	protected RootNodeConfiguration rootConf = this.getRootNodeConfiguration(null,null);
-	protected UnsignedIntConfiguration toShowConf = new UnsignedIntConfiguration();
+	protected UnsignedIntConfiguration toShowConf = new MaxNodesConfiguration();
 	protected DiagramNode root = null;
 	
 	protected int maxNodes = -1;
@@ -29,20 +30,20 @@ public abstract class LocalNestedBuilder extends NestedGraphBuilder {
 		//Si la configuración no nos da un límite de vértices devolvemos el grafo original
 //		if ((this.toShowConf.getConfiguration() == 0) && (!properties.isSetMaxNodes())) {
 		if ((this.toShowConf.getConfiguration() == 0) && 
-				((properties.getConfiguration(DisplayOptions.MAX_NODES.toString()) == null) || 
-						((int)(properties.getConfiguration(DisplayOptions.MAX_NODES.toString())) == 0))) {
+				((properties.getConfiguration(this.toShowConf.getNameOfConfiguration()) == null) || 
+						((int)(properties.getConfiguration(this.toShowConf.getNameOfConfiguration())) == 0))) {
 			return data;
 		} else {
 			//Si ahora lo que no nos dan es un nodo raíz, lo establecemos como el primero del grafo data
 			this.root = rootConf.getConfiguration();
-			Object auxRoot = properties.getConfiguration(DisplayOptions.ROOT_NODE.toString());
+			Object auxRoot = properties.getConfiguration(this.rootConf.getNameOfConfiguration());
 			if(this.root == null && auxRoot != null) {
 				this.root = this.existsRelatedNode(data,(DiagramNode)auxRoot);
 			}
 			
 			this.maxNodes = toShowConf.getConfiguration();
 			if(this.maxNodes == 0 || this.maxNodes == -1) {
-				this.maxNodes = (int) properties.getConfiguration(DisplayOptions.MAX_NODES.toString());
+				this.maxNodes = (int) properties.getConfiguration(MaxNodesConfiguration.class);
 			}
 		}
 		
@@ -50,14 +51,14 @@ public abstract class LocalNestedBuilder extends NestedGraphBuilder {
 	}
 
 	@Override
-	public Collection<DisplayOptions> getConfigurationNeeded() {
-		Collection<DisplayOptions> res = new ArrayList<>();
+	public Collection<Class<? extends Configuration>> getConfigurationNeeded() {
+		Collection<Class<? extends Configuration>> res = new ArrayList<>();
 		
 		if(this.rootConf.getConfiguration() == null) {
-			res.add(DisplayOptions.ROOT_NODE);
+			res.add(this.rootConf.getClass());
 		} 
 		if(this.toShowConf.getConfiguration() == 0) {
-			res.add(DisplayOptions.MAX_NODES);
+			res.add(this.toShowConf.getClass());
 		}
 		
 		return res;
@@ -68,14 +69,14 @@ public abstract class LocalNestedBuilder extends NestedGraphBuilder {
 	public Collection<Pair<String, Configuration>> getConfiguration() {
 		ArrayList<Pair<String, Configuration>> conf = new ArrayList<>();
 		
-		conf.add(new Pair<>("Root Node", rootConf));
-		conf.add(new Pair<>("Nodes tho Show", toShowConf));
+		conf.add(new Pair<>(rootConf.getNameOfConfiguration(), rootConf));
+		conf.add(new Pair<>(toShowConf.getNameOfConfiguration(), toShowConf));
 		
 		return conf;
 	}
 
 	@Override
-	public void setConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
+	public void setNewConfiguration(Collection<Configuration> newConf) throws BadConfigurationException,
 			BadArgumentException {
 		boolean root = false, toShow = false;
 		
@@ -95,8 +96,6 @@ public abstract class LocalNestedBuilder extends NestedGraphBuilder {
 			}
 		}
 	}
-	
 
-
-	protected abstract RootNodeConfiguration getRootNodeConfiguration(DiagramGraph data, DisplayProperties properties);
+	protected abstract RootNodeConfiguration getRootNodeConfiguration(DiagramGraph data, Configurable properties);
 }
