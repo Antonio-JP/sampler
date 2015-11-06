@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SavingViews
+Bundle-SymbolicName: rioko.savingViews
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: rioko.savingviews.Activator
+Bundle-Vendor: Rioukay
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.draw2d,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ rioko.plugin.utils;bundle-version="1.0.0",
+ rioko.graphabstraction;bundle-version="1.0.0",
+ rioko.layouts,
+ rioko.drawmodels;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
