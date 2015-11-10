@@ -21,6 +21,10 @@ public abstract class AbstractEvent extends Event {
 	 */
 	protected static HashMap<Class<? extends AbstractEvent>, ArrayList<AbstractListener>> listeners = new HashMap<>();
 	
+	private static HashMap<Class<? extends AbstractEvent>, ArrayList<AbstractListener>> toAdd = new HashMap<>();
+	private static HashMap<Class<? extends AbstractEvent>, ArrayList<AbstractListener>> toRemove = new HashMap<>();
+	private static boolean blocked = false;
+	
 	/**
 	 * Static method to register a listener to the system
 	 * 
@@ -33,11 +37,16 @@ public abstract class AbstractEvent extends Event {
 		if(listener.getAssociatedEvent() == null) {
 			throw new Exception("Rioko ERROR: no event associated with an event");
 		}
-		if(listeners.get(listener.getAssociatedEvent()) == null) {
-			listeners.put(listener.getAssociatedEvent(), new ArrayList<AbstractListener>());
+		
+		HashMap<Class<? extends AbstractEvent>, ArrayList<AbstractListener>> where = listeners;
+		if(blocked) {
+			where = toAdd;
+		}
+		if(where.get(listener.getAssociatedEvent()) == null) {
+			where.put(listener.getAssociatedEvent(), new ArrayList<AbstractListener>());
 		}
 		
-		listeners.get(listener.getAssociatedEvent()).add(listener);
+		where.get(listener.getAssociatedEvent()).add(listener);
 	}
 	
 	/**
@@ -49,9 +58,19 @@ public abstract class AbstractEvent extends Event {
 	 */
 	public static boolean removeListener(AbstractListener listener)
 	{
-		ArrayList<AbstractListener> list = listeners.get(listener.getAssociatedEvent());
-		if(list != null) {
-			return list.remove(listener);
+		if(blocked) {
+			if(toRemove.get(listener.getAssociatedEvent()) == null) {
+				toRemove.put(listener.getAssociatedEvent(), new ArrayList<AbstractListener>());
+			}
+			
+			toRemove.get(listener.getAssociatedEvent()).add(listener);
+			
+			return true;
+		} else {
+			ArrayList<AbstractListener> list = listeners.get(listener.getAssociatedEvent());
+			if(list != null) {
+				return list.remove(listener);
+			}
 		}
 		
 		return false;
@@ -64,12 +83,41 @@ public abstract class AbstractEvent extends Event {
 	 */
 	protected void processEvent()
 	{
+		//Block the HashMap of Listeners to avoid Concurrent Modifications
+		blocked = true;
+		//Create new toAdd and toRemove maps
+		toAdd = new HashMap<>();
+		toRemove = new HashMap<>();
+		
+		//Execute the listeners "handleEvents"
 		for(Class<? extends AbstractEvent> event : listeners.keySet()) {
 			if(event.isInstance(this)) {
 				for(AbstractListener listener : listeners.get(event)) {
-					listener.handleEvent(this);
+						listener.handleEvent(this);
 				}
 			}
 		}
+		
+		//Make the changes in the HashMap
+		for(Class<? extends AbstractEvent> event : toAdd.keySet()) {
+			if(listeners.get(event) == null) {
+				listeners.put(event, new ArrayList<AbstractListener>());
+			}
+			
+			for(AbstractListener listener : toAdd.get(event)) {
+				listeners.get(event).add(listener);
+			}
+		}
+		
+		for(Class<? extends AbstractEvent> event : toRemove.keySet()) {
+			if(listeners.get(event) != null) {
+				for(AbstractListener listener : toRemove.get(event)) {
+					listeners.get(event).remove(listener);
+				}
+			}
+		}
+		
+		//Unlock the tables
+		blocked = false;
 	}
 }

@@ -214,7 +214,7 @@ public class XMIReader implements Reader<EObject> {
 						Object object = current.eGet(reference, false);
 						
 						if(object == null) {
-							Log.print("Null Object found");
+							Log.xPrint("Null Object found");
 						} else {
 							if(object instanceof InternalEList) {
 								@SuppressWarnings("rawtypes")
