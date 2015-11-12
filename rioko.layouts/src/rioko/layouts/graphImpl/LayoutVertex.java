@@ -44,6 +44,10 @@ public class LayoutVertex implements Vertex {
 		return this.position;
 	}
 	
+	public void addMove(Point d) {
+		this.move = this.move.add(d);
+	}
+	
 	public void setMove(Point d) {
 		this.move = d;
 	}

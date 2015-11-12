@@ -107,6 +107,10 @@ public abstract class AbstractLayoutAlgorithm implements LayoutAlgorithm {
 	}
 	
 	/* Movement methods */
+	protected void addDVector(LayoutVertex node, Point p) {
+		node.addMove(p);
+	}
+	
 	protected void setDVector(LayoutVertex node, Point p) {
 		node.setMove(p);
 	}

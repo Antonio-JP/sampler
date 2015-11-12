@@ -10,6 +10,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: rioko.layouts,
  rioko.layouts.algorithms,
+ rioko.layouts.algorithms.basic,
  rioko.layouts.algorithms.examples,
  rioko.layouts.bridge,
  rioko.layouts.geometry,

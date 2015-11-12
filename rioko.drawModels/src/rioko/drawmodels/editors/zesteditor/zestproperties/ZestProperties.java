@@ -1,5 +1,6 @@
 package rioko.drawmodels.editors.zesteditor.zestproperties;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
@@ -115,6 +116,10 @@ public class ZestProperties implements Copiable {
 		}
 	}
 	
+	public ZestProperties(BufferedReader bf) {
+		// TODO Implement this method
+	}
+
 	//Getters & Setters	
 	public ZestGenericConfigurable getGenericConfigurable() {
 		return this.genericConf;
@@ -383,5 +388,10 @@ public class ZestProperties implements Copiable {
 
 	public JustFiltersBuilder getFinalFilters() {
 		return this.postAlgorithmFilters;
+	}
+
+	public String serialize() {
+		//TODO Implement this method
+		return "Not implemented yet";
 	}
 }
