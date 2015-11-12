@@ -216,6 +216,9 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements
 	}
 	
 	private void createPropertiesListener() {
+		if(this.activeEditor != null) {
+			this.properties = this.activeEditor.getProperties();
+		}
 		if(this.properties != null) {
 			try{	
 				if(propertiesListener != null) {
@@ -227,6 +230,7 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements
 					protected void doWhenGenericChange() {
 						// We update the generic table
 						changeBasicTable();
+						changeAlgTable();
 					}
 	
 					@Override
@@ -244,6 +248,9 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements
 				// Impossible Exception
 				Log.exception(e);
 			}
+			
+			this.changeBasicTable();
+			this.changeAlgTable();
 		}
 	}
 }

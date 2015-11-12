@@ -18,6 +18,7 @@ import rioko.graphabstraction.display.FilterNestedBuilder;
 import rioko.graphabstraction.display.configurations.MaxNodesConfiguration;
 import rioko.graphabstraction.display.configurations.RootNodeConfiguration;
 import rioko.layouts.algorithms.LayoutAlgorithm;
+import rioko.revent.REvent;
 import rioko.revent.datachange.DataChangeEvent;
 import rioko.revent.datachange.DataChangeListener;
 import rioko.drawmodels.algorithms.display.JustFiltersBuilder;
@@ -45,6 +46,9 @@ public class ZestProperties implements Copiable {
 	
 	//Filtros posteriores
 	private JustFiltersBuilder postAlgorithmFilters = new JustFiltersBuilder();
+	
+	//Listeners para los Configurables
+	private ConfigurationChangeListener algorithmListener;
 
 	//Pila de estados
 	private Stack<Pair<NestedBuilderAlgorithm, ZestAlgorithmConfigurable>> stackView = new Stack<>();
@@ -89,7 +93,7 @@ public class ZestProperties implements Copiable {
 				}
 			};
 			
-			new ConfigurationChangeListener(this.algorithmConf, this) {
+			algorithmListener = new ConfigurationChangeListener(this.algorithmConf, this) {
 				
 				@Override
 				public void run(DataChangeEvent event) {
@@ -109,14 +113,6 @@ public class ZestProperties implements Copiable {
 			// Impossible Exception
 			Log.exception(e);
 		}
-
-//		try {
-//			this.algorithmConf.setConfiguration(DisplayOptions.ROOT_NODE, root);
-//			this.algorithmConf.setConfiguration(DisplayOptions.MAX_NODES, maxNodes);
-//		} catch (BadConfigurationException | BadArgumentException e) {
-			// Impossible Exception
-//			e.printStackTrace();
-//		}
 	}
 	
 	//Getters & Setters	
@@ -354,6 +350,20 @@ public class ZestProperties implements Copiable {
 		}
 
 		res.algorithmConf = this.algorithmConf.copy();
+		REvent.removeListener(res.algorithmListener);
+		try {
+			res.algorithmListener = new ConfigurationChangeListener(res.algorithmConf, res) {
+				
+				@Override
+				public void run(DataChangeEvent event) {
+					//When the Generic Configuration Change, we throw a new Event associated to this Properties
+					new ZestPropertiesEvent((ZestProperties) this.getAffectedObject(), ZestPropertiesEvent.ALGORITHM);
+				}
+			};
+		} catch (Exception e) {
+			// Impossible Exception
+			e.printStackTrace();
+		}
 
 		//Propiedades de visualización
 		Stack<Pair<NestedBuilderAlgorithm, ZestAlgorithmConfigurable>> auxStack = new Stack<>();
