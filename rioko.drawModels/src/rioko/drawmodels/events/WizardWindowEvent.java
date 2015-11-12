@@ -1,9 +1,10 @@
 package rioko.drawmodels.events;
 
 import rioko.drawmodels.wizards.AbstractWizard;
-import rioko.events.AbstractEvent;
+import rioko.revent.BadArgumentForBuildingException;
+import rioko.revent.REvent;
 
-public class WizardWindowEvent extends AbstractEvent {
+public class WizardWindowEvent extends REvent {
 
 	public static final int NONE = -1, OPEN_WIZARD = 0, CLOSE_WIZARD = 1;
 	
@@ -13,14 +14,10 @@ public class WizardWindowEvent extends AbstractEvent {
 	
 	public WizardWindowEvent(int type, AbstractWizard wizard)
 	{
-		super();
+		super(wizard, type);
 		
 		this.type = type;
 		this.wizard = wizard;
-		
-		if(this.getClass().getSimpleName().equals(WizardWindowEvent.class.getSimpleName())) {
-			this.processEvent();
-		}
 	}
 	
 	//Getters
@@ -31,5 +28,15 @@ public class WizardWindowEvent extends AbstractEvent {
 
 	public Object getWizard() {
 		return this.wizard;
+	}
+
+	@Override
+	protected void specificBuilder(Object... objects) throws BadArgumentForBuildingException {
+		try {
+			this.wizard = (AbstractWizard)this.getSource();
+			this.type = (int) objects[0];
+		} catch(Exception e) {
+			throw new BadArgumentForBuildingException();
+		}
 	}
 }

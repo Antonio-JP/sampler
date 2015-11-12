@@ -20,7 +20,7 @@ public class PropertiesViewWizardListener extends WizardWindowListener {
 
 	@Override
 	protected void closeWizard(WizardWindowEvent wwe) {
-		((ZestPropertiesView)this.parent).updateView();
+		((ZestPropertiesView)this.getAffectedObject()).updateView();
 		properties.hasChanged(ZestEditor.UPDATE_ALL);
 	}
 

@@ -8,7 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import rioko.events.DataChangeEvent;
+import rioko.revent.datachange.DataChangeEvent;
 
 public class RadioButtonLine extends Composite {
 

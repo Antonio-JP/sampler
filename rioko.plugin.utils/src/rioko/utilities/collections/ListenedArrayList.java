@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import rioko.events.DataChangeEvent;
+import rioko.revent.datachange.DataChangeEvent;
 
 /**
  * Extension of an ArrayList which throw a new Event whenever it changes.

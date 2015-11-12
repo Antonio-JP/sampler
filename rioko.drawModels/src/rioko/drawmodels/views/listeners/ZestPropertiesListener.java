@@ -1,19 +1,18 @@
 package rioko.drawmodels.views.listeners;
 
-import org.eclipse.swt.widgets.Event;
-
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestPropertiesEvent;
-import rioko.events.listeners.AbstractDataChangeListener;
+import rioko.revent.datachange.DataChangeEvent;
+import rioko.revent.datachange.DataChangeListener;
 
-public abstract class ZestPropertiesListener extends AbstractDataChangeListener {
+public abstract class ZestPropertiesListener extends DataChangeListener {
 
 	public ZestPropertiesListener(ZestProperties data, Object parent) throws Exception {
-		super(data, parent);
+		super(parent, data);
 	}
 
 	@Override
-	public void onDataChange(Event event) {
+	public void run(DataChangeEvent event) {
 		if(event instanceof ZestPropertiesEvent) {
 			ZestPropertiesEvent zEvent = (ZestPropertiesEvent)event;
 			if((zEvent.getChange() & ZestPropertiesEvent.GENERIC) != 0) {

@@ -12,7 +12,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -25,8 +24,8 @@ import rioko.drawmodels.swt.composites.RadioButtonLine;
 import rioko.drawmodels.swt.composites.addremovetables.SearchAddRemoveListener;
 import rioko.drawmodels.swt.composites.addremovetables.TableConfigurationListener;
 import rioko.drawmodels.swt.composites.labeldatatables.ConfigurationTable;
-import rioko.events.DataChangeEvent;
-import rioko.events.listeners.AbstractDataChangeListener;
+import rioko.revent.datachange.DataChangeEvent;
+import rioko.revent.datachange.DataChangeListener;
 import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.filters.AndComposeFilter;
@@ -160,48 +159,33 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 		
 		//Configuración de la tercera fila
 		try {
-			//Añadimos dos listeners para controlar los cambios de los filtros y de los atributos de los filtros para actualizar la lista de nodos filtrados
-			new AbstractDataChangeListener(listOfCriteria, nodeFiltered) {
+			//Añadimos listeners para controlar los cambios de los filtros y de los atributos de los filtros para actualizar la lista de nodos filtrados
+			new DataChangeListener(nodeFiltered, listOfCriteria) {
 				@Override
-				public void onDataChange(Event arg0) {
+				public void run(DataChangeEvent arg0) {
 					updateFilteredNodes();
 				}
-
-				@Override
-				protected void dispose() { }
-				
 			};
 			
-			new AbstractDataChangeListener(configurationTable, nodeFiltered) {
+			new DataChangeListener(nodeFiltered, configurationTable) {
 				@Override
-				public void onDataChange(Event arg0) {
+				public void run(DataChangeEvent arg0) {
 					updateFilteredNodes();
-				}
-
-				@Override
-				protected void dispose() { }
-				
+				}				
 			};
 			
-			new AbstractDataChangeListener(eClassSelector, nodeFiltered) {
+			new DataChangeListener(nodeFiltered, eClassSelector) {
 				@Override
-				public void onDataChange(Event arg0) {
+				public void run(DataChangeEvent arg0) {
 					updateFilteredNodes();
 				}
-
-				@Override
-				protected void dispose() { }
-				
 			};
 			
-			new AbstractDataChangeListener(andOrButtons, nodeFiltered) {
+			new DataChangeListener(nodeFiltered, andOrButtons) {
 				@Override
-				public void onDataChange(Event arg0) {
+				public void run(DataChangeEvent arg0) {
 					updateFilteredNodes();
 				}
-
-				@Override
-				protected void dispose() { }
 				
 			};
 		} catch (Exception e) {
@@ -233,14 +217,11 @@ public class SearchDialog extends TitleAreaDialog implements ValuableDialog{
 		});
 		
 		try {
-			new AbstractDataChangeListener(nodeFiltered, nodeInfo) {
+			new DataChangeListener(nodeInfo, nodeFiltered) {
 				@Override
-				public void onDataChange(Event arg0) {
+				public void run(DataChangeEvent arg0) {
 					updateNodeInfo();
 				}
-
-				@Override
-				protected void dispose() { }
 				
 			};
 		} catch (Exception e) {

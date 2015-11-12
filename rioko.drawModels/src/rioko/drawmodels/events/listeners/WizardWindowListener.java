@@ -1,46 +1,53 @@
 package rioko.drawmodels.events.listeners;
 
-import org.eclipse.swt.widgets.Event;
-
 import rioko.drawmodels.events.WizardWindowEvent;
 import rioko.drawmodels.wizards.AbstractWizard;
-import rioko.events.AbstractEvent;
-import rioko.events.listeners.AbstractListener;
+import rioko.revent.AbstractRListener;
+import rioko.revent.BadArgumentForBuildingException;
 
-public abstract class WizardWindowListener extends AbstractListener {
+public abstract class WizardWindowListener extends AbstractRListener<WizardWindowEvent> {
 
 	private Class<? extends AbstractWizard> typeOfWizard;
 	
 	public WizardWindowListener(Class<? extends AbstractWizard> typeOfWizard, Object parent) {
-		super(parent);
+		super(parent, typeOfWizard);
 		
 		this.typeOfWizard = typeOfWizard;
 	}
 	
 	@Override
-	public void handleEvent(Event e) {
-		if(e instanceof WizardWindowEvent) {
-			WizardWindowEvent wwe = (WizardWindowEvent)e;
-			
-			if(this.typeOfWizard.isInstance(wwe.getWizard())) {
-				if(wwe.getType() == WizardWindowEvent.CLOSE_WIZARD) {
-					this.closeWizard(wwe);
-				} else if(wwe.getType() == WizardWindowEvent.OPEN_WIZARD) {
-					this.openWizard(wwe);
-				}
-			}
+	public void run(WizardWindowEvent wwe) {
+		if(wwe.getType() == WizardWindowEvent.CLOSE_WIZARD) {
+			this.closeWizard(wwe);
+		} else if(wwe.getType() == WizardWindowEvent.OPEN_WIZARD) {
+			this.openWizard(wwe);
 		}
 	}
 	
 	@Override
-	public Class<? extends AbstractEvent> getAssociatedEvent() {
+	public Class<? extends WizardWindowEvent> getClassForListener() {
 		return WizardWindowEvent.class;
 	}
-	
+
 	@Override
-	protected void dispose() { /* Do nothing */	}
+	public boolean checkedEvent(WizardWindowEvent event) {
+		return this.typeOfWizard.isInstance(event.getWizard());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void specificBuilder(Object... objects) throws BadArgumentForBuildingException {
+		try {
+			this.typeOfWizard = (Class<? extends AbstractWizard>) objects[0];
+		} catch (Exception e) {
+			throw new BadArgumentForBuildingException();
+		}
+	}
+	
 
 	//Abstract methods
 	protected abstract void openWizard(WizardWindowEvent wwe);
 	protected abstract void closeWizard(WizardWindowEvent wwe);
+
+	
 }

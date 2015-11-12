@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
-import org.eclipse.swt.widgets.Event;
-
 import rioko.utilities.Copiable;
 import rioko.utilities.Log;
 import rioko.utilities.Pair;
@@ -13,7 +11,6 @@ import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.Configuration;
-import rioko.graphabstraction.configurations.events.ConfigurationChange;
 import rioko.graphabstraction.configurations.events.ConfigurationChangeListener;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
@@ -21,11 +18,12 @@ import rioko.graphabstraction.display.FilterNestedBuilder;
 import rioko.graphabstraction.display.configurations.MaxNodesConfiguration;
 import rioko.graphabstraction.display.configurations.RootNodeConfiguration;
 import rioko.layouts.algorithms.LayoutAlgorithm;
+import rioko.revent.datachange.DataChangeEvent;
+import rioko.revent.datachange.DataChangeListener;
 import rioko.drawmodels.algorithms.display.JustFiltersBuilder;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.events.PropertiesChangeEvent;
-import rioko.events.listeners.AbstractDataChangeListener;
 
 public class ZestProperties implements Copiable {
 	
@@ -82,9 +80,9 @@ public class ZestProperties implements Copiable {
 			new ConfigurationChangeListener(this.genericConf, this) {
 				
 				@Override
-				protected void run(ConfigurationChange event) {
+				public void run(DataChangeEvent event) {
 					//When the Generic Configuration Change, we throw a new Event associated to this Properties
-					new ZestPropertiesEvent((ZestProperties) this.parent, ZestPropertiesEvent.GENERIC);
+					new ZestPropertiesEvent((ZestProperties) this.getAffectedObject(), ZestPropertiesEvent.GENERIC);
 					//We update the algorithm configurated. If it has not changed, nothing happens
 					algorithmConf.setAlgorithm(
 							(NestedBuilderAlgorithm) genericConf.getConfiguration(ZestGenericProperties.AGGREGATION_ALG));
@@ -94,17 +92,17 @@ public class ZestProperties implements Copiable {
 			new ConfigurationChangeListener(this.algorithmConf, this) {
 				
 				@Override
-				protected void run(ConfigurationChange event) {
+				public void run(DataChangeEvent event) {
 					//When the Generic Configuration Change, we throw a new Event associated to this Properties
-					new ZestPropertiesEvent((ZestProperties) this.parent, ZestPropertiesEvent.ALGORITHM);
+					new ZestPropertiesEvent((ZestProperties) this.getAffectedObject(), ZestPropertiesEvent.ALGORITHM);
 				}
 			};
 			
-			new AbstractDataChangeListener(this.postAlgorithmFilters, this) {
+			new DataChangeListener(this, this.postAlgorithmFilters) {
 				@Override
-				public void onDataChange(Event event) {
+				public void run(DataChangeEvent event) {
 					//When the Generic Configuration Change, we throw a new Event associated to this Properties
-					new ZestPropertiesEvent((ZestProperties) this.parent, ZestPropertiesEvent.FILTERS);
+					new ZestPropertiesEvent((ZestProperties) this.getAffectedObject(), ZestPropertiesEvent.FILTERS);
 				}
 			};
 		} catch (Exception e) {

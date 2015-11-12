@@ -1,6 +1,7 @@
 package rioko.drawmodels.editors.zesteditor.zestproperties;
 
-import rioko.events.DataChangeEvent;
+import rioko.revent.BadArgumentForBuildingException;
+import rioko.revent.datachange.DataChangeEvent;
 
 public class ZestPropertiesEvent extends DataChangeEvent {
 	
@@ -9,15 +10,22 @@ public class ZestPropertiesEvent extends DataChangeEvent {
 	private int change = 0;
 
 	public ZestPropertiesEvent(ZestProperties data, int change) {
-		super(data);
-		
-		this.change = change;
-		
-		this.processEvent();
+		super(data, (Integer)change);
 	}
 	
 	public int getChange() {
 		return this.change;
+	}
+	
+	@Override
+	protected void specificBuilder(Object ... objects) {
+		if(objects.length != 1) {
+			throw new BadArgumentForBuildingException();
+		} else if(!(objects[0] instanceof Integer)) {
+			throw new BadArgumentForBuildingException();
+		} else {
+			this.change = (int) objects[0];
+		}
 	}
 
 }

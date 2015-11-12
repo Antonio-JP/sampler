@@ -1,24 +1,18 @@
 package rioko.graphabstraction.configurations.events;
 
-import org.eclipse.swt.widgets.Event;
-
-import rioko.events.listeners.AbstractDataChangeListener;
+import rioko.revent.datachange.DataChangeEvent;
+import rioko.revent.datachange.DataChangeListener;
 import rioko.graphabstraction.configurations.Configurable;
 
-public abstract class ConfigurationChangeListener extends AbstractDataChangeListener {
+public abstract class ConfigurationChangeListener extends DataChangeListener {
 
 	public ConfigurationChangeListener(Configurable data, Object parent) throws Exception {
-		super(data, parent);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void onDataChange(Event event) {
-		if(event instanceof ConfigurationChange) {
-			this.run((ConfigurationChange)event);
-		}
+		super(parent, data);
 	}
 	
-	protected abstract void run(ConfigurationChange event);
+	@Override
+	public Class<? extends DataChangeEvent> getClassForListener() {
+		return ConfigurationChange.class;
+	}
 
 }

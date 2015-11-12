@@ -19,7 +19,7 @@ import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.jface.NodeCellEditor;
 import rioko.drawmodels.swt.LabelValueDataLine;
 import rioko.drawmodels.swt.composites.LabelDataTable;
-import rioko.events.DataChangeEvent;
+import rioko.revent.datachange.DataChangeEvent;
 import rioko.graphabstraction.configurations.BadArgumentException;
 import rioko.graphabstraction.configurations.BadConfigurationException;
 import rioko.graphabstraction.configurations.ComboConfiguration;

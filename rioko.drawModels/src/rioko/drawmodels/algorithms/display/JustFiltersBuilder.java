@@ -3,9 +3,9 @@ package rioko.drawmodels.algorithms.display;
 import java.util.ArrayList;
 import java.util.List;
 
-import rioko.events.DataChangeEvent;
+import rioko.revent.REvent;
+import rioko.revent.datachange.DataChangeEvent;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
-import rioko.graphabstraction.configurations.events.ConfigurationChange;
 import rioko.graphabstraction.configurations.events.ConfigurationChangeListener;
 import rioko.graphabstraction.display.FilterNestedBuilder;
 import rioko.graphabstraction.display.GlobalNestedBuilder;
@@ -53,9 +53,8 @@ public class JustFiltersBuilder extends NestedBuilderAlgorithm {
 				try {
 					this.listOfListeners.add(new Pair<>(filter,
 							new ConfigurationChangeListener(filter, this) {
-								
 								@Override
-								protected void run(ConfigurationChange event) {
+								public void run(DataChangeEvent event) {
 									new DataChangeEvent(justMe);
 								}
 							}));
@@ -78,7 +77,7 @@ public class JustFiltersBuilder extends NestedBuilderAlgorithm {
 			//We dispose the listener for that Filter
 			Pair<FilterNestedBuilder, ConfigurationChangeListener> pair = this.containsFilter(filter);
 			if(pair != null) {
-				ConfigurationChangeListener.destroyListener(pair.getLast());
+				REvent.removeListener(pair.getLast());
 			}
 			
 			//Finally we delete the pair entrance of the list

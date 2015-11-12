@@ -47,8 +47,8 @@ import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.jface.ZestEditorStructuredSelection;
 import rioko.drawmodels.layouts.bridge.ZestLayoutAlgorithm;
 import rioko.drawmodels.views.listeners.ZestPropertiesListener;
-import rioko.events.DataChangeEvent;
-import rioko.events.listeners.AbstractListener;
+import rioko.revent.REvent;
+import rioko.revent.datachange.DataChangeEvent;
 import rioko.utilities.Log;
 import rioko.zest.ExtendedGraphViewer;
 
@@ -216,7 +216,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	
 	@Override
 	public void dispose() {
-		AbstractListener.destroyListener(this.changeListener);
+		REvent.removeListener(this.changeListener);
 	}
 
 	
@@ -259,7 +259,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		
 		//We update the listener of the properties
 		this.createPropertiesListener();
-		AbstractListener.destroyListener(this.changeListener);
+		REvent.removeListener(this.changeListener);
 		try {
 			this.changeListener = new PropertiesChangeListener(this.properties, this);
 		} catch (Exception e) {
@@ -270,7 +270,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	private void createPropertiesListener() {
 		try {
 			if(this.propertiesListener != null) {
-				AbstractListener.destroyListener(this.propertiesListener);
+				REvent.removeListener(this.propertiesListener);
 			}
 		
 			this.propertiesListener = new ZestPropertiesListener(this.properties, this) {

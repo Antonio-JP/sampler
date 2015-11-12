@@ -4,14 +4,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPart;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.swt.composites.labeldatatables.ConfigurationTable;
 import rioko.drawmodels.views.ZestEditorDependingViewPart;
 import rioko.drawmodels.views.listeners.ZestPropertiesListener;
-import rioko.events.listeners.AbstractDataChangeListener;
+import rioko.revent.REvent;
+import rioko.revent.datachange.DataChangeEvent;
+import rioko.revent.datachange.DataChangeListener;
 import rioko.utilities.Log;
 
 public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements IWindowListener*/ {
@@ -22,7 +23,7 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements
 	private ZestEditor activeEditor;
 	private ZestProperties properties;
 
-	private AbstractDataChangeListener editorListener;
+	private DataChangeListener editorListener;
 	private ZestPropertiesListener propertiesListener;
 	
 	@Override
@@ -199,12 +200,11 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements
 		if(this.activeEditor != null) {
 			try{	
 				if(editorListener != null) {
-					AbstractDataChangeListener.destroyListener(editorListener);
+					REvent.removeListener(editorListener);
 				}
-				editorListener = new AbstractDataChangeListener(this.activeEditor, this) {
-	
+				editorListener = new DataChangeListener(this,this.activeEditor) {
 					@Override
-					public void onDataChange(Event event) {
+					public void run(DataChangeEvent event) {
 						createPropertiesListener();
 					}				
 				};
@@ -219,7 +219,7 @@ public class ZestPropertiesView extends ZestEditorDependingViewPart /*implements
 		if(this.properties != null) {
 			try{	
 				if(propertiesListener != null) {
-					ZestPropertiesListener.destroyListener(propertiesListener);
+					REvent.removeListener(propertiesListener);
 				}
 				propertiesListener = new ZestPropertiesListener(this.properties, this) {
 	

@@ -12,12 +12,13 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
+import rioko.revent.datachange.DataChangeEvent;
+import rioko.revent.datachange.DataChangeListener;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.swt.StringTableRow;
@@ -27,7 +28,6 @@ import rioko.drawmodels.swt.composites.StringTable;
 import rioko.drawmodels.swt.composites.labeldatatables.ConfigurationTable;
 import rioko.drawmodels.wizards.SelectSpecialAlgorithmWizard;
 import rioko.drawmodels.wizards.pages.CustomWizardPage;
-import rioko.events.listeners.AbstractDataChangeListener;
 
 public class SelectExistingAlgorithmWizardPage extends CustomWizardPage {
 	
@@ -126,24 +126,16 @@ public class SelectExistingAlgorithmWizardPage extends CustomWizardPage {
 			initConf.setNewConfigurable(this.generalConfiguration.getAlgorithmConfigurable());
 			
 			try {
-				new AbstractDataChangeListener(this.generalConf, this) {
-						
+				new DataChangeListener(this, this.generalConf) {
 					@Override
-					protected void dispose() { /* Do nothing */ }
-					
-					@Override
-					public void onDataChange(Event arg0) {
+					public void run(DataChangeEvent event) {
 						updatePage();
 					}
 				};
 				
-				new AbstractDataChangeListener(this.initConf, this) {
-					
+				new DataChangeListener(this, this.initConf) {
 					@Override
-					protected void dispose() { /* Do nothing */ }
-					
-					@Override
-					public void onDataChange(Event arg0) {
+					public void run(DataChangeEvent event) {
 						updatePage();
 					}
 				};
