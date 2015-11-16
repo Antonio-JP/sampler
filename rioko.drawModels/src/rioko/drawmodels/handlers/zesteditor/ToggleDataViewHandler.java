@@ -2,28 +2,16 @@ package rioko.drawmodels.handlers.zesteditor;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
 
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
-import rioko.drawmodels.handlers.AbstractGenericHandler;
+import rioko.drawmodels.handlers.EditorDependentHandler;
 
-public class ToggleDataViewHandler extends AbstractGenericHandler {
+public class ToggleDataViewHandler extends EditorDependentHandler {
 
 	@Override
-	public Object execute(ExecutionEvent arg0) throws ExecutionException {
-		try{
-			IWorkbenchPage page = this.getEditorPage();
-		
-			IEditorPart editor = page.getActiveEditor();
-			
-			if(editor instanceof ZestEditor) {
-				((ZestEditor)editor).toggleShowingData();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+	public Object run(ExecutionEvent arg0) throws ExecutionException {
+		((ZestEditor)editor).toggleShowingData();
+				
 		return null;
 	}
 

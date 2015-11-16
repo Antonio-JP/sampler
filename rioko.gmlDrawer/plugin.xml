@@ -10,6 +10,7 @@
             id="rioko.gmlDrawer.gmlDiagram"
             name="GraphML Model Diagram"
             node="rioko.gmldrawer.gmlDiagram.GMLDiagramNode"
+            parser="rioko.gmldrawer.gmlDiagram.GMLIdParser"
             proxy="rioko.gmldrawer.gmlDiagram.GMLProxyDiagramNode"
             reader="rioko.gmldrawer.gmlReader.GMLReader">
          <fileExtension

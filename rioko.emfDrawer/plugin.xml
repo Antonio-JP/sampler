@@ -10,6 +10,7 @@
             id="rioko.emfDrawer.emfDiagram"
             name="XMI Model Diagram"
             node="rioko.emfdrawer.xmiDiagram.XMIDiagramNode"
+            parser="rioko.emfdrawer.xmiDiagram.XMIIdParser"
             proxy="rioko.emfdrawer.xmiDiagram.XMIProxyDiagramNode"
             reader="rioko.emfdrawer.xmiReader.XMIReader">
          <fileExtension

@@ -129,6 +129,18 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="parser" type="string" use="required">
+            <annotation>
+               <documentation>
+                  This is a class implementing the &lt;samp&gt;IdParser&lt;/samp&gt; interface that gives two methods to parser nodes to a new Object injectively. 
+
+This parser could be obtained from a ModelDiagram using the method getIdParser.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":rioko.drawmodels.diagram.IdParser"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

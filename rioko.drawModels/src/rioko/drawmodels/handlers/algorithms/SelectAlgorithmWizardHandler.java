@@ -2,42 +2,31 @@ package rioko.drawmodels.handlers.algorithms;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-//import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
 
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
-import rioko.drawmodels.handlers.AbstractGenericHandler;
+import rioko.drawmodels.handlers.EditorDependentHandler;
 import rioko.drawmodels.wizards.SelectSpecialAlgorithmWizard;
 
-public class SelectAlgorithmWizardHandler extends AbstractGenericHandler {
+public class SelectAlgorithmWizardHandler extends EditorDependentHandler {
 
 	@Override
-	public Object execute(ExecutionEvent arg0) throws ExecutionException {
-		try{
-			IWorkbenchPage page = this.getEditorPage();
+	public Object run(ExecutionEvent arg0) throws ExecutionException {
+		// TODO Implement this method
+		MessageDialog.openInformation(null, "¡Error!", "Action not yet implemented");
 		
-			IEditorPart editor = page.getActiveEditor();
-			
-			if(editor instanceof ZestEditor) {
-//				MessageDialog.openInformation(null, 
-//						"¡Error!", "Action not yet implemented");
-				SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard((ZestEditor) editor);
+		SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard((ZestEditor) editor);
 				
-				wizard.init(editor.getSite().getWorkbenchWindow().getWorkbench(), null);
+		wizard.init(this.editor.getSite().getWorkbenchWindow().getWorkbench(), null);
 				    
-				// Instantiates the wizard container with the wizard and opens it
-				WizardDialog dialog = new WizardDialog(editor.getSite().getWorkbenchWindow().getShell(), wizard);
+		// Instantiates the wizard container with the wizard and opens it
+		WizardDialog dialog = new WizardDialog(this.editor.getSite().getWorkbenchWindow().getShell(), wizard);
+			
+		dialog.create();
+		dialog.open();
 				
-				dialog.create();
-				dialog.open();
-				
-				dialog.getReturnCode();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		dialog.getReturnCode();
 		
 		return null;
 	}

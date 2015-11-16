@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SavingViews
-Bundle-SymbolicName: rioko.savingViews
+Bundle-SymbolicName: rioko.savingViews;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: rioko.savingviews.Activator
 Bundle-Vendor: Rioukay

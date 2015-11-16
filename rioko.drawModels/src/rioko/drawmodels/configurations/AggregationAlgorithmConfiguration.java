@@ -35,9 +35,9 @@ public class AggregationAlgorithmConfiguration implements ComboConfiguration {
 	@Override
 	public void setValueConfiguration(Object value) throws BadArgumentException, BadConfigurationException {
 		if(value instanceof NestedBuilderAlgorithm) {
-			if(this.contains((NestedBuilderAlgorithm) value)) {
+//			if(this.contains((NestedBuilderAlgorithm) value)) {
 				this.currentAlgorithm = (NestedBuilderAlgorithm) value;
-			}
+//			}
 		} else if(value instanceof String) {
 			NestedBuilderAlgorithm alg = this.getAlgorithm((String)value);
 			

@@ -77,6 +77,10 @@ public class GMLDiagramNode extends DiagramNode {
 	protected AbstractAttribute[] getNonDrawableData() {
 		return new AbstractAttribute[0];
 	}
+	
+	protected Element getRawData() {
+		return this.data;
+	}
 
 	//Other methods
 	@Override

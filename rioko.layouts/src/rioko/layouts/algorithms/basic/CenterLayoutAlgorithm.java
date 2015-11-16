@@ -12,11 +12,12 @@ public abstract class CenterLayoutAlgorithm extends AbstractLayoutAlgorithm {
 		
 		double sumX = 0, sumY = 0;
 		for(LayoutVertex vertex : this.graph.vertexSet()) {
-			sumX += vertex.getPosition().getX();
-			sumY += vertex.getPosition().getY();
+			Point relative = this.getLayoutArea().getRelative(vertex.getPosition());
+			sumX += relative.getX();
+			sumY += relative.getY();
 		}
 		
-		Point vectorMove = (new Point(-sumX, -sumY)).scale(1.0/this.graph.vertexSet().size());
+		Point vectorMove = new Point(-sumX/this.graph.vertexSet().size(), -sumY/this.graph.vertexSet().size());
 		
 		for(LayoutVertex vertex : this.graph.vertexSet()) {
 			this.addDVector(vertex, vectorMove);

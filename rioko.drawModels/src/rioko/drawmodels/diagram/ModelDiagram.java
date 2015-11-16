@@ -14,6 +14,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import rioko.drawmodels.filemanage.Reader;
+import rioko.eclipse.registry.RegistryManagement;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
@@ -38,6 +39,8 @@ public abstract class ModelDiagram<T> implements IEditorInput{
 	private DiagramGraph printable;
 	
 	private Reader<T> reader = null;
+	
+	private IdParser parser = null;
 	
 	//Static generic builder for a ModelDiagram
 	/**
@@ -128,6 +131,22 @@ public abstract class ModelDiagram<T> implements IEditorInput{
 		this.reader = reader;
 	}
 	
+	public IdParser getIdParser() {
+		if(this.parser == null) {
+			//Get the extension diagram where this ModelDiagram has been taken.
+			IConfigurationElement[] elements = RegistryManagement.getElementsFor(ID_DIAGRAM_EXTENSION);
+			for(IConfigurationElement conf : elements) {
+				if(this.getClass().isInstance(RegistryManagement.getInstance(conf,"diagram"))) {
+					//Once found, instantiate a new IdParser for that diagram
+					this.parser = (IdParser) RegistryManagement.getInstance(conf, "parser");
+					break;
+				}
+			}
+		}
+		
+		return this.parser;
+	}
+
 	//Diagram Gestion methods
 	private int nextId = 1;
 	public boolean addVertex(DiagramNode node) {

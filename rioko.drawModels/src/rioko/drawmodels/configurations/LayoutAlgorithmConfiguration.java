@@ -36,9 +36,9 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	@Override
 	public void setValueConfiguration(Object value) throws BadArgumentException, BadConfigurationException {
 		if(value instanceof LayoutAlgorithm) {
-			if(this.contains((LayoutAlgorithm) value)) {
+//			if(this.contains((LayoutAlgorithm) value)) {
 				this.currentAlgorithm = (LayoutAlgorithm) value;
-			}
+//			}
 		} else if(value instanceof String) {
 			LayoutAlgorithm alg = this.getAlgorithm((String)value);
 			
@@ -88,9 +88,9 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	}
 	
 	//Private methods
-	private boolean contains(LayoutAlgorithm value) {
-		return this.getAlgorithm(value.getName()) != null;
-	}
+//	private boolean contains(LayoutAlgorithm value) {
+//		return this.getAlgorithm(value.getName()) != null;
+//	}
 
 	private int indexOf(LayoutAlgorithm value) {
 		return this.algorithms.indexOf(this.getAlgorithm(value.getName()));

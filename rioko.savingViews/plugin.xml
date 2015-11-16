@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.ui.commands">
+   		<!-- Our commands will be in the category rioko.prueba.drawModels.commands.category (see rioko.drawmodels/plugin.xml file) -->
+		<command
+			name="Save Model Display"
+			description="Allows to save the current visualization and abstraction in a text file so it could be loadable later."
+			id="rioko.savingViews.commands.displays.save"/>
+		<command
+			name="Load Model Display"
+			description="Load a visualization and abstraction from a text file and apply it to current model."
+			id="rioko.savingViews.commands.displays.load"/>
+	</extension>
+	
+	<!-- Menu contributions -->
+	<extension point="org.eclipse.ui.menus">
+		<!-- Contributions to Menu tool bars -->
+		<menuContribution 
+			locationURI="menu:rioko.prueba.drawModels.menus.AlgorithmMenu?after=additions">
+			
+			<separator name="SavingViews.separator" visible="true" />
+			
+			<command
+				commandId="rioko.savingViews.commands.displays.save"
+				id="rioko.savingViews.menus.displays.save"
+				icon="icons/saving_view_little.jpg"
+				mnemonic="S"/>
+			<command
+				commandId="rioko.savingViews.commands.displays.load"
+				id="rioko.savingViews.menus.displays.load"
+				icon="icons/load_view_little.jpg"
+				mnemonic="L"/>
+			
+			<separator name="SavingViews.separator2" visible="true" />
+		</menuContribution>
+		
+		<!-- Contributions to Eclpise Toolbars -->
+		<menuContribution 
+			locationURI="toolbar:rioko.drawModels.toolbars.zestEditor?after=additions">
+			
+			<separator name="SavingViews.separator3" visible="true" />
+			
+			<command
+				commandId="rioko.savingViews.commands.displays.save"
+				id="rioko.savingViews.toolbar.displays.save"
+				icon="icons/saving_view.jpg"/>
+			<command
+				commandId="rioko.savingViews.commands.displays.load"
+				id="rioko.savingViews.toolbar.displays.load"
+				icon="icons/load_view.jpg"/>
+				
+			<separator name="SavingViews.separator4" visible="true" />
+		</menuContribution>
+		
+		<!-- Contributions to contextual menu on the file explorer -->
+		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+        	<command
+        		commandId="rioko.savingViews.commands.displays.load"
+        		id="rioko.savingViews.popup.displays.load"
+        		icon="icons/load_view.jpg"
+        		mnemonic="L">
+	        	<visibleWhen>
+					<with variable="activeMenuSelection">
+						<iterate ifEmpty="false">
+							<adapt type="org.eclipse.core.resources.IFile">
+								<test property="org.eclipse.core.resources.name" value="*.smp" />
+							</adapt>
+						</iterate>
+					</with>
+	        	</visibleWhen>
+        	</command>
+ 		</menuContribution>
+	</extension>
+	
+	<!-- Handlers for the actions -->
+	<extension point="org.eclipse.ui.handlers">
+ 		<handler
+ 			commandId="rioko.savingViews.commands.displays.save"
+ 			class="rioko.savingviews.ui.handlers.SavingHandler"/>
+ 		<handler
+ 			commandId="rioko.savingViews.commands.displays.load"
+ 			class="rioko.savingviews.ui.handlers.LoadingHandler"/>
+ 	</extension>
+
+</plugin>

@@ -1,10 +1,9 @@
 package rioko.savingviews;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,19 +13,24 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
+import rioko.drawmodels.diagram.IdParser;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.graphabstraction.algorithms.NestedBuilderAlgorithm;
 import rioko.graphabstraction.configurations.Configurable;
+import rioko.graphabstraction.diagram.DiagramEdge;
+import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.layouts.algorithms.LayoutAlgorithm;
 import rioko.layouts.algorithms.basic.CenterLayoutAlgorithm;
 import rioko.layouts.geometry.Point;
+import rioko.layouts.geometry.Rectangle;
+import rioko.layouts.graphImpl.LayoutGraph;
 import rioko.layouts.graphImpl.LayoutVertex;
 import rioko.utilities.Log;
 
-public class ZestDisplay<K extends Serializable, T> implements Serializable{
+public class ZestDisplay implements Serializable{
 
 	/**
 	 * Long serial ID for the Serializable interface 
@@ -36,15 +40,15 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 	/* Fields for a Zest Display */
 	private String nameOfDisplay;
 	
-	private HashMap<Integer, List<K>> verticesForAbstraction;
+	private HashMap<Integer, List<Object>> verticesForAbstraction;
 	private HashMap<Integer, Point> positionsForVertices;
 	
 	private ZestProperties properties;
 	
-	private IdParser<K> parser;
+	private IdParser parser;
 	
 	/* Builders */
-	public ZestDisplay(ModelDiagram<T> model, ZestProperties properties, IdParser<K> parser) {
+	public ZestDisplay(ModelDiagram<?> model, ZestProperties properties, IdParser parser) {
 		/* Getting the name of the model */
 		this.nameOfDisplay = model.getName();
 		
@@ -58,7 +62,7 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 		int id = 0;
 		for(DiagramNode node : model.getPrintDiagram().vertexSet()) {
 			/* Creating the abstraction List */
-			List<K> auxList = new ArrayList<>();
+			List<Object> auxList = new ArrayList<>();
 			for(DiagramNode inNode : node.getFullListOfNodes()) {
 				auxList.add(this.parser.getKey(inNode));
 			}
@@ -75,7 +79,7 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 		this.properties = properties;	
 	}
 	
-	public ZestDisplay(IFile file, IdParser<K> parser) throws FileFormatException {
+	public ZestDisplay(IFile file, IdParser parser) throws FileFormatException {
 		/* Setting the parser */
 		this.parser = parser;
 		
@@ -92,8 +96,8 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 		return new SavedAbstractionAlgorithm(this);
 	}
 	
-	public LayoutAlgorithm getLayout() {
-		return new SavedLayoutAlgorithm(this);
+	public LayoutAlgorithm getLayout(LayoutAlgorithm auxLayout) {
+		return new SavedLayoutAlgorithm(this, auxLayout);
 	}
 	
 	public ZestProperties getProperties() {
@@ -102,10 +106,12 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 	
 	public boolean saveDisplay(IFile file) {
 		try {
-			PipedInputStream in = new PipedInputStream();
-			PipedOutputStream out = new PipedOutputStream(in);
-		
-			PrintStream ps = new PrintStream(out);
+			File rawFile = new File(file.getLocation().makeAbsolute().toOSString());
+			if(!rawFile.exists()) {
+				rawFile.createNewFile();
+			}
+			
+			PrintStream ps = new PrintStream(rawFile);
 			
 			/* Printing the name of the model */
 			ps.println(this.nameOfDisplay);
@@ -113,35 +119,29 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 			/* Printing the abstraction */
 			ps.println("abstraction {");
 			for(Integer id : this.verticesForAbstraction.keySet()) {
-				ps.println(""+id+":"+printList(this.verticesForAbstraction.get(id)));
+				ps.println("\t"+id+":"+printList(this.verticesForAbstraction.get(id)));
 			}
 			
-			ps.println("}");
+			ps.println("}");ps.flush();
 			
 			/* Printing the position of the vertices */
 			ps.println("position {");
+			for(Integer id : this.positionsForVertices.keySet()) {
+				ps.println("\t"+id+": (" + this.positionsForVertices.get(id).getX() + ", " + this.positionsForVertices.get(id).getY() + ")");
+			}
 			
-			
-			ps.println("}");
+			ps.println("}");ps.flush();
 			
 			/* Printing the configuration */
 			ps.println("configuration {");
 			ps.println(this.properties.serialize());
-			ps.println("}");
+			ps.println("}");ps.flush();
 			
 			/* Closing the streams */
-			ps.flush();
-			ps.close();
-			out.close();
-			
-			/* Writing the file */
-			file.setContents(in, true, true, null);
-			
+			ps.close();			
 		} catch(IOException e) {
 			Log.exception(e);
-			return false;
-		} catch (CoreException e) {
-			Log.exception(e);
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -174,8 +174,8 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 		
 			while(line != null) {
 				if(line.startsWith("abstraction")) {
-					do {
-						line = bf.readLine();
+					line = bf.readLine();
+					while(!line.endsWith("}")) {
 						aux = cleanString(line);
 						String[] tokens = aux.split(":");
 						if(tokens.length != 2) {
@@ -183,18 +183,20 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 						}
 						String[] nodes = tokens[1].split(",");
 						
-						ArrayList<K> list = new ArrayList<>();
+						ArrayList<Object> list = new ArrayList<>();
 						for(int i = 0; i < nodes.length; i++) {
 							list.add(this.parser.getFromString(nodes[i]));
 						}
 						
 						this.verticesForAbstraction.put(Integer.parseInt(tokens[0]), list);
-					} while(!line.endsWith("}"));
+						
+						line = bf.readLine();
+					}
 					
 					break;
 				} else if(line.startsWith("position")) {
-					do {
-						line = bf.readLine();
+					line = bf.readLine();
+					while(!line.endsWith("}")) {
 						aux = cleanString(line);
 						String[] tokens = aux.split(":");
 						if(tokens.length != 2) {
@@ -209,7 +211,8 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 								Integer.parseInt(tokens[0]), 
 								new Point(Double.parseDouble(coords[0]), Double.parseDouble(coords[1])));
 						
-					} while(!line.endsWith("}"));
+						line = bf.readLine();
+					}
 					
 					break;
 				} else if(line.startsWith("configuration")) {
@@ -219,15 +222,17 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 					
 					break;
 				}
+				
+				line = bf.readLine();
 			}
 			
-			return line == null;
+			return line != null;
 		} catch (IOException | NullPointerException e) {
 			return false;
 		}
 	}
 	
-	private String printList(List<K> list) {
+	private String printList(List<Object> list) {
 		String res = "(";
 		for(int i = 0; i < list.size()-1; i++) {
 			res += list.get(i).toString() + ",";
@@ -246,8 +251,8 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 		return str.replaceAll(" ", "")
 				.replaceAll("\t", "")
 				.replaceAll("\\{", "")
-				.replaceAll("(", "")
-				.replaceAll(")", "")
+				.replaceAll("\\(", "")
+				.replaceAll("\\)", "")
 				.replaceAll(";", "")
 				.replaceAll("\\}", "");
 	}
@@ -255,9 +260,9 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 	/* Private classes */
 	private class SavedAbstractionAlgorithm extends NestedBuilderAlgorithm {
 		
-		private ZestDisplay<K, T> display;
+		private ZestDisplay display;
 		
-		public SavedAbstractionAlgorithm(ZestDisplay<K, T> zestDisplay) {
+		public SavedAbstractionAlgorithm(ZestDisplay zestDisplay) {
 			super("Saved Algorithm");
 			
 			this.display = zestDisplay;
@@ -273,32 +278,85 @@ public class ZestDisplay<K extends Serializable, T> implements Serializable{
 			}
 			
 			for(DiagramNode node : data.vertexSet()) {
-				mapToNodes.get(display.parser.getKey(node)).add(node);
+				mapToNodes.get(this.getKeyFor(display.parser.getKey(node))).add(node);
 			}
 			
-			for(Integer id : mapToNodes.keySet()) {
+			for(Object id : mapToNodes.keySet()) {
 				if(mapToNodes.get(id).size() > 1) {
-					data.addVertex(data.getComposeVertexFactory().createVertex(mapToNodes.get(id)));
+					res.addVertex(res.getComposeVertexFactory().createVertex(mapToNodes.get(id)));
 				} else {
-					data.addVertex(mapToNodes.get(id).get(0));
+					res.addVertex(mapToNodes.get(id).get(0));
 				}
 			}
 			
 			return res;
 		}
+		
+		@Override
+		public void buildEdges(DiagramGraph target, DiagramGraph data) {
+			// For each new node
+			for(DiagramNode tgNode : target.vertexSet()) {
+				//For each inner node (that is contained in data graph)
+				for(DiagramNode dtNode : tgNode.getFullListOfNodes()) {
+					// We iterate in every outing edge
+					for(DiagramEdge<DiagramNode> edge : data.edgesFrom(dtNode)) {
+						// And search in which vertex of target graph is contained the target
+						for(DiagramNode destTgNode : target.vertexSet()) {
+							if(destTgNode.areRelated(edge.getTarget())) {
+								if(destTgNode != tgNode) {
+									DiagramEdge<DiagramNode> prevEdge = target.getEdge(tgNode, destTgNode);
+									if(prevEdge == null) {	//If the edge does not exist previously, we add it
+										DiagramEdge<DiagramNode> edgeTg = target.addEdge(tgNode, destTgNode);
+										edgeTg.setType(edge.getType());
+									} else if(!prevEdge.getType().equals(edge.getType())) {	//If not, but the type of the edge is different, we put simple type
+										prevEdge.setType(typeOfConnection.SIMPLE);
+									}
+								}
+								
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private Integer getKeyFor(Object key) {
+			for(Integer id : this.display.verticesForAbstraction.keySet()) {
+				for(Object obj : this.display.verticesForAbstraction.get(id)) {
+					if(obj.toString().equals(key.toString())) {
+						return id;
+					}
+				}
+			}
+			
+			return null;
+		}
 	}
 	
 	private class SavedLayoutAlgorithm extends CenterLayoutAlgorithm {
 		
-		private ZestDisplay<K, T> display;
+		private ZestDisplay display;
+		private LayoutAlgorithm auxAlgorithm;
 		
-		public SavedLayoutAlgorithm(ZestDisplay<K,T> zestDisplay) {
+		public SavedLayoutAlgorithm(ZestDisplay zestDisplay, LayoutAlgorithm auxAlgorithm) {
 			this.display = zestDisplay;
+			this.auxAlgorithm = auxAlgorithm;
 		}
 
 		@Override
 		public LayoutAlgorithm copy() {
-			return new SavedLayoutAlgorithm(this.display);
+			return new SavedLayoutAlgorithm(this.display, this.auxAlgorithm);
+		}
+		
+		@Override
+		public void applyLayout(LayoutGraph graphToLayout, Rectangle layoutArea) {
+			try {
+				super.applyLayout(graphToLayout, layoutArea);
+			} catch(Exception e) {
+				Log.print("Applying the auxiliary algorithm");
+				this.auxAlgorithm.applyLayout(this.graph, this.getLayoutArea());
+			}
 		}
 
 		@Override

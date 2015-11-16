@@ -26,5 +26,6 @@ Export-Package: rioko.drawmodels,
  rioko.drawmodels.diagram,
  rioko.drawmodels.display.local,
  rioko.drawmodels.editors.zesteditor.zestproperties,
- rioko.drawmodels.filemanage
+ rioko.drawmodels.filemanage,
+ rioko.drawmodels.handlers
 Bundle-Vendor: Miso - Rioukay
