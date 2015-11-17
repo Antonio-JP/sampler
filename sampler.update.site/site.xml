@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/sampler.emf_1.0.0.201507311223.jar" id="sampler.emf" version="1.0.0.201507311223">
+   <feature url="features/sampler.emf_1.0.0.201511171033.jar" id="sampler.emf" version="1.0.0.201511171033">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.tools_1.0.0.201507311223.jar" id="sampler.tools" version="1.0.0.201507311223">
+   <feature url="features/sampler.tools_1.0.0.201511171033.jar" id="sampler.tools" version="1.0.0.201511171033">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/rioko.feature.utils_1.0.0.201507311223.jar" id="rioko.feature.utils" version="1.0.0.201507311223">
+   <feature url="features/rioko.feature.utils_1.0.0.201511171033.jar" id="rioko.feature.utils" version="1.0.0.201511171033">
       <category name="rioko.category"/>
    </feature>
-   <feature url="features/sampler.tools.spectral_1.0.0.201507311223.jar" id="sampler.tools.spectral" version="1.0.0.201507311223">
+   <feature url="features/sampler.tools.spectral_1.0.0.201511171033.jar" id="sampler.tools.spectral" version="1.0.0.201511171033">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.complete_1.0.0.201507311223.jar" id="sampler.complete" version="1.0.0.201507311223">
+   <feature url="features/sampler.complete_1.0.0.201511171033.jar" id="sampler.complete" version="1.0.0.201511171033">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.layouts.wrapper_1.0.0.201507311223.jar" id="sampler.layouts.wrapper" version="1.0.0.201507311223">
+   <feature url="features/sampler.layouts.wrapper_1.0.0.201511171033.jar" id="sampler.layouts.wrapper" version="1.0.0.201511171033">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.graphML_1.0.0.201507311223.jar" id="sampler.graphML" version="1.0.0.201507311223">
+   <feature url="features/sampler.graphML_1.0.0.201511171033.jar" id="sampler.graphML" version="1.0.0.201511171033">
       <category name="sampler.category"/>
    </feature>
    <category-def name="sampler.category" label="SAMPLER">
