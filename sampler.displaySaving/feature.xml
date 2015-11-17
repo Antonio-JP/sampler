@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="sampler.displaySaving"
-      label="DisplaySaving"
+      label="SAMPLER Display Saving"
       version="1.0.0.qualifier"
       provider-name="Rioukay - Miso">
 
    <license url="">
       Use this software freely but, whenever use it, make a reference to its creator and distributor.
    </license>
+
+   <url>
+      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
+   </url>
 
    <requires>
       <import feature="sampler.tools" version="1.0.0.qualifier"/>
