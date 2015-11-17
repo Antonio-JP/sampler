@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="sampler.displaySaving"
+      label="DisplaySaving"
+      version="1.0.0.qualifier"
+      provider-name="Rioukay - Miso">
+
+   <license url="">
+      Use this software freely but, whenever use it, make a reference to its creator and distributor.
+   </license>
+
+   <requires>
+      <import feature="sampler.tools" version="1.0.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="rioko.savingViews"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
