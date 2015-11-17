@@ -150,7 +150,9 @@ public class ZestDisplay implements Serializable{
 			for(int i = 0; i < this.markedVertices.size() - 1; i++) {
 				ps.print(this.markedVertices.get(i)+",");
 			}
-			ps.print(this.markedVertices.get(this.markedVertices.size() - 1)+"\n");
+			if(this.markedVertices.size() > 0) {
+				ps.print(this.markedVertices.get(this.markedVertices.size() - 1)+"\n");
+			}
 			
 			ps.println("}");
 			
