@@ -72,7 +72,7 @@ public class OpenFile extends AbstractGenericHandler {
 						throw new PartInitException("Bad editor created");
 					}
 					
-					newEditor.setFocus();
+					((ZestEditor) newEditor).setFile(file);
 					
 					((ZestEditor)newEditor).changeZestProperties(properties);
 					((ZestEditor)newEditor).updateView();

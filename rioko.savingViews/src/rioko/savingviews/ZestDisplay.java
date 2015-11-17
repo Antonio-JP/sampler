@@ -42,6 +42,7 @@ public class ZestDisplay implements Serializable{
 	
 	private HashMap<Integer, List<Object>> verticesForAbstraction;
 	private HashMap<Integer, Point> positionsForVertices;
+	private ArrayList<Integer> markedVertices;
 	
 	private ZestProperties properties;
 	
@@ -58,6 +59,7 @@ public class ZestDisplay implements Serializable{
 		/* Getting the abstraction and position of the model */
 		this.verticesForAbstraction = new HashMap<>();
 		this.positionsForVertices = new HashMap<>();
+		this.markedVertices = new ArrayList<>();
 		
 		int id = 0;
 		for(DiagramNode node : model.getPrintDiagram().vertexSet()) {
@@ -72,6 +74,9 @@ public class ZestDisplay implements Serializable{
 			
 			this.verticesForAbstraction.put(id, auxList);
 			this.positionsForVertices.put(id, auxPosition);
+			if(node.isRoot()) {
+				this.markedVertices.add(id);
+			}
 			id++;
 		}
 		
@@ -86,6 +91,7 @@ public class ZestDisplay implements Serializable{
 		/* Basic initialization */
 		this.verticesForAbstraction = new HashMap<>();
 		this.positionsForVertices = new HashMap<>();
+		this.markedVertices = new ArrayList<>();
 		
 		/* Getting the information of Display from the file */
 		this.getDataFromFile(file);
@@ -137,6 +143,17 @@ public class ZestDisplay implements Serializable{
 			ps.println(this.properties.serialize());
 			ps.println("}");ps.flush();
 			
+			/* Printing the marking of vertices */
+			ps.println("roots {");
+			ps.print("\t");
+			
+			for(int i = 0; i < this.markedVertices.size() - 1; i++) {
+				ps.print(this.markedVertices.get(i)+",");
+			}
+			ps.print(this.markedVertices.get(this.markedVertices.size() - 1)+"\n");
+			
+			ps.println("}");
+			
 			/* Closing the streams */
 			ps.close();			
 		} catch(IOException e) {
@@ -185,7 +202,9 @@ public class ZestDisplay implements Serializable{
 						
 						ArrayList<Object> list = new ArrayList<>();
 						for(int i = 0; i < nodes.length; i++) {
-							list.add(this.parser.getFromString(nodes[i]));
+							if(!nodes[i].isEmpty()) {
+								list.add(this.parser.getFromString(nodes[i]));
+							}
 						}
 						
 						this.verticesForAbstraction.put(Integer.parseInt(tokens[0]), list);
@@ -219,6 +238,22 @@ public class ZestDisplay implements Serializable{
 					this.properties = new ZestProperties(bf);
 					
 					line = bf.readLine();
+					
+					break;
+				} else if(line.startsWith("roots")) {
+					line = bf.readLine();
+					while(!line.endsWith("}")) {
+						aux = cleanString(line);
+						String[] tokens = aux.split(",");
+						
+						for(String token : tokens) {
+							if(!token.isEmpty()) {
+								this.markedVertices.add(Integer.parseInt(token));
+							}
+						}
+						
+						line = bf.readLine();
+					}
 					
 					break;
 				}
@@ -281,12 +316,21 @@ public class ZestDisplay implements Serializable{
 				mapToNodes.get(this.getKeyFor(display.parser.getKey(node))).add(node);
 			}
 			
-			for(Object id : mapToNodes.keySet()) {
+			for(Integer id : mapToNodes.keySet()) {
+				DiagramNode toAdd;
 				if(mapToNodes.get(id).size() > 1) {
-					res.addVertex(res.getComposeVertexFactory().createVertex(mapToNodes.get(id)));
+					toAdd = res.getComposeVertexFactory().createVertex(mapToNodes.get(id));
 				} else {
-					res.addVertex(mapToNodes.get(id).get(0));
+					toAdd = mapToNodes.get(id).get(0);
 				}
+				
+				if(this.display.markedVertices.contains(id)) {
+					toAdd.setBeRoot(true);
+				} else {
+					toAdd.setBeRoot(false);
+				}
+				
+				res.addVertex(toAdd);
 			}
 			
 			return res;

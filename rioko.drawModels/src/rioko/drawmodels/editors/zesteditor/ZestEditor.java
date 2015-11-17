@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -66,6 +67,8 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	
 	private ExtendedGraphViewer viewer;
 	private ZestLayoutAlgorithm viewerLayout = new ZestLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+	
+	private IFile file = null;
 	
 	private Reader<?> reader = null;
 	
@@ -118,6 +121,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 			//Cargamos el fichero y el metamodelo
 			if(input instanceof FileEditorInput) {
 				try {
+					this.file = ((FileEditorInput) input).getFile();
 					this.reader = GeneralReader.getReaderFromFile(this.getFile());
 					this.model = this.reader.getModel();
 				} catch (IOException e) {
@@ -221,11 +225,13 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 
 	
 	// Proper methods
+	public void setFile(IFile file) {
+		this.file = file;
+	}
 	
 	public IFile getFile()
 	{
-		// It is not necessary control the casting because we check it when creating the Editor 
-		return ((FileEditorInput)this.getEditorInput()).getFile();
+		return this.file;
 	}
 	
 	public void setShowingData(boolean showingData)
@@ -390,9 +396,17 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		try {
 			ModelDiagram<?> newModel = ModelDiagram.getModelDiagramForGraph((DiagramGraph)this.model.getModelDiagram().inducedSubgraph(collection));
 			newModel.setName(this.model.getName() + "/" + collection.iterator().next().getTitle());
-	        IDE.openEditor(page, 
+	        IEditorPart editor = IDE.openEditor(page, 
 	        		newModel, 
 	        		this.getSite().getId());
+	        
+	        if(!(editor instanceof ZestEditor)) {
+	        	//Impossible exception
+	        	throw new PartInitException("Bad editor created");
+	        }
+	        
+	        ((ZestEditor) editor).setFile(this.file);
+	        
 	    } catch ( PartInitException e ) {
 	        Log.exception(e);
 	    }
@@ -412,7 +426,14 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 				throw new Exception("The proxy is not contained in the model");
 			}
 			
-	        IDE.openEditor(page, newModel, this.getSite().getId());
+	        IEditorPart editor = IDE.openEditor(page, newModel, this.getSite().getId());
+	        
+	        if(!(editor instanceof ZestEditor)) {
+	        	//Impossible exception
+	        	throw new PartInitException("Bad editor created");
+	        }
+	        
+	        ((ZestEditor) editor).setFile(this.file);
 	    } catch ( Exception e ) {
 	        Log.exception(e);
 	    } 
