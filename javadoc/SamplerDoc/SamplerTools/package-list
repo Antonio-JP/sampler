@@ -36,6 +36,7 @@ rioko.graphabstraction
 rioko.graphabstraction.algorithms
 rioko.graphabstraction.algorithms.test
 rioko.graphabstraction.configurations
+rioko.graphabstraction.configurations.events
 rioko.graphabstraction.diagram
 rioko.graphabstraction.diagram.filters
 rioko.graphabstraction.diagram.iterators
@@ -49,6 +50,7 @@ rioko.graphabstraction.runtime.registers
 rioko.graphabstraction.runtime.registers.algorithm
 rioko.layouts
 rioko.layouts.algorithms
+rioko.layouts.algorithms.basic
 rioko.layouts.algorithms.examples
 rioko.layouts.bridge
 rioko.layouts.geometry

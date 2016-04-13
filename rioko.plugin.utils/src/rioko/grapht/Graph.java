@@ -229,7 +229,7 @@ public interface Graph<V extends Vertex,E extends Edge<V>> {
 	 * @return True if the edge is in the graph and false otherwise.
 	 */
 	public default boolean containsEdge(E edge) {
-		return this.containsEdge(this.getEdgeSource(edge), this.getEdgeTarget(edge));
+		return this.containsEdge(edge.getSource(), edge.getTarget());
 	}
 	/**
 	 * Method to check if an edge  with a source and target vertices is contained in the graph,

@@ -54,6 +54,11 @@ public final class Log {
 	private static boolean isClose = true;
 	
 	/**
+	 * Flag to know if the Log has been activated
+	 */
+	public static boolean isReady = false;
+	
+	/**
 	 * Private method to get the XML Log File.
 	 * 
 	 * @return Stream with the XML Log.
@@ -138,6 +143,8 @@ public final class Log {
 		String basePath = folder.getAbsolutePath();
 		
 		open(basePath+"\\xmlLog.log", basePath+"\\exceptionLog.log");
+		
+		Log.isReady = true;
 	}
 	
 	/**
@@ -160,9 +167,11 @@ public final class Log {
 	 * Method to close the Log system.
 	 */
 	public static void close() {	
-		Log.xClose("exe");
-		Log.purePrint(getExceptionFile(), "</exe>");
-		Log.isClose = true;
+		if(Log.isReady) {
+			Log.xClose("exe");
+			Log.purePrint(getExceptionFile(), "</exe>");
+			Log.isClose = true;
+		}
 	}
 
 	/**
@@ -170,8 +179,10 @@ public final class Log {
 	 * @param string Message to print.
 	 */
 	public static void sPrint(String string) {
-		Log.print(System.out, string, sLogNum);
-		sLogNum++;
+		if(Log.isReady) {
+			Log.print(System.out, string, sLogNum);
+			sLogNum++;
+		}
 	}
 	
 	/**
@@ -179,8 +190,10 @@ public final class Log {
 	 * @param string Message to print
 	 */
 	public static void xPrint(String string) {
-		Log.print(getXMLFile(), string, xLogNum);
-		xLogNum++;
+		if(Log.isReady) {
+			Log.print(getXMLFile(), string, xLogNum);
+			xLogNum++;
+		}
 	}
 	
 	//XML File management
@@ -190,7 +203,9 @@ public final class Log {
 	 * @param label Name of the node to be opened.
 	 */
 	public static void xOpen(String label) {
-		Log.purePrint(getXMLFile(), "<" + label + ">");
+		if(Log.isReady) {
+			Log.purePrint(getXMLFile(), "<" + label + ">");
+		}
 	}
 	
 	/**
@@ -199,7 +214,9 @@ public final class Log {
 	 * @param label Name of the node to be closed.
 	 */
 	public static void xClose(String label) {
-		Log.purePrint(getXMLFile(), "</" + label + ">");
+		if(Log.isReady) {
+			Log.purePrint(getXMLFile(), "</" + label + ">");
+		}
 	}
 
 	/**
@@ -208,14 +225,16 @@ public final class Log {
 	 * @param e Exception to be printed.
 	 */
 	public static void exception(Exception e) {
-		Log.print(getExceptionFile(), "Exception " + e.getClass().getSimpleName() + " thrown", eLogNum);
-		eLogNum++;
-		
-		Log.purePrint(getExceptionFile(), "<exception>");
-		e.printStackTrace(getExceptionFile());
-		Log.purePrint(getExceptionFile(), "</exception>");
-		
-		Log.sPrint("Exception " + e.getClass().getSimpleName() + " thrown");
+		if(Log.isReady) {
+			Log.print(getExceptionFile(), "Exception " + e.getClass().getSimpleName() + " thrown", eLogNum);
+			eLogNum++;
+			
+			Log.purePrint(getExceptionFile(), "<exception>");
+			e.printStackTrace(getExceptionFile());
+			Log.purePrint(getExceptionFile(), "</exception>");
+			
+			Log.sPrint("Exception " + e.getClass().getSimpleName() + " thrown");
+		}
 	}
 
 	//Printing methods
@@ -238,8 +257,10 @@ public final class Log {
 	 * @param logNum Number of messages that have been printed in this Stream before this one.
 	 */
 	private static void print(PrintStream out, String string, int logNum) {
-		Log.purePrint(out, initial + "(" + logNum + " - " + dateFormat.format(Calendar.getInstance().getTime()) +  "): " + string);
-		out.flush();
+		if(Log.isReady) {
+			Log.purePrint(out, initial + "(" + logNum + " - " + dateFormat.format(Calendar.getInstance().getTime()) +  "): " + string);
+			out.flush();
+		}
 	}
 	
 	/**
@@ -249,7 +270,7 @@ public final class Log {
 	 * @param string Message to print in the Stream.
 	 */
 	private static void purePrint(PrintStream out, String string) {
-		if(!Log.isClose) {
+		if(!Log.isClose && Log.isReady) {
 			out.println(string);
 		}
 	}
