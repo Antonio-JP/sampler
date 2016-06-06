@@ -95,8 +95,13 @@ public class XMIReader implements Reader<EObject> {
 					Resource aux = this.resSet.createResource(URI.createURI(res.getFullPath().makeAbsolute().toString()));
 					aux.load(this.getDefaultLoadConfiguration());
 					
-					EPackage pack = (EPackage) aux.getContents().get(0);
-					EPackage.Registry.INSTANCE.put(pack.getNsURI().toString(), aux.getContents().get(0));
+					EList<EObject> contents = aux.getContents();
+					for(EObject eObj : contents) {
+						if(eObj instanceof EPackage) {
+							EPackage pack = (EPackage) eObj;
+							EPackage.Registry.INSTANCE.put(pack.getNsURI().toString(), pack);
+						}
+					}
 				}
 			}
 			
