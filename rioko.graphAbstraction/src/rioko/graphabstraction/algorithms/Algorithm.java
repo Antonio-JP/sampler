@@ -57,6 +57,14 @@ public abstract class Algorithm {
 		return this.algorithmName;
 	}
 	
+	public boolean equals(Object obj) {
+		if(obj.getClass().equals(this.getClass())) {
+			return this.getClass().cast(obj).getAlgorithmName().equals(this.getAlgorithmName());
+		}
+		
+		return false;
+	}
+	
 	//Other methods
 	public static boolean existsName(String name) {
 		return ListOfNames.contains(name);

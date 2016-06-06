@@ -271,6 +271,8 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		} catch (Exception e) {
 			Log.exception(e);
 		}
+		
+		if(this.model != null) this.updateView();
 	}
 	
 	private void createPropertiesListener() {

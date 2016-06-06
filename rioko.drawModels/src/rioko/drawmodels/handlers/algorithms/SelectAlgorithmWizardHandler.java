@@ -2,7 +2,6 @@ package rioko.drawmodels.handlers.algorithms;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
@@ -13,9 +12,6 @@ public class SelectAlgorithmWizardHandler extends EditorDependentHandler {
 
 	@Override
 	public Object run(ExecutionEvent arg0) throws ExecutionException {
-		// TODO Implement this method
-		MessageDialog.openInformation(null, "¡Error!", "Action not yet implemented");
-		
 		SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard((ZestEditor) editor);
 				
 		wizard.init(this.editor.getSite().getWorkbenchWindow().getWorkbench(), null);
