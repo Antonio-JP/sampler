@@ -1,17 +1,19 @@
 package rioko.savingviews;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import rioko.drawmodels.diagram.IdParser;
 import rioko.drawmodels.diagram.ModelDiagram;
@@ -112,53 +114,52 @@ public class ZestDisplay implements Serializable{
 	
 	public boolean saveDisplay(IFile file) {
 		try {
-			File rawFile = new File(file.getLocation().makeAbsolute().toOSString());
-			if(!rawFile.exists()) {
-				rawFile.createNewFile();
+			IProgressMonitor monitor = new NullProgressMonitor();
+			if(file.exists()) {
+				file.delete(true, monitor);
 			}
 			
-			PrintStream ps = new PrintStream(rawFile);
+			StringBuilder builder = new StringBuilder();
 			
 			/* Printing the name of the model */
-			ps.println(this.nameOfDisplay);
+			builder.append(this.nameOfDisplay + "\n");
 			
 			/* Printing the abstraction */
-			ps.println("abstraction {");
+			builder.append("abstraction {\n");
 			for(Integer id : this.verticesForAbstraction.keySet()) {
-				ps.println("\t"+id+":"+printList(this.verticesForAbstraction.get(id)));
+				builder.append("\t"+id+":"+printList(this.verticesForAbstraction.get(id)) + "\n");
 			}
 			
-			ps.println("}");ps.flush();
+			builder.append("}\n");
 			
 			/* Printing the position of the vertices */
-			ps.println("position {");
+			builder.append("position {\n");
 			for(Integer id : this.positionsForVertices.keySet()) {
-				ps.println("\t"+id+": (" + this.positionsForVertices.get(id).getX() + ", " + this.positionsForVertices.get(id).getY() + ")");
+				builder.append("\t"+id+": (" + this.positionsForVertices.get(id).getX() + ", " + this.positionsForVertices.get(id).getY() + ")\n");
 			}
 			
-			ps.println("}");ps.flush();
+			builder.append("}\n");
 			
 			/* Printing the configuration */
-			ps.println("configuration {");
-			ps.println(this.properties.serialize());
-			ps.println("}");ps.flush();
+			builder.append("configuration {\n");
+			builder.append(this.properties.serialize() + "\n");
+			builder.append("}\n");
 			
 			/* Printing the marking of vertices */
-			ps.println("roots {");
-			ps.print("\t");
+			builder.append("roots {\n");
+			builder.append("\t");
 			
 			for(int i = 0; i < this.markedVertices.size() - 1; i++) {
-				ps.print(this.markedVertices.get(i)+",");
+				builder.append(this.markedVertices.get(i)+",");
 			}
 			if(this.markedVertices.size() > 0) {
-				ps.print(this.markedVertices.get(this.markedVertices.size() - 1)+"\n");
+				builder.append(this.markedVertices.get(this.markedVertices.size() - 1)+"\n");
 			}
 			
-			ps.println("}");
+			builder.append("}\n");
 			
-			/* Closing the streams */
-			ps.close();			
-		} catch(IOException e) {
+			file.create(new ReaderInputStream(new StringReader(builder.toString())), true, monitor);		
+		} catch(CoreException e) {
 			Log.exception(e);
 			e.printStackTrace();
 			return false;
@@ -400,6 +401,7 @@ public class ZestDisplay implements Serializable{
 			try {
 				super.applyLayout(graphToLayout, layoutArea);
 			} catch(Exception e) {
+				e.printStackTrace();
 				Log.print("Applying the auxiliary algorithm");
 				this.auxAlgorithm.applyLayout(this.graph, this.getLayoutArea());
 			}

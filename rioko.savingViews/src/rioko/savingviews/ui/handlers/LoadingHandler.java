@@ -4,6 +4,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -23,7 +24,7 @@ public class LoadingHandler  extends EditorDependentHandler{
 		// Getting the default loading path
 		IFile file = this.getFileAssociated();	
 		IContainer folder = file.getParent();
-		IFile dest = folder.getFile(folder.getFullPath().removeLastSegments(1).append(file.getName()+".smp"));
+		IFile dest = folder.getFile(new Path("./" + file.getName()+".smp"));
 		
 		//If we have a file selected, we put it as the file to load
 		if(sel instanceof IStructuredSelection) {
