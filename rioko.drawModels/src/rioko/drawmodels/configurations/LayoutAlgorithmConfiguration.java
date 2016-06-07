@@ -111,7 +111,10 @@ public class LayoutAlgorithmConfiguration implements ComboConfiguration {
 	public LayoutAlgorithmConfiguration copy() {
 		LayoutAlgorithmConfiguration res = new LayoutAlgorithmConfiguration();
 		
-		res.currentAlgorithm = res.algorithms.get(this.indexOf(this.currentAlgorithm));
+		int index = this.indexOf(this.currentAlgorithm);
+		
+		res.currentAlgorithm = res.algorithms.get((index == -1) ? 0 : index);
+			
 		return res;
 	}
 

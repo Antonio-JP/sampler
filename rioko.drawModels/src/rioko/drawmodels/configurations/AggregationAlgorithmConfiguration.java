@@ -109,7 +109,8 @@ public class AggregationAlgorithmConfiguration implements ComboConfiguration {
 	public AggregationAlgorithmConfiguration copy() {
 		AggregationAlgorithmConfiguration res = new AggregationAlgorithmConfiguration();
 		
-		res.currentAlgorithm = res.algorithms.get(this.algorithms.indexOf(currentAlgorithm));
+		int index = this.algorithms.indexOf(currentAlgorithm);
+		res.currentAlgorithm = res.algorithms.get((index == -1) ? 0 : index);
 		
 		return res;
 	}
