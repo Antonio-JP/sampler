@@ -27,7 +27,6 @@ public class OpenFile extends AbstractGenericHandler {
 
 	@Override
 	public Object execute(ExecutionEvent ee) throws ExecutionException {
-		
 		ISelection sel = HandlerUtil.getActiveMenuSelection(ee);
 		if(sel instanceof IStructuredSelection) {
 			IStructuredSelection strSel = (IStructuredSelection)sel;
@@ -37,58 +36,72 @@ public class OpenFile extends AbstractGenericHandler {
 			if(obj instanceof IFile) {
 				IFile file = (IFile)obj;
 				
-				Reader<?> reader;
 				try {
-					Log.xOpen("wizard");
-					Log.xPrint("Reading the model...");
-					reader = GeneralReader.getReaderFromFile(file);
-				
-					ModelDiagram<?> model = reader.getModel();
-					ZestEditor editor = new ZestEditor();
-					
-					Log.xPrint("Creating wizard...");
-					SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard(editor, model.getModelDiagram());
-					
-					Log.xPrint("Running wizard...");
-					wizard.init(HandlerUtil.getActiveWorkbenchWindow(ee).getWorkbench(), null);
-					    
-					// Instantiates the wizard container with the wizard and opens it
-					WizardDialog dialog = new WizardDialog(null, wizard);
-					
-					dialog.create();
-					dialog.open();
-					
-					Log.xPrint("Wizard opened. Waiting result...");
-					int ret = dialog.getReturnCode();
-					
-					Log.xPrint("Return of Wizard -> " + ret);
-					Log.xClose("wizard");
-					
-					ZestProperties properties = editor.getProperties().copy();
-					editor.dispose();
-					
-					IEditorPart newEditor = IDE.openEditor(HandlerUtil.getActiveWorkbenchWindow(ee).getActivePage(), model/*new SpecialInputZestEditor(graph, properties, file.getName())*/, "rioko.drawmodels.editors.zestEditor");
-					if(!(newEditor instanceof ZestEditor)) {
-						throw new PartInitException("Bad editor created");
-					}
-					
-					((ZestEditor) newEditor).setFile(file);
-					
-					((ZestEditor)newEditor).changeZestProperties(properties);
-					((ZestEditor)newEditor).updateView();
-				} catch (IOException e) {
-					Log.exception(e);
-					MessageDialog.openError(null, "Error loading the File", 
-							e.getMessage());
+					this.openEditorWithFile(file, ee);
 				} catch (PartInitException e) {
 					Log.exception(e);
 					MessageDialog.openError(null, "Error creating the Zest Editor", 
 							e.getMessage());
+				} catch (IOException e) {
+					Log.exception(e);
+					MessageDialog.openError(null, "Error loading the File", 
+							e.getMessage());
+				} catch (Exception e) {
+					Log.exception(e);
+					MessageDialog.openError(null, "Unexpected error loading the File", 
+							e.getMessage());
 				}
+				
 			}
 		}
 		
 		return null;
+	}
+	
+	public void openEditorWithFile(IFile file, ExecutionEvent ee) throws PartInitException, IOException, Exception {
+		this.setContext(ee);
+		this.openEditorWithFile(file);
+	}
+	
+	protected void openEditorWithFile(IFile file) throws IOException, PartInitException, Exception {
+		Reader<?> reader;
+		Log.xOpen("wizard");
+		Log.xPrint("Reading the model...");
+		reader = GeneralReader.getReaderFromFile(file);
+	
+		ModelDiagram<?> model = reader.getModel();
+		ZestEditor editor = new ZestEditor();
+		
+		Log.xPrint("Creating wizard...");
+		SelectSpecialAlgorithmWizard wizard = new SelectSpecialAlgorithmWizard(editor, model.getModelDiagram());
+		
+		Log.xPrint("Running wizard...");
+		wizard.init(this.getWindow().getWorkbench(), null);
+		    
+		// Instantiates the wizard container with the wizard and opens it
+		WizardDialog dialog = new WizardDialog(null, wizard);
+		
+		dialog.create();
+		dialog.open();
+		
+		Log.xPrint("Wizard opened. Waiting result...");
+		int ret = dialog.getReturnCode();
+		
+		Log.xPrint("Return of Wizard -> " + ret);
+		Log.xClose("wizard");
+		
+		ZestProperties properties = editor.getProperties().copy();
+		editor.dispose();
+		
+		IEditorPart newEditor = IDE.openEditor(this.getEditorPage(), model/*new SpecialInputZestEditor(graph, properties, file.getName())*/, "rioko.drawmodels.editors.zestEditor");
+		if(!(newEditor instanceof ZestEditor)) {
+			throw new PartInitException("Bad editor created");
+		}
+		
+		((ZestEditor) newEditor).setFile(file);
+		
+		((ZestEditor)newEditor).changeZestProperties(properties);
+		((ZestEditor)newEditor).updateView();
 	}
 
 }
