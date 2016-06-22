@@ -337,12 +337,12 @@ public class XMIReader implements Reader<EObject> {
 
 	@Override
 	public EObject resolve(ProxyDiagramNode<EObject> proxy) {
-		return this.resolve(proxy);
+		return this.resolve((XMIProxyDiagramNode)proxy);
 	}
 
 	@Override
 	public XMIModelDiagram getModel(ProxyDiagramNode<EObject> proxy) {
-		return this.getModel(proxy);
+		return this.getModel();
 	}
 //
 //	@Override

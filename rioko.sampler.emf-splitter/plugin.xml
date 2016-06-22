@@ -12,7 +12,7 @@
             categoryId="rioko.sampler.emf-splitter.open-with"
             description="Standard SAMPLER command for Open-With in EMF-Splitter"
             id="rioko.sampler.emf-splitter.open-with.standard"
-            name="Standard command">
+            name="Open SAMPLER">
       </command>
    </extension>
    <extension

@@ -237,14 +237,18 @@ public abstract class ModelDiagram<T> implements IEditorInput{
 	
 	private ProxyDiagramNode<T> castProxy(ProxyDiagramNode<?> proxy) throws IllegalArgumentException {
 		Class<?> modelClass = (Class<?>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		Class<?> proxyClass = (Class<?>) ((ParameterizedType) proxy.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		if(modelClass.equals(proxyClass)) {
+		Class<?> proxyClass = (Class<?>) ((ParameterizedType) proxy.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+		if(!modelClass.equals(proxyClass)) {
 			throw new IllegalArgumentException("The parmeters of the model and proxy are not the same: " + modelClass.getSimpleName() + " vs " + proxyClass.getSimpleName());
 		}
 		
-		@SuppressWarnings("unchecked")
-		ProxyDiagramNode<T> tProxy = (ProxyDiagramNode<T>)proxy;
-		return tProxy;
+		try {
+			@SuppressWarnings("unchecked")
+			ProxyDiagramNode<T> tProxy = (ProxyDiagramNode<T>)proxy;
+			return tProxy;
+		}catch (ClassCastException e) {
+			throw new IllegalArgumentException("The parmeters of the model and proxy are not the same: " + modelClass.getSimpleName() + " vs " + proxyClass.getSimpleName());
+		}
 	}
 
 	//IEditorInput methods

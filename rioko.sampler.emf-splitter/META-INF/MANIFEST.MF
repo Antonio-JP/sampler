@@ -5,6 +5,7 @@ Bundle-SymbolicName: rioko.sampler.emf-splitter;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: rioko.sampler.emf_splitter.Activator
 Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.mondo.generate.modular.project;bundle-version="1.0.0",
  rioko.drawmodels;bundle-version="1.0.0"
