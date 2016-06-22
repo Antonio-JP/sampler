@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            description="Open with commands for EMF-Splitter"
+            id="rioko.sampler.emf-splitter.open-with"
+            name="Open-With">
+      </category>
+      <command
+            categoryId="rioko.sampler.emf-splitter.open-with"
+            description="Standard SAMPLER command for Open-With in EMF-Splitter"
+            id="rioko.sampler.emf-splitter.open-with.standard"
+            name="Standard command">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="rioko.sampler.emf_splitter.SamplerOpenWithHandler"
+            commandId="rioko.sampler.emf-splitter.open-with.standard">
+      </handler>
+   </extension>
+   <extension
+         point="org.mondo.generate.modular.project.OpenWithExtension">
+         
+      <client
+      		commandId="rioko.sampler.emf-splitter.open-with.standard"
+      		class="rioko.sampler.emf_splitter.SamplerOpenWithHandler">
+      </client>
+   </extension>
+
+</plugin>

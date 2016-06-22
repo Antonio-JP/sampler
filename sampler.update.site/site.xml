@@ -24,6 +24,9 @@
    <feature url="features/sampler.displaySaving_1.0.0.201606201156.jar" id="sampler.displaySaving" version="1.0.0.201606201156">
       <category name="sampler.category"/>
    </feature>
+   <feature url="features/sampler.emfsplitter.integration_1.0.0.qualifier.jar" id="sampler.emfsplitter.integration" version="1.0.0.qualifier">
+      <category name="sampler.emfsplitter.integration.category"/>
+   </feature>
    <category-def name="sampler.category" label="SAMPLER">
       <description>
          Category for the SAMPLER features
@@ -34,4 +37,5 @@
          This is the category for different features developed independly by Rioukay working in Miso.
       </description>
    </category-def>
+   <category-def name="sampler.emfsplitter.integration.category" label="SAMPLER with EMF-Splitter"/>
 </site>

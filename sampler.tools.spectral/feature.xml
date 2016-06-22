@@ -13,7 +13,7 @@
    </license>
 
    <url>
-      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
+      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Antonio-JP/sampler/master/sampler.update.site/site.xml"/>
    </url>
 
    <requires>

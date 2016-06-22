@@ -9,16 +9,16 @@
       This feature include all the Eclipse plug-ins with different classes and utilities for Java programming.
 
 It gives access to:
- 	- An abstract implementation of a graph using adjacency lists.
- 	- Graph searching iteratos as the breath Search.
- 	- Some Zest utilities
- 	- A Copiable interface
- 	- A Log system
- 	- A Time measure system for performance testing.
- 	- Some collections implementations:
-  		* A FIFO Set.
-  		* A Map which iterates over it keys in the same order they have been added.
-  	- A implementation of Set basic operation (union, intersection, symmetric difference, etc.)
+  - An abstract implementation of a graph using adjacency lists.
+  - Graph searching iteratos as the breath Search.
+  - Some Zest utilities
+  - A Copiable interface
+  - A Log system
+  - A Time measure system for performance testing.
+  - Some collections implementations:
+    * A FIFO Set.
+    * A Map which iterates over it keys in the same order they have been added.
+   - A implementation of Set basic operation (union, intersection, symmetric difference, etc.)
    </description>
 
    <license url="">
@@ -26,7 +26,7 @@ It gives access to:
    </license>
 
    <url>
-      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Rioukay/sampler/master/sampler.update.site/site.xml"/>
+      <update label="Miso SAMPLER site" url="https://raw.githubusercontent.com/Antonio-JP/sampler/master/sampler.update.site/site.xml"/>
    </url>
 
    <plugin

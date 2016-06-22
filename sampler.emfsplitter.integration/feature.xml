@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="sampler.emfsplitter.integration"
+      label="EMF-Splitter Integration"
+      version="1.0.0.qualifier"
+      provider-name="Miso">
+
+   <description>
+      This feature include all the plug-ins that integrate SAMPLER into the EMF-Splitter tool.
+   </description>
+
+   <license url="">
+      Use this software freely but, whenever use it, make a reference to its creator and distributor.
+   </license>
+
+   <url>
+      <update label="Miso SAMPLER Site" url="https://raw.githubusercontent.com/Antonio-JP/sampler/master/sampler.update.site/site.xml"/>
+      <discovery label="EMF-Splitter update site" url="http://antoniogarmendia.github.io/EMF-Splitter/update-site/"/>
+   </url>
+
+   <requires>
+      <import feature="org.emf.splitter.feature" version="0.1.0.201606211532" match="greaterOrEqual"/>
+      <import feature="sampler.tools" version="1.0.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="rioko.sampler.emf-splitter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
