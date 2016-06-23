@@ -92,7 +92,6 @@ public class AdjacencyListGraph<V extends Vertex,E extends Edge<V>> implements G
 		if(edge == null) {
 			//If not, we create the new edge
 			edge = this.getEdgeFactory().createEdge(arg0, arg1);
-		
 			this.adyacencyList.get(arg0).add(edge);
 		}
 		

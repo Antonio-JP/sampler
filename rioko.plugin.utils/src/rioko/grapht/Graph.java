@@ -328,7 +328,9 @@ public interface Graph<V extends Vertex,E extends Edge<V>> {
 		Set<V> set = new HashSet<V>();
 		
 		for(E edge : this.edgesFrom(vertex)) {
-			set.add(edge.getTarget());
+			if(edge.getSource().equals(vertex)) {
+				set.add(edge.getTarget());
+			}
 		}
 		
 		return set;
@@ -345,7 +347,9 @@ public interface Graph<V extends Vertex,E extends Edge<V>> {
 		Set<V> set = new HashSet<V>();
 		
 		for(E edge : this.edgesTo(vertex)) {
-			set.add(edge.getSource());
+			if(edge.getTarget().equals(vertex)) {
+				set.add(edge.getSource());
+			}
 		}
 		
 		return set;
