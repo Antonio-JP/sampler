@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder.diagram;
+package rioko.sampler.directoryDrawer.diagram;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -7,7 +7,7 @@ import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.StringAttribute;
 import rioko.grapht.VertexFactory;
-import rioko.sampler.emf_splitter.folder.diagram.factory.FolderDiagramNodeFactory;
+import rioko.sampler.directoryDrawer.diagram.factory.FolderDiagramNodeFactory;
 
 public class FolderDiagramNode extends DiagramNode {
 

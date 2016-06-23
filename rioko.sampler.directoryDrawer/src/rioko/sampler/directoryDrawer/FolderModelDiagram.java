@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder;
+package rioko.sampler.directoryDrawer;
 
 import org.eclipse.core.resources.IResource;
 

@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder.diagram;
+package rioko.sampler.directoryDrawer.diagram;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.grapht.VertexFactory;
-import rioko.sampler.emf_splitter.folder.diagram.factory.ComposeFolderDiagramNodeFactory;
+import rioko.sampler.directoryDrawer.diagram.factory.ComposeFolderDiagramNodeFactory;
 
 public class ComposeFolderDiagramNode extends ComposeDiagramNode {
 	

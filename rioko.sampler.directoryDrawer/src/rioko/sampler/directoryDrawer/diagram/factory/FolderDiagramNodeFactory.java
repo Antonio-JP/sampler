@@ -1,11 +1,11 @@
-package rioko.sampler.emf_splitter.folder.diagram.factory;
+package rioko.sampler.directoryDrawer.diagram.factory;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 
 import rioko.grapht.VertexFactory;
-import rioko.sampler.emf_splitter.folder.diagram.FolderDiagramNode;
-import rioko.sampler.emf_splitter.folder.diagram.FolderProxyDiagramNode;
+import rioko.sampler.directoryDrawer.diagram.FolderDiagramNode;
+import rioko.sampler.directoryDrawer.diagram.FolderProxyDiagramNode;
 
 public class FolderDiagramNodeFactory implements VertexFactory<FolderDiagramNode>{
 

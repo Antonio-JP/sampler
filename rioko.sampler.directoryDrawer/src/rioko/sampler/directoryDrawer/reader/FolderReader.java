@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder.reader;
+package rioko.sampler.directoryDrawer.reader;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,11 +21,11 @@ import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.ProxyDiagramNode;
 import rioko.graphabstraction.diagram.DiagramEdge.typeOfConnection;
-import rioko.sampler.emf_splitter.folder.FolderModelDiagram;
-import rioko.sampler.emf_splitter.folder.diagram.ComposeFolderDiagramNode;
-import rioko.sampler.emf_splitter.folder.diagram.FolderDiagramEdge;
-import rioko.sampler.emf_splitter.folder.diagram.FolderDiagramNode;
-import rioko.sampler.emf_splitter.folder.diagram.FolderProxyDiagramNode;
+import rioko.sampler.directoryDrawer.FolderModelDiagram;
+import rioko.sampler.directoryDrawer.diagram.ComposeFolderDiagramNode;
+import rioko.sampler.directoryDrawer.diagram.FolderDiagramEdge;
+import rioko.sampler.directoryDrawer.diagram.FolderDiagramNode;
+import rioko.sampler.directoryDrawer.diagram.FolderProxyDiagramNode;
 import rioko.utilities.Log;
 
 public class FolderReader implements Reader<IResource> {

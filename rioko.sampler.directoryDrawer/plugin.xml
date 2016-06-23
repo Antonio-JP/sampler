@@ -4,15 +4,15 @@
    <extension
          point="rioko.drawmodels.diagrams">
       <diagram
-            compose="rioko.sampler.emf_splitter.folder.diagram.ComposeFolderDiagramNode"
-            diagram="rioko.sampler.emf_splitter.folder.FolderModelDiagram"
-            edge="rioko.sampler.emf_splitter.folder.diagram.FolderDiagramEdge"
+            compose="rioko.sampler.directoryDrawer.diagram.ComposeFolderDiagramNode"
+            diagram="rioko.sampler.directoryDrawer.FolderModelDiagram"
+            edge="rioko.sampler.directoryDrawer.diagram.FolderDiagramEdge"
             id="rioko.sampler.emf-splitter.folder.folderDiagram"
             name="Folder Model Diagram"
-            node="rioko.sampler.emf_splitter.folder.diagram.FolderDiagramNode"
-            parser="rioko.sampler.emf_splitter.folder.diagram.FolderIdParser"
-            proxy="rioko.sampler.emf_splitter.folder.diagram.FolderProxyDiagramNode"
-            reader="rioko.sampler.emf_splitter.folder.reader.FolderReader">
+            node="rioko.sampler.directoryDrawer.diagram.FolderDiagramNode"
+            parser="rioko.sampler.directoryDrawer.diagram.FolderIdParser"
+            proxy="rioko.sampler.directoryDrawer.diagram.FolderProxyDiagramNode"
+            reader="rioko.sampler.directoryDrawer.reader.FolderReader">
          <fileExtension
                fileExtension="fileExtension">
          </fileExtension>
@@ -30,7 +30,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="rioko.sampler.emf_splitter.folder.handler.OpenDirectoryVisualization"
+            class="rioko.sampler.directoryDrawer.handler.OpenDirectoryVisualization"
             commandId="rioko.sampler.emf-splitter.folder.open.directory">
       </handler>
    </extension>

@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder;
+package rioko.sampler.directoryDrawer;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

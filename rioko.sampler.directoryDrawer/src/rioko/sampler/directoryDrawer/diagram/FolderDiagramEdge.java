@@ -1,8 +1,8 @@
-package rioko.sampler.emf_splitter.folder.diagram;
+package rioko.sampler.directoryDrawer.diagram;
 
 import rioko.graphabstraction.diagram.DiagramEdge;
 import rioko.graphabstraction.diagram.DiagramNode;
-import rioko.sampler.emf_splitter.folder.diagram.factory.FolderDiagramEdgeFactory;
+import rioko.sampler.directoryDrawer.diagram.factory.FolderDiagramEdgeFactory;
 
 public class FolderDiagramEdge extends DiagramEdge<DiagramNode> {
 	//Builders

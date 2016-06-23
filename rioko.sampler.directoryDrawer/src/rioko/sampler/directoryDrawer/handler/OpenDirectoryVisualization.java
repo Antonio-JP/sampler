@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder.handler;
+package rioko.sampler.directoryDrawer.handler;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.handlers.AbstractGenericHandler;
-import rioko.sampler.emf_splitter.folder.reader.FolderReader;
+import rioko.sampler.directoryDrawer.reader.FolderReader;
 import rioko.utilities.Log;
 
 public class OpenDirectoryVisualization extends AbstractGenericHandler{

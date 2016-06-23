@@ -1,10 +1,10 @@
-package rioko.sampler.emf_splitter.folder.diagram.factory;
+package rioko.sampler.directoryDrawer.diagram.factory;
 
 import java.util.Collection;
 
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.grapht.VertexFactory;
-import rioko.sampler.emf_splitter.folder.diagram.ComposeFolderDiagramNode;
+import rioko.sampler.directoryDrawer.diagram.ComposeFolderDiagramNode;
 
 public class ComposeFolderDiagramNodeFactory implements VertexFactory<ComposeFolderDiagramNode> {
 

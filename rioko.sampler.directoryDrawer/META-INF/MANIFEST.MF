@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Folder
-Bundle-SymbolicName: rioko.sampler.emf-splitter.folder;singleton:=true
+Bundle-SymbolicName: rioko.sampler.directoryDrawer;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: rioko.sampler.emf_splitter.folder.Activator
+Bundle-Activator: rioko.sampler.directoryDrawer.Activator
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.ui;bundle-version="3.107.0",

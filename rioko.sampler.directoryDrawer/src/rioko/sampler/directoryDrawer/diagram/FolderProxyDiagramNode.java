@@ -1,4 +1,4 @@
-package rioko.sampler.emf_splitter.folder.diagram;
+package rioko.sampler.directoryDrawer.diagram;
 
 import java.util.ArrayList;
 
