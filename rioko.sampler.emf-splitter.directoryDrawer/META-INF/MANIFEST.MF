@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DirectoryDrawer
+Bundle-SymbolicName: rioko.sampler.emf-splitter.directoryDrawer
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: rioko.sampler.emf_splitter.directorydrawer.Activator
+Bundle-Vendor: Miso
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

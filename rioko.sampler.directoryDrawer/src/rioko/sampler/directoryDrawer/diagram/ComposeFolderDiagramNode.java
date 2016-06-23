@@ -59,12 +59,15 @@ public class ComposeFolderDiagramNode extends ComposeDiagramNode {
 			
 			//Etiquetas intermedias
 			Iterator<Class<?>> iterator = amountOfTypes.keySet().iterator();
-			for(int i = 0; i < amountOfTypes.keySet().size() && i < maxRowsInDataFigure; i++) 
+			for(int i = 0; iterator.hasNext() && i < maxRowsInDataFigure;) 
 			{
 				Class<?> eClass = iterator.next();
-				Label aux = new Label("   - "+amountOfTypes.get(eClass)+" " + eClass.getSimpleName());
-				aux.setLabelAlignment(PositionConstants.LEFT);
-				figure.add(aux);
+				if(amountOfTypes.get(eClass) > 0) {
+					Label aux = new Label("   - "+amountOfTypes.get(eClass)+" " + eClass.getSimpleName());
+					aux.setLabelAlignment(PositionConstants.LEFT);
+					figure.add(aux);
+					i++;
+				}
 			}
 			
 			//Los que sobran los sumamos para indicar cuántos quedan
@@ -128,7 +131,7 @@ public class ComposeFolderDiagramNode extends ComposeDiagramNode {
 	private Class<?> getSuperClassOnSet(Set<Class<?>> set, Class<?> clazz) {
 		Class<?> found = null;
 		for(Class<?> aux : set) {
-			if(aux.isAssignableFrom(clazz) && (found != null && aux.isAssignableFrom(found))) {
+			if(aux.isAssignableFrom(clazz) && (found == null || aux.isAssignableFrom(found))) {
 				found = aux;
 			}
 		}

@@ -37,5 +37,9 @@
          This is the category for different features developed independly by Rioukay working in Miso.
       </description>
    </category-def>
-   <category-def name="sampler.emfsplitter.integration.category" label="SAMPLER with EMF-Splitter"/>
+   <category-def name="sampler.emfsplitter.integration.category" label="SAMPLER with EMF-Splitter">
+      <description>
+         Features that include different functionality of SAMPLER related with EMF-Splitter tool developed by Antonio Garmendía at Miso
+      </description>
+   </category-def>
 </site>
