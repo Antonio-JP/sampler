@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -68,7 +68,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	private ExtendedGraphViewer viewer;
 	private ZestLayoutAlgorithm viewerLayout = new ZestLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
 	
-	private IFile file = null;
+	private IResource file = null;
 	
 	private Reader<?> reader = null;
 	
@@ -225,11 +225,11 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 
 	
 	// Proper methods
-	public void setFile(IFile file) {
+	public void setFile(IResource file) {
 		this.file = file;
 	}
 	
-	public IFile getFile()
+	public IResource getFile()
 	{
 		return this.file;
 	}

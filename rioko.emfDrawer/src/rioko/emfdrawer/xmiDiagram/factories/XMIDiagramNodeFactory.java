@@ -1,7 +1,10 @@
-package rioko.emfdrawer.xmiDiagram;
+package rioko.emfdrawer.xmiDiagram.factories;
 
 import org.eclipse.emf.ecore.EObject;
 
+import rioko.emfdrawer.xmiDiagram.XMIDiagramNode;
+import rioko.emfdrawer.xmiDiagram.XMINullDiagramNode;
+import rioko.emfdrawer.xmiDiagram.XMIProxyDiagramNode;
 import rioko.grapht.VertexFactory;
 
 public class XMIDiagramNodeFactory implements VertexFactory<XMIDiagramNode> {

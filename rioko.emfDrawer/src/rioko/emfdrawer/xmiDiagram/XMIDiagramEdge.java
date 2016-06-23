@@ -1,6 +1,5 @@
 package rioko.emfdrawer.xmiDiagram;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EReference;
 
 import rioko.emfdrawer.xmiDiagram.factories.XMIDiagramEdgeFactory;
@@ -28,9 +27,9 @@ public class XMIDiagramEdge extends DiagramEdge<DiagramNode>{
 	}
 	
 	//Public methods
-	public IFigure getFigure() {
-		return this.getValueFigure();
-	}
+//	public IFigure getFigure() {
+//		return this.getValueFigure();
+//	}
 	
 	@Override
 	public XMIDiagramEdgeFactory getEdgeFactory()
@@ -49,7 +48,7 @@ public class XMIDiagramEdge extends DiagramEdge<DiagramNode>{
 	}
 	
 	//Abstract methods
-	public IFigure getValueFigure() {
-		return null;
-	}
+//	public IFigure getValueFigure() {
+//		return null;
+//	}
 }

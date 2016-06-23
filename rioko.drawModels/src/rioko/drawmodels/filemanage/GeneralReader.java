@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -22,7 +23,7 @@ public class GeneralReader {
 	
 	private static final String ID_DIAGRAM_EXTENSION = "rioko.drawmodels.diagrams";
 	
-	private static HashMap<IFile, Reader<?>> mapFilesToReader = new HashMap<>();
+	private static HashMap<IResource, Reader<?>> mapFilesToReader = new HashMap<>();
 
 	/**
 	 * This method take an IFile and using its extension, search a good Reader class to use it.
@@ -33,7 +34,7 @@ public class GeneralReader {
 	 * 
 	 * @throws IOException If any error happens. The message gove more information of the error.
 	 */
-	public static Reader<?> getReaderFromFile(IFile file) throws IOException {
+	public static Reader<?> getReaderFromFile(IResource file) throws IOException {
 		//We check that the file is not already opened
 		Reader<?> auxReader = mapFilesToReader.get(file);
 		if(auxReader != null) {

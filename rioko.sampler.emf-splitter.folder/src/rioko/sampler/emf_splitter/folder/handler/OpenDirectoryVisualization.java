@@ -1,36 +1,35 @@
-package rioko.drawmodels.handlers.extensions;
+package rioko.sampler.emf_splitter.folder.handler;
 
 import java.io.IOException;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
-import rioko.utilities.Log;
+
 import rioko.drawmodels.diagram.ModelDiagram;
-import rioko.drawmodels.filemanage.GeneralReader;
 import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.handlers.AbstractGenericHandler;
+import rioko.sampler.emf_splitter.folder.reader.FolderReader;
+import rioko.utilities.Log;
 
-public class OpenFile extends AbstractGenericHandler {
+public class OpenDirectoryVisualization extends AbstractGenericHandler{
 
 	@Override
-	public Object execute(ExecutionEvent ee) throws ExecutionException {
-		ISelection sel = HandlerUtil.getActiveMenuSelection(ee);
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		ISelection sel = HandlerUtil.getActiveMenuSelection(event);
 		if(sel instanceof IStructuredSelection) {
 			IStructuredSelection strSel = (IStructuredSelection)sel;
 			
 			Object obj = strSel.getFirstElement();
 			
-			if(obj instanceof IFile) {
-				IFile file = (IFile)obj;
-				
+			if(obj instanceof IResource) {
 				try {
-					this.openEditorWithFile(file, ee);
+					this.openEditorWithFile((IResource)obj, event);
 				} catch (PartInitException e) {
 					Log.exception(e);
 					MessageDialog.openError(null, "Error creating the Zest Editor", 
@@ -44,26 +43,24 @@ public class OpenFile extends AbstractGenericHandler {
 					MessageDialog.openError(null, "Unexpected error loading the File", 
 							e.getMessage());
 				}
-				
 			}
 		}
 		
 		return null;
 	}
 	
-	public void openEditorWithFile(IFile file, ExecutionEvent ee) throws PartInitException, IOException, Exception {
+	public void openEditorWithFile(IResource file, ExecutionEvent ee) throws PartInitException, IOException, Exception {
 		this.setContext(ee);
 		this.openEditorWithFile(file);
 	}
 	
-	protected void openEditorWithFile(IFile file) throws IOException, PartInitException, Exception {
-		Reader<?> reader;
+	protected void openEditorWithFile(IResource resource) throws IOException, PartInitException, Exception {
 		Log.xOpen("wizard");
 		Log.xPrint("Reading the model...");
-		reader = GeneralReader.getReaderFromFile(file);
+		Reader<?> reader = new FolderReader(resource);
 	
 		ModelDiagram<?> model = reader.getModel();
-		this.openZestEditor(model, file);
+		this.openZestEditor(model, resource);
 		Log.xClose("wizard");
 	}
 

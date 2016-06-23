@@ -4,6 +4,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -22,7 +23,7 @@ public class LoadingHandler  extends EditorDependentHandler{
 		ISelection sel = HandlerUtil.getActiveMenuSelection(event);
 		
 		// Getting the default loading path
-		IFile file = this.getFileAssociated();	
+		IResource file = this.getFileAssociated();	
 		IContainer folder = file.getParent();
 		IFile dest = folder.getFile(new Path("./" + file.getName()+".smp"));
 		

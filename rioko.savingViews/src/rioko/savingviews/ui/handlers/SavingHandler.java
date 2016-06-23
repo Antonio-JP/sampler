@@ -4,6 +4,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import rioko.drawmodels.diagram.ModelDiagram;
@@ -20,7 +21,7 @@ public class SavingHandler extends EditorDependentHandler {
 		
 		IFile dest = null;
 		//try {
-			IFile file = this.getFileAssociated();	
+			IResource file = this.getFileAssociated();	
 			IContainer folder = file.getParent();
 			dest = folder.getFile(new Path("./" + file.getName() + ".smp")); //folder.getLocation().removeLastSegments(1).append(file.getName()+".smp")
 //		} catch (NullPointerException e) {

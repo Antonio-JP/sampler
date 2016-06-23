@@ -1,7 +1,8 @@
-package rioko.emfdrawer.xmiDiagram;
+package rioko.emfdrawer.xmiDiagram.factories;
 
 import java.util.Collection;
 
+import rioko.emfdrawer.xmiDiagram.ComposeXMIDiagramNode;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.grapht.VertexFactory;
 

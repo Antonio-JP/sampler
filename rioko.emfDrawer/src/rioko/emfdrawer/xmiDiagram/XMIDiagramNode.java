@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import rioko.emfdrawer.xmiDiagram.factories.XMIDiagramNodeFactory;
 import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.diagram.StringAttribute;

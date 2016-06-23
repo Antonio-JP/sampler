@@ -2,7 +2,7 @@ package rioko.drawmodels.dialogs;
 
 import java.util.ArrayList;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -27,7 +27,7 @@ public class SelectReaderDialog extends TitleAreaDialog implements ValuableDialo
 	
 	private static final String ID_DIAGRAM_EXTENSION = "rioko.drawmodels.diagrams";
 
-	private IFile file = null;
+	private IResource file = null;
 	
 	private String readerClassName = "";
 	
@@ -38,7 +38,7 @@ public class SelectReaderDialog extends TitleAreaDialog implements ValuableDialo
 	
 	//Logic Fields
 	
-	public SelectReaderDialog(Shell shell, IFile file, Boolean allReaders) {
+	public SelectReaderDialog(Shell shell, IResource file, Boolean allReaders) {
 		super(shell);
 		
 		this.file = file;

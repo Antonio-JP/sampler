@@ -12,6 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 
 import rioko.draw2d.figures.VerticalFigure;
+import rioko.emfdrawer.xmiDiagram.factories.ComposeXMIDiagramNodeFactory;
 import rioko.graphabstraction.diagram.AbstractAttribute;
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramNode;

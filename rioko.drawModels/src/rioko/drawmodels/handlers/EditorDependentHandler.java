@@ -2,7 +2,7 @@ package rioko.drawmodels.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -54,7 +54,7 @@ public abstract class EditorDependentHandler extends AbstractGenericHandler {
 		return null;
 	}
 
-	protected IFile getFileAssociated() {
+	protected IResource getFileAssociated() {
 		if(this.editor != null) {
 			return ((ZestEditor)this.editor).getFile();
 		}
