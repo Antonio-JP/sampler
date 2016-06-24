@@ -27,6 +27,9 @@
    <feature url="features/sampler.emfsplitter.integration_1.0.0.201606231629.jar" id="sampler.emfsplitter.integration" version="1.0.0.201606231629">
       <category name="sampler.emfsplitter.integration.category"/>
    </feature>
+   <feature url="features/sampler.emfsplitter.directory.integration_1.0.0.qualifier.jar" id="sampler.emfsplitter.directory.integration" version="1.0.0.qualifier">
+      <category name="sampler.emfsplitter.integration.category"/>
+   </feature>
    <category-def name="sampler.category" label="SAMPLER">
       <description>
          Category for the SAMPLER features

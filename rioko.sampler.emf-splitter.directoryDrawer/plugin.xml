@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="rioko.sampler.emf-splitter.open-with"
+            description="SAMPLER command for Open-With in EMF-Splitter which opens the Directory Drawer"
+            id="rioko.sampler.emf-splitter.open-with.directory"
+            name="Open SAMPLER Directory">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="rioko.sampler.emf_splitter.directorydrawer.SamplerDirectoryOpenWithHandler"
+            commandId="rioko.sampler.emf-splitter.open-with.directory">
+      </handler>
+   </extension>
+   <extension
+         point="org.mondo.generate.modular.project.OpenWithExtension">
+      <client
+            class="rioko.sampler.emf_splitter.directorydrawer.SamplerDirectoryOpenWithHandler"
+            commandId="rioko.sampler.emf-splitter.open-with.directory">
+      </client>
+   </extension>
+   <extension
+         point="rioko.drawmodels.editor.listeners">
+      <mouseListener
+            class="rioko.sampler.emf_splitter.directorydrawer.listener.OpenModelFragmentMouseListener"
+            id="rioko.sampler.emf_splitter.directorydrawer.listeners.mouse.openFragment"
+            name="Open Model Fragment">
+      </mouseListener>
+   </extension>
+
+</plugin>

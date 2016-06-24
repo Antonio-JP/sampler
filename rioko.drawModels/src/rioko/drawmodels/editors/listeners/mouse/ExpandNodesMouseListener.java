@@ -1,12 +1,11 @@
-package rioko.drawmodels.draw2d.listeners;
+package rioko.drawmodels.editors.listeners.mouse;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.ProxyDiagramNode;
 import rioko.graphabstraction.draw2d.ModelNodeFigure;
+import rioko.zest.ExtendedGraphViewer;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 
 /**
@@ -14,23 +13,20 @@ import rioko.drawmodels.editors.zesteditor.ZestEditor;
  * 
  * @author Antonio
  */
-public class ChangeRootMouseListener implements MouseListener {
+public class ExpandNodesMouseListener extends AbstractZestMouseListener {
 
-	//Private attributes
-	/**
-	 * ZestEditor related with this wizardListener
-	 */
-	private ZestEditor controler;
-	
 	//Builders
-	/**
-	 * Public builder indicating the controler related with this wizardListener
-	 * 
-	 * @param controler ZestEditor to change
-	 */
-	public ChangeRootMouseListener(ZestEditor controler)
+	public ExpandNodesMouseListener() {
+		super();
+	}
+	
+	public ExpandNodesMouseListener(ZestEditor controller) {
+		super(controller, null);
+	}
+	
+	public ExpandNodesMouseListener(ZestEditor controller, ExtendedGraphViewer viewer)
 	{
-		this.controler = controler;
+		super(controller, viewer);
 	}
 
 	//MouseListener Interface methods
@@ -38,7 +34,7 @@ public class ChangeRootMouseListener implements MouseListener {
 	public void mouseDoubleClick(MouseEvent me) {	
 		if(me.button == 1) {
 			//Encontramos el nodo adecuado
-			IFigure[] figures = this.controler.getViewer().getFiguresAtPosition(me.x, me.y);
+			IFigure[] figures = this.getController().getViewer().getFiguresAtPosition(me.x, me.y);
 			
 			if(figures.length > 0)
 			{
@@ -49,12 +45,12 @@ public class ChangeRootMouseListener implements MouseListener {
 						ModelNodeFigure ndFig = (ModelNodeFigure)fig;
 						
 						if(ndFig.getReferredNode() instanceof ComposeDiagramNode) {
-							this.controler.extendComposeNode((ComposeDiagramNode)ndFig.getReferredNode());
+							this.getController().extendComposeNode((ComposeDiagramNode)ndFig.getReferredNode());
 						} else if(ndFig.getReferredNode() instanceof ProxyDiagramNode){
-							this.controler.extendProxyNode((ProxyDiagramNode<?>)ndFig.getReferredNode().getRootNode());
-						} else {
-							this.controler.changeRoot(ndFig.getReferredNode().getRootNode());
-						}
+							this.getController().extendProxyNode((ProxyDiagramNode<?>)ndFig.getReferredNode().getRootNode());
+						} //else {
+							//this.getController().changeRoot(ndFig.getReferredNode().getRootNode());
+						//}
 						break;
 					}
 				}

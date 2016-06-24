@@ -13,3 +13,6 @@ Require-Bundle: org.eclipse.core.resources,
  rioko.drawmodels;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Export-Package: rioko.sampler.directoryDrawer.diagram,
+ rioko.sampler.directoryDrawer.handler,
+ rioko.sampler.directoryDrawer.reader

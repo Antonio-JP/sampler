@@ -5,16 +5,10 @@
       version="1.0.0.qualifier"
       provider-name="Miso - Rioukay">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
-   </description>
+   <license url="">
+      Miso - Rioko License
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+Use this software freely but, whenever use it, make a reference to its creator and distributor.
    </license>
 
    <url>

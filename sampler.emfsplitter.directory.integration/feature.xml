@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="sampler.emfsplitter.integration"
-      label="EMF-Splitter Integration"
+      id="sampler.emfsplitter.directory.integration"
+      label="EMF-Splitter Directory Integration"
       version="1.0.0.qualifier"
       provider-name="Miso">
 
    <description>
-      This feature include all the plug-ins that integrate SAMPLER into the EMF-Splitter tool.
+      This feature includes the functionality to integrate the Directory Drawer of SAMPLER with EMF-Splitter projects.
+
+It add a new Open-With option and some listeners to open EMF Model fragments when double-clicking Files on the Directory Drawer.
    </description>
 
    <license url="">
@@ -21,13 +23,13 @@ Use this software freely but, whenever use it, make a reference to its creator a
    </url>
 
    <requires>
-      <import feature="org.emf.splitter.feature" version="0.1.0.201606211532" match="greaterOrEqual"/>
-      <import feature="sampler.tools" version="1.0.0.qualifier"/>
+      <import feature="org.emf.splitter.feature" version="0.1.0.201606221537"/>
       <import feature="sampler.emf" version="1.0.0.qualifier"/>
+      <import feature="sampler.tools" version="1.0.0.qualifier"/>
    </requires>
 
    <plugin
-         id="rioko.sampler.emf-splitter"
+         id="rioko.sampler.emf-splitter.directoryDrawer"
          download-size="0"
          install-size="0"
          version="0.0.0"

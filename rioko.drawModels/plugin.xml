@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="diagrams" name="Diagrams" schema="schema/diagrams.exsd"/>
+   <extension-point id="rioko.drawmodels.editor.listeners" name="Listeners For SAMPLER editor" schema="schema/editor.listeners.exsd"/>
 	<?Comandos añadidos?>
 	<extension point="org.eclipse.ui.commands">
 		<category
@@ -372,6 +373,24 @@
           id="rioko.drawModels.configurations.showConnConfiguration"
           name="Show Connection Data Configuration">
     </bool>
+ </extension>
+ <extension
+       point="rioko.drawmodels.editor.listeners">
+    <mouseListener
+          class="rioko.drawmodels.editors.listeners.mouse.OpenNewVisualizacionEditorMouseListener"
+          id="rioko.drawmodels.editor.listeners.mouse.openNew"
+          name="Open New Visualizacion Editor">
+    </mouseListener>
+    <mouseListener
+          class="rioko.drawmodels.editors.listeners.mouse.ZestClickSelectionMouseListener"
+          id="rioko.drawmodels.editor.listeners.mouse.selectFigure"
+          name="Click Selection of Figures">
+    </mouseListener>
+    <mouseListener
+          class="rioko.drawmodels.editors.listeners.mouse.ExpandNodesMouseListener"
+          id="rioko.drawmodels.editor.listeners.mouse.expandNodes"
+          name="Expand Nodes">
+    </mouseListener>
  </extension>
   	<?Criterios de búsqueda?>
 </plugin>

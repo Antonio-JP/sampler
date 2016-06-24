@@ -36,7 +36,7 @@ public class FolderDiagramNode extends DiagramNode {
 	}
 	
 	//Getters & Setters
-	IResource getResource() {
+	public IResource getResource() {
 		return this.resource;
 	}
 	

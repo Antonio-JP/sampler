@@ -285,5 +285,9 @@ public abstract class ModelDiagram<T> implements IEditorInput{
 	@Override
 	public String getToolTipText() { return "SAMPLER: " + this.getName(); }
 
+	public Reader<T> getReader() {
+		return this.reader;
+	}
+
 	
 }

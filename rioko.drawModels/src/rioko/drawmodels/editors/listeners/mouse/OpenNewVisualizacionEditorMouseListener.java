@@ -1,9 +1,7 @@
-package rioko.drawmodels.editors.listeners;
+package rioko.drawmodels.editors.listeners.mouse;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-
 import rioko.graphabstraction.diagram.ComposeDiagramNode;
 import rioko.graphabstraction.diagram.DiagramGraph;
 import rioko.graphabstraction.diagram.DiagramNode;
@@ -13,21 +11,22 @@ import rioko.graphabstraction.draw2d.ModelNodeFigure;
 import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.zest.ExtendedGraphViewer;
 
-public class OpenNewVisualizacionEditorMouseListener implements MouseListener {
-
-	private ZestEditor controler;
-	private ExtendedGraphViewer viewer;
+public class OpenNewVisualizacionEditorMouseListener extends AbstractZestMouseListener {
 	
-	public OpenNewVisualizacionEditorMouseListener(ZestEditor controler, ExtendedGraphViewer viewer)
-	{
-		this.controler = controler;
-		this.viewer = viewer;
+	//Builders
+	public OpenNewVisualizacionEditorMouseListener() {
+		super();
+	}
+
+	public OpenNewVisualizacionEditorMouseListener(ZestEditor controller, ExtendedGraphViewer viewer) {
+		super(controller, viewer);
 	}
 	
+	//Methods
 	@Override
 	public void mouseDoubleClick(MouseEvent me) {
 		if(me.button == 3) { //Doble click derecho
-			for(IFigure figure : this.viewer.getFiguresAtPosition(me.x, me.y))	//Buscamos en las figuras clicadas
+			for(IFigure figure : this.getViewer().getFiguresAtPosition(me.x, me.y))	//Buscamos en las figuras clicadas
 			{
 				if(figure instanceof ModelNodeFigure)	//Si son un nodo
 				{
@@ -35,25 +34,25 @@ public class OpenNewVisualizacionEditorMouseListener implements MouseListener {
 					if(mdFig.getReferredNode() instanceof ComposeDiagramNode) {	//Y si son un nodo compuesto
 						ComposeDiagramNode compose = (ComposeDiagramNode)mdFig.getReferredNode();
 						
-						this.controler.createNavigationEditor(compose);	//Abrimos la nueva ventana
+						this.getController().createNavigationEditor(compose);	//Abrimos la nueva ventana
 						return;
 					} else if(mdFig.getReferredNode() instanceof ProxyDiagramNode<?>) {
 						ProxyDiagramNode<?> proxy = (ProxyDiagramNode<?>)mdFig.getReferredNode();
 						
-						this.controler.createNavigationEditor(proxy);
+						this.getController().createNavigationEditor(proxy);
 					}
 				}
 			}
 		}
 		if(me.button == 2) { //Doble click central
-			for(IFigure figure : this.viewer.getFiguresAtPosition(me.x, me.y))	//Buscamos en las figuras clicadas
+			for(IFigure figure : this.getViewer().getFiguresAtPosition(me.x, me.y))	//Buscamos en las figuras clicadas
 			{
 				if(figure instanceof ModelNodeFigure)	//Si son un nodo
 				{
 					ModelNodeFigure mdFig = (ModelNodeFigure)figure;
-					DiagramGraph graph = this.controler.getModel().getModelDiagram();
+					DiagramGraph graph = this.getController().getModel().getModelDiagram();
 					DiagramNode root = mdFig.getReferredNode().getRootNode();
-					this.controler.createNavigationEditor(graph.getSubTree(new TreeDirectedSearchIterator<DiagramNode>(graph, root))); 
+					this.getController().createNavigationEditor(graph.getSubTree(new TreeDirectedSearchIterator<DiagramNode>(graph, root))); 
 					
 					break;
 				}
@@ -69,6 +68,11 @@ public class OpenNewVisualizacionEditorMouseListener implements MouseListener {
 	@Override
 	public void mouseUp(MouseEvent me) {
 		//Nothing happens
+	}
+
+	@Override
+	protected void doAddListener() {
+		this.getViewer().getControl().addMouseListener(this);
 	}
 
 }

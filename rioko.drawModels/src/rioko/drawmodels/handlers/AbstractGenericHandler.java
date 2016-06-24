@@ -30,8 +30,10 @@ public abstract class AbstractGenericHandler extends AbstractHandler {
 	private IWorkbenchPage page = null;
 	
 	protected void setContext(ExecutionEvent ee) throws Exception {
-		this.win = HandlerUtil.getActiveWorkbenchWindow(ee);
-		this.page = this.getEditorPage();
+		if(ee != null) {
+			this.win = HandlerUtil.getActiveWorkbenchWindow(ee);
+			this.page = this.getEditorPage();
+		}
 	}
 
 	protected IWorkbench getWorkbench() throws Exception

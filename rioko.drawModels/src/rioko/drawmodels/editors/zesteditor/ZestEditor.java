@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -37,17 +38,16 @@ import rioko.drawmodels.diagram.ModelDiagram;
 import rioko.graphabstraction.display.ExpandComposeNodeNestedBuilder;
 import rioko.graphabstraction.runtime.registers.NotRegisteredException;
 import rioko.graphabstraction.runtime.registers.RegisterBuilderAlgorithm;
-import rioko.drawmodels.draw2d.listeners.ChangeRootMouseListener;
 import rioko.drawmodels.editors.AbstractEditorPart;
-import rioko.drawmodels.editors.listeners.OpenNewVisualizacionEditorMouseListener;
+import rioko.drawmodels.editors.listeners.AbstractZestListener;
 import rioko.drawmodels.editors.listeners.PropertiesChangeListener;
-import rioko.drawmodels.editors.listeners.ZestClickSelectionMouseListener;
 import rioko.drawmodels.editors.zesteditor.zestproperties.ZestProperties;
 import rioko.drawmodels.filemanage.GeneralReader;
 import rioko.drawmodels.filemanage.Reader;
 import rioko.drawmodels.jface.ZestEditorStructuredSelection;
 import rioko.drawmodels.layouts.bridge.ZestLayoutAlgorithm;
 import rioko.drawmodels.views.listeners.ZestPropertiesListener;
+import rioko.eclipse.registry.RegistryManagement;
 import rioko.revent.REvent;
 import rioko.revent.datachange.DataChangeEvent;
 import rioko.utilities.Log;
@@ -61,6 +61,8 @@ import rioko.zest.ExtendedGraphViewer;
 // TODO Recibe información de la vista de preferencias y de la vista de filtros
 
 public class ZestEditor extends AbstractEditorPart implements ISelectionProvider {
+	
+	private static final String LISTENERS_EXTENSION_ID = "rioko.drawmodels.editor.listeners";
 
 	private Label label;
 	private ModelDiagram<?> model;
@@ -88,6 +90,10 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 	//Getters
 	public ModelDiagram<?> getModel() {
 		return model;
+	}
+
+	public Reader<?> getReader() {
+		return this.reader;
 	}
 
 	public ExtendedGraphViewer getViewer() {
@@ -131,6 +137,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 				}
 			} else if(input instanceof ModelDiagram) {
 	        	this.model = (ModelDiagram<?>)this.getEditorInput();
+	        	this.reader = this.model.getReader();
 	        } else if(input instanceof SpecialInputZestEditor) {
 				this.properties = ((SpecialInputZestEditor) input).getProperties();
 	        	this.model = ModelDiagram.getModelDiagramForGraph(((SpecialInputZestEditor) input).getModel());
@@ -138,6 +145,7 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 			
 			//Create the listeners to maintain updated the viewer
 			this.createPropertiesListener();
+//			this.addListenersForEditor();
 			
 			return;
 		}		
@@ -186,9 +194,12 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		    viewer.setLayoutAlgorithm(this.viewerLayout);
 		    viewer.setInput(this.model.getPrintDiagram().vertexSet());
 		    
-		    viewer.getControl().addMouseListener(new ChangeRootMouseListener(this));
-		    viewer.getControl().addMouseListener(new ZestClickSelectionMouseListener(this, viewer));
-		    viewer.getControl().addMouseListener(new OpenNewVisualizacionEditorMouseListener(this, viewer));
+		    //Adding the Listeners to the Editor
+		    this.addListenersForEditor();
+		    
+//		    viewer.getControl().addMouseListener(new ExpandNodesMouseListener(this));
+//		    viewer.getControl().addMouseListener(new ZestClickSelectionMouseListener(this, viewer));
+//		    viewer.getControl().addMouseListener(new OpenNewVisualizacionEditorMouseListener(this, viewer));
 		    		   
 	        //Organización de los objetos        
 	        GridData gd = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
@@ -211,6 +222,18 @@ public class ZestEditor extends AbstractEditorPart implements ISelectionProvider
 		} catch (Exception e) {
 			e.printStackTrace();
 		}  
+	}
+
+	private void addListenersForEditor() {
+		IConfigurationElement[] registryElements = RegistryManagement.getElementsFor(LISTENERS_EXTENSION_ID);
+		for(IConfigurationElement element : registryElements) {
+			AbstractZestListener listener = (AbstractZestListener) RegistryManagement.getInstance(element, "class");
+			
+			listener.setController(this);
+			listener.setViewer(this.viewer);
+			
+			listener.addListenerToViewer();
+		}
 	}
 
 	@Override
