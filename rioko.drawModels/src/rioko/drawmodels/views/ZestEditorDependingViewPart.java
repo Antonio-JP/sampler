@@ -43,10 +43,11 @@ public abstract class ZestEditorDependingViewPart extends ViewPart implements IP
 					this.currentEditor = (ZestEditor)part;
 					
 					this.doWhenActivate(part);
+					this.updateView();
 				}
+			} else {
+				this.updateView();
 			}
-			
-			this.updateView();
 		}
 	}
 	

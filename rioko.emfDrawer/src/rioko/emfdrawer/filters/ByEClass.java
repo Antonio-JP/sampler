@@ -21,7 +21,7 @@ public class ByEClass extends FilterOfVertex {
 	@Override
 	protected boolean filter(DiagramNode node, Configurable properties, DiagramGraph graph) {
 		if(conf == null || conf.getConfiguration() == null) {
-			return true;
+			return false;
 		}
 		
 		if(node instanceof XMIDiagramNode) {

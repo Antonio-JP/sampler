@@ -8,6 +8,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.TableItem;
 
 import rioko.drawmodels.swt.composites.AddRemoveTable;
+import rioko.revent.datachange.DataChangeEvent;
 
 public abstract class AddRemoveListener<T> implements MouseListener {
 	
@@ -60,6 +61,7 @@ public abstract class AddRemoveListener<T> implements MouseListener {
 		}
 		
 		sourceTable.setInput(this.getInputFromControled());
+		new DataChangeEvent(this.sourceTable);
 	}
 
 	private void runAdd(MouseEvent me) {
@@ -69,6 +71,7 @@ public abstract class AddRemoveListener<T> implements MouseListener {
 		}
 		
 		sourceTable.setInput(this.getInputFromControled());
+		new DataChangeEvent(this.sourceTable);
 	}
 
 	protected abstract Collection<T> chooseAvaible(Class<? extends T> extendClass);

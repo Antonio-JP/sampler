@@ -32,5 +32,39 @@
             name="Open Model Fragment">
       </mouseListener>
    </extension>
+   <extension
+         point="rioko.graphabstraction.searches">
+      <search
+            class="rioko.sampler.emf_splitter.directorydrawer.search.EMFSplitterRepeatedFilter"
+            id="rioko.sampler.emf-splitter.directoryDrawer.filter.repeated"
+            name="Repeated EMF-Splitter Files">
+      </search>
+      <search
+            class="rioko.sampler.emf_splitter.directorydrawer.search.EMFSplitterSystemFilter"
+            id="rioko.sampler.emf-splitter.directoryDrawer.filter.system"
+            name="EMF-Splitter System Files">
+      </search>
+      <search
+            class="rioko.sampler.emf_splitter.directorydrawer.search.FileNameRegexFilter"
+            id="rioko.sampler.emf-splitter.directoryDrawer.filter.regex"
+            name="Regex File Name">
+      </search>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.configurations">
+      <string
+            class="rioko.sampler.emf_splitter.directorydrawer.configuration.RegexConfiguration"
+            id="rioko.sampler.emf-splitter.directoryDrawer.conf.regex"
+            name="Regex Configuration">
+      </string>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.steps">
+      <filter
+            class="rioko.sampler.emf_splitter.directorydrawer.step.FilterEMFSplitterRepeated"
+            id="rioko.sampler.emf-splitter.directoryDrawer.step.repeated"
+            name="EMF-Splitter Repeated Files Filter">
+      </filter>
+   </extension>
 
 </plugin>

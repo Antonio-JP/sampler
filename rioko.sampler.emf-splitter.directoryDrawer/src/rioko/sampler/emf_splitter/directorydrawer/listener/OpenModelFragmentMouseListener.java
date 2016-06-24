@@ -13,7 +13,6 @@ import rioko.drawmodels.handlers.extensions.OpenFile;
 import rioko.graphabstraction.diagram.DiagramNode;
 import rioko.graphabstraction.draw2d.ModelNodeFigure;
 import rioko.sampler.directoryDrawer.diagram.FolderDiagramNode;
-import rioko.sampler.directoryDrawer.handler.OpenDirectoryVisualization;
 import rioko.sampler.directoryDrawer.reader.FolderReader;
 
 public class OpenModelFragmentMouseListener extends AbstractZestMouseListener {
