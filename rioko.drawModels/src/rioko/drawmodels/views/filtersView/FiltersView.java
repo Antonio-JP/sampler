@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbenchPart;
 
 import rioko.drawmodels.algorithms.display.JustFiltersBuilder;
-import rioko.drawmodels.editors.zesteditor.ZestEditor;
 import rioko.drawmodels.swt.composites.AddRemoveTable;
 import rioko.drawmodels.swt.composites.labeldatatables.ConfigurationTable;
 import rioko.drawmodels.views.ZestEditorDependingViewPart;
