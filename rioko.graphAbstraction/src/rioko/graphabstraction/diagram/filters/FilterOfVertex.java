@@ -15,6 +15,7 @@ import rioko.utilities.Pair;
 public abstract class FilterOfVertex implements Configurable{
 	private DiagramGraph graph = null;
 	private HashSet<DiagramNode> verticesFiltered = null;
+	private boolean cache = false;
 	
 	public FilterOfVertex() { }
 	
@@ -33,7 +34,7 @@ public abstract class FilterOfVertex implements Configurable{
 	}
 	
 	public Set<DiagramNode> filterVertex(Configurable properties, DiagramGraph graph) {
-		if(this.graph != graph && graph!= null) {
+		if((!this.cache)|| (this.graph != graph && graph!= null)) {
 			this.graph = graph;
 			this.verticesFiltered = null;
 		}
@@ -42,6 +43,10 @@ public abstract class FilterOfVertex implements Configurable{
 	}
 	
 	protected abstract boolean filter(DiagramNode node, Configurable properties, DiagramGraph graph);
+	
+	protected void setCache(boolean cache) {
+		this.cache = cache;
+	}
 	
 	//Static methods
 	public static FilterOfVertex getOppositeFilter(FilterOfVertex filterOfVertex) {

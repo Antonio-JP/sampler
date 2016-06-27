@@ -47,6 +47,11 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 	 */
 	protected boolean searchRoots = true;
 	
+	/**
+	 * Flag to know if this algorithm need to check its configuration
+	 */
+	protected boolean checkConfiguration = true;
+	
 	//Builders
 	public NestedBuilderAlgorithm() {
 		super();
@@ -303,7 +308,7 @@ public class NestedBuilderAlgorithm extends Algorithm implements GraphBuilder, C
 
 		Log.print("Running algorithm " + this.getAlgorithmName() + "...");
 		Log.xOpen("algorithm");
-		if(this.checkProperties(properties)) {			
+		if(!this.checkConfiguration || this.checkProperties(properties)) {			
 			try {
 				Log.xPrint("Properties checked. Starting...");
 				Log.xOpen("nodes");

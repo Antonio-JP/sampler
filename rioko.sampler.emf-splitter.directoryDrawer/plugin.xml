@@ -65,6 +65,29 @@
             id="rioko.sampler.emf-splitter.directoryDrawer.step.repeated"
             name="EMF-Splitter Repeated Files Filter">
       </filter>
+      <filter
+            class="rioko.sampler.emf_splitter.directorydrawer.step.FilterEMFSplitterSystem"
+            id="rioko.sampler.emf-splitter.directoryDrawer.step.system"
+            name="EMF-Splitter System Files Silter">
+      </filter>
+      <filter
+            class="rioko.sampler.emf_splitter.directorydrawer.step.FilterFileNameRegex"
+            id="rioko.sampler.emf-splitter.directoryDrawer.step.regex"
+            name="File Name Regex Filter">
+      </filter>
+      <step
+            class="rioko.sampler.emf_splitter.directorydrawer.step.AllDirectoryEMFSplitterSteps"
+            id="rioko.sampler.emf-splitter.directoryDrawer.step.allBasic"
+            name="EMF-Splitter All Filter Steps">
+      </step>
+   </extension>
+   <extension
+         point="rioko.graphabstraction.abstractionAlgorithms">
+      <algorithm
+            class="rioko.sampler.emf_splitter.directorydrawer.algorithm.DirectoryEMFSplitterAlgorithm"
+            id="rioko.sampler.emf-splitter.directoryDrawer.algorithm.allBasic"
+            name="Directory EMF-Splitter">
+      </algorithm>
    </extension>
 
 </plugin>

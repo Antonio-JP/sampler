@@ -18,11 +18,14 @@ import rioko.utilities.Pair;
 
 public class FileNameRegexFilter extends FilterOfVertex {
 
-	private RegexConfiguration configuration = new RegexConfiguration("");
+	private RegexConfiguration configuration;
 	
-	public FileNameRegexFilter() {}
+	public FileNameRegexFilter() {
+		this.configuration = new RegexConfiguration("");
+	}
 	
 	protected FileNameRegexFilter(String regex) {
+		this();
 		try {
 			this.configuration.setValueConfiguration(regex);
 		} catch (BadArgumentException | BadConfigurationException e) {

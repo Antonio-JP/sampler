@@ -109,6 +109,7 @@ public final class RegisterBuilderSteps {
 				registerClass( (NestedGraphBuilder) element.createExecutableExtension("class"));
 			}
 		} catch (InvalidRegistryObjectException | CoreException e) {
+			e.printStackTrace();
 			Log.exception(e);
 		}
 	}

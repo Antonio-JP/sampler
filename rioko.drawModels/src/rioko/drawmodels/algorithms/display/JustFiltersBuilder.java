@@ -24,6 +24,7 @@ public class JustFiltersBuilder extends NestedBuilderAlgorithm {
 		super("Just filters algorithm");
 		
 		this.searchRoots = false;
+		this.checkConfiguration = false;
 	}
 	
 	@Override

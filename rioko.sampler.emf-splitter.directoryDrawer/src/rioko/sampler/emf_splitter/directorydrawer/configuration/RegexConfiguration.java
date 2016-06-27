@@ -5,7 +5,7 @@ import rioko.graphabstraction.configurations.TextConfiguration;
 public class RegexConfiguration extends TextConfiguration {
 
 	public RegexConfiguration() {
-		super();
+		super("");
 	}
 	
 	public RegexConfiguration(String configuration) {
