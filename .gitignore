@@ -46,4 +46,4 @@ Temporary Items
 *.class
 
 # Tests from JUnit
-*tests*
+*tests/

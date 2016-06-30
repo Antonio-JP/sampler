@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/sampler.emf_1.0.0.201606301125.jar" id="sampler.emf" version="1.0.0.201606301125">
+   <feature url="features/sampler.emf_1.0.0.201606301634.jar" id="sampler.emf" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.tools_1.0.0.201606301125.jar" id="sampler.tools" version="1.0.0.201606301125">
+   <feature url="features/sampler.tools_1.0.0.201606301634.jar" id="sampler.tools" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/rioko.feature.utils_1.0.0.201606301125.jar" id="rioko.feature.utils" version="1.0.0.201606301125">
+   <feature url="features/rioko.feature.utils_1.0.0.201606301634.jar" id="rioko.feature.utils" version="1.0.0.201606301634">
       <category name="rioko.category"/>
    </feature>
-   <feature url="features/sampler.tools.spectral_1.0.0.201606301125.jar" id="sampler.tools.spectral" version="1.0.0.201606301125">
+   <feature url="features/sampler.tools.spectral_1.0.0.201606301634.jar" id="sampler.tools.spectral" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.complete_1.0.0.201606301125.jar" id="sampler.complete" version="1.0.0.201606301125">
+   <feature url="features/sampler.complete_1.0.0.201606301634.jar" id="sampler.complete" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.layouts.wrapper_1.0.0.201606301125.jar" id="sampler.layouts.wrapper" version="1.0.0.201606301125">
+   <feature url="features/sampler.layouts.wrapper_1.0.0.201606301634.jar" id="sampler.layouts.wrapper" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.graphML_1.0.0.201606301125.jar" id="sampler.graphML" version="1.0.0.201606301125">
+   <feature url="features/sampler.graphML_1.0.0.201606301634.jar" id="sampler.graphML" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.displaySaving_1.0.0.201606301125.jar" id="sampler.displaySaving" version="1.0.0.201606301125">
+   <feature url="features/sampler.displaySaving_1.0.0.201606301634.jar" id="sampler.displaySaving" version="1.0.0.201606301634">
       <category name="sampler.category"/>
    </feature>
-   <feature url="features/sampler.emfsplitter.integration_1.0.0.201606301125.jar" id="sampler.emfsplitter.integration" version="1.0.0.201606301125">
+   <feature url="features/sampler.emfsplitter.integration_1.0.0.201606301634.jar" id="sampler.emfsplitter.integration" version="1.0.0.201606301634">
       <category name="sampler.emfsplitter.integration.category"/>
    </feature>
-   <feature url="features/sampler.emfsplitter.directory.integration_1.0.0.201606301125.jar" id="sampler.emfsplitter.directory.integration" version="1.0.0.201606301125">
+   <feature url="features/sampler.emfsplitter.directory.integration_1.0.0.201606301634.jar" id="sampler.emfsplitter.directory.integration" version="1.0.0.201606301634">
       <category name="sampler.emfsplitter.integration.category"/>
    </feature>
    <category-def name="sampler.category" label="SAMPLER">
