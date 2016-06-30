@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,8 +46,11 @@ public class GMLReader implements Reader<Node> {
 	//Builders
 	public GMLReader() { }
 	
-	public GMLReader(IFile file) {
-		this.file = file;
+	public GMLReader(IResource file) {
+		if(!(file instanceof IFile)) {
+			throw new RuntimeException("Invalid resource for GMLReader");
+		}
+		this.file = (IFile)file;
 		
 		//Open the file with DOM xml parser
 		try {

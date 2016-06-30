@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -90,7 +89,7 @@ public class GeneralReader {
 		//We use the Constructor with the IFile parameter and throw and exception if it does not exist
 		Reader<?> reader;
 		try {
-			reader = fooReader.getClass().getConstructor(IFile.class).newInstance(file);
+			reader = fooReader.getClass().getConstructor(IResource.class).newInstance(file);
 			mapFilesToReader.put(file, reader);
 			return reader;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException e) {
@@ -113,7 +112,7 @@ public class GeneralReader {
 	 * 
 	 * @throws IOException If any error happens. The message gove more information of the error.
 	 */
-	public static <T extends Reader<?>> T getReaderFromFile(IFile file, Class<T> readerClass) throws IOException {
+	public static <T extends Reader<?>> T getReaderFromFile(IResource file, Class<T> readerClass) throws IOException {
 		Reader<?> auxReader = mapFilesToReader.get(file);
 		if(auxReader != null) {
 			if(readerClass.isInstance(auxReader)) {
@@ -130,7 +129,7 @@ public class GeneralReader {
 		for(IConfigurationElement element : elements) {
 			if(element.getAttribute("reader").equals(readerClass.getCanonicalName())) {
 				try {
-					T reader = readerClass.getConstructor(IFile.class).newInstance(file);
+					T reader = readerClass.getConstructor(IResource.class).newInstance(file);
 					mapFilesToReader.put(file, reader);
 					return reader;
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -149,7 +148,7 @@ public class GeneralReader {
 	 *  
 	 * @param file The IFile we want to close
 	 */
-	public static void closeFile(IFile file) {
+	public static void closeFile(IResource file) {
 		if(mapFilesToReader.containsKey(file)) {
 			mapFilesToReader.remove(file);
 		}

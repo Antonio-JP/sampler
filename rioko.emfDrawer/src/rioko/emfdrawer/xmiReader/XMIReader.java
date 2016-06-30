@@ -69,10 +69,14 @@ public class XMIReader implements Reader<EObject> {
 	//Builders
 	public XMIReader() {}
 	
-	public XMIReader(IFile file) throws IOException
+	public XMIReader(IResource file) throws IOException
 	{
+		if(!(file instanceof IFile)) {
+			throw new IOException("Invalid resource for XMIReader");
+		}
+		
 		//We set the file of this xmiReader as file
-		this.file = file;
+		this.file = (IFile)file;
 		
 		//Create the ResourceSet associated to this Reader
 		this.resSet = new ResourceSetImpl();
