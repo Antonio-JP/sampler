@@ -106,7 +106,7 @@ public abstract class NestedGraphBuilder implements GraphBuilder,Configurable{
 								Log.xPrint("--- * Changing edge type");
 								if(trgsTarget.getLast() != null) {
 									Log.xPrint("--- ** Node does not exist: simple type");
-									edge.setType(data.getEdge(dtSource, trgsTarget.getLast()).getType());
+									edge.setType(typeOfConnection.SIMPLE);//data.getEdge(dtSource, trgsTarget.getLast()).getType());
 								} else {
 									Log.xPrint("--- ** Have to get connection type");
 									Log.xOpen("edges-typeConnection");
